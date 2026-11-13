@@ -1,0 +1,14 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input must be a non-negative integer")
+    dim = 0
+    while (2 ** (dim + 1) - 1) <= n:
+        dim += 1
+    coords = [0] * dim
+    remaining = n
+    for i in range(dim):
+        coords[i] = min(remaining % 2, dim - i - 1)
+        remaining //= 2
+    return tuple(coords)
+```

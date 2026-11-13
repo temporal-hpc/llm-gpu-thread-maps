@@ -1,0 +1,5 @@
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input must be a non-negative integer")
+    return tuple((i % (n+1)) for i in range(3))
+</RESPONSE>

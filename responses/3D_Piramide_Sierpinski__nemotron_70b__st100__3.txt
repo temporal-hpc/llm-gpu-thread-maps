@@ -1,0 +1,30 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer")
+    
+    coordinates = [0, 0, 0]
+    dimensions = [1, 2, 4]  # growth rates for each dimension
+    remainders = []
+    
+    while n >= 0:
+        for dim in reversed(dimensions):
+            remainder = n % (dim + 1)
+            n = n // (dim + 1) - 1
+            remainders.append(remainder)
+            
+            if n < 0:
+                break
+        else:
+            continue
+        break
+    
+    remainders.reverse()
+    
+    for i, rem in enumerate(remainders):
+        if i >= len(coordinates):
+            coordinates.append(0)
+        coordinates[i] += rem
+    
+    return tuple(coordinates)
+```

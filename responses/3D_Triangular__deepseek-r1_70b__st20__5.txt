@@ -1,0 +1,39 @@
+To map a non-negative integer \( n \) to its corresponding pair of non-negative integers \( (x, y) \) such that each pair is uniquely and orderly represented without repetition, we can use a pairing function. One common method is to enumerate pairs diagonally across the grid of non-negative integers. Here's how it works step by step:
+
+1. **Calculate the diagonal level \( s \):**
+   - Compute \( s \) as the largest integer such that the sum of the first \( s+1 \) natural numbers (triangular number) is less than or equal to \( n \). This can be found using:
+     \[
+     s = \left\lfloor \frac{\sqrt{8n + 1} - 1}{2} \right\rfloor
+     \]
+
+2. **Determine the position within the diagonal \( k \):**
+   - Subtract the triangular number corresponding to \( s \) from \( n \):
+     \[
+     k = n - \frac{s(s+1)}{2}
+     \]
+
+3. **Assign coordinates based on parity of \( s \):**
+   - If \( s \) is even, assign:
+     \[
+     x = s - k \\
+     y = k
+     \]
+   - If \( s \) is odd, assign:
+     \[
+     x = k \\
+     y = s - k
+     \]
+
+This method ensures that each non-negative integer \( n \) maps uniquely to a pair \( (x, y) \), enumerating all pairs without repetition by moving diagonally across the grid.
+
+**Answer:**
+
+To map \( n \) to \( (x, y) \):
+1. Compute \( s = \left\lfloor \frac{\sqrt{8n + 1} - 1}{2} \right\rfloor \).
+2. Find \( k = n - \frac{s(s+1)}{2} \).
+3. If \( s \) is even, set \( x = s - k \), else \( x = k \).
+4. Set \( y = s - k \).
+
+Thus, the pair \( (x, y) \) corresponding to \( n \) is determined.
+
+\boxed{(x, y)}

@@ -1,0 +1,307 @@
+**Solution Explanation**
+
+For every non‑negative integer `n` we have to output the `n`‑th point of the
+infinite set  
+
+```
+S = { (x , y) |  x%3 != 1  or  y%3 != 1 }            (the centre of a 3×3
+                                                    block is missing)
+    ∩ { (x , y) |  not ( (x//3)%2 == 1  and  (y//3)%2 == 1) }   (the whole
+                                                    block (odd,odd) is omitted)
+```
+
+The points are ordered in the following way
+
+* the points belonging to the same *3×3* block are emitted in the fixed order  
+
+```
+(0,0) (1,0) (2,0) (0,1) (2,1) (0,2) (1,2) (2,2)       (8 points)
+```
+
+* the 3×3 blocks themselves are ordered **row‑major**, i.e. first all blocks
+with `y//3 = 0`, then all blocks with `y//3 = 1`, … .  
+A block whose block‑coordinates `(bx , by)` are both odd (`bx%2==1` and
+`by%2==1`) does **not** exist – it is completely omitted.
+All other blocks exist and contain exactly the eight points above.
+
+Consequently
+
+* each existing block contributes **8** points,
+* the *k*‑th existing block (`k = n // 8`) has block‑coordinates `(bx , by)`,
+  which are the `k`‑th pair of non‑negative integers that are **not**
+  both odd,
+* inside the block the inner order described above is used.
+
+So the whole problem is reduced to
+
+```
+given k (the index of a block) → find its block coordinates (bx , by)
+```
+
+--------------------------------------------------------------------
+
+#### 1.   Finding the k‑th existing block
+
+The set of existing block‑coordinates is
+
+```
+B = { (bx , by) | not (bx%2==1 and by%2==1) } .
+```
+
+We enumerate `B` row after row (increasing `by`).  
+For a fixed row `by`
+
+```
+if by is even : every column is allowed → 1 block per column
+if by is odd  : only even columns are allowed → 1 block per 2 columns
+```
+
+Therefore while we have not reached the required block we can simply walk
+through the rows, subtracting how many blocks each whole row would add.
+
+```
+remaining = k                         # still to skip
+by = 0
+while True
+        if by is even
+                # row contains one block per column → we can skip a whole
+                # row only if remaining >= number_of_columns_of_this_row
+                # we do not know that number, but we can skip the whole row
+                # only when remaining is larger than the number of blocks
+                # already passed.
+                #   → we just go to the next row
+                # (the loop below will stop as soon as remaining becomes 0)
+        else                     # by is odd
+                # one block per two columns → also just go to the next row
+        # count how many blocks the current row really adds
+        # (the row may be finished early – we stop as soon as remaining == 0)
+        for bx = 0,1,2,…                # walk through the columns of this row
+                if not (bx%2==1 and by%2==1)   # existing block ?
+                        if remaining == 0      # this is the wanted block
+                                return (bx , by)
+                        remaining -= 1
+        by += 1
+```
+
+The inner `for bx …` loop stops as soon as `remaining` becomes `0`,
+hence at most `k+1` existing blocks are inspected.
+`k = n // 8`, therefore the whole search needs *O(n)* elementary steps,
+which is easily fast enough for the usual limits of the task
+(`n` fits into a 32‑bit signed integer).
+
+--------------------------------------------------------------------
+
+#### 2.   Whole conversion `n → (x , y)`
+
+```
+inner = [(0,0),(1,0),(2,0),(0,1),(2,1),(0,2),(1,2),(2,2)]
+
+pos       = n % 8                 # position inside the block
+block_idx = n // 8                # index of the block
+
+(bx , by) = kth_existing_block(block_idx)
+
+dx , dy   = inner[pos]            # inner coordinates inside the block
+x = dx + 3*bx
+y = dy + 3*by
+```
+
+--------------------------------------------------------------------
+
+#### 3.   Correctness Proof  
+
+We prove that the algorithm prints exactly the point required by the
+statement.
+
+---
+
+##### Lemma 1  
+Every existing 3×3 block contains exactly the eight points listed in `inner`
+and they appear in that order in the global sequence.
+
+**Proof.**  
+The statement of the problem (see the sample table) shows that inside a
+3×3 block the points are emitted exactly in that order.
+No other point belongs to the block, because the centre `(1,1)` of the
+3×3 block is forbidden (`x%3==1 and y%3==1`). ∎
+
+
+
+##### Lemma 2  
+The enumeration performed by the algorithm visits the blocks of `B`
+(row by row, left to right) in the same order as the official ordering
+used in the problem statement.
+
+**Proof.**  
+The official order is *row‑major* and skips precisely the blocks with
+both coordinates odd.
+The algorithm iterates `by = 0,1,2,…`.  
+For a fixed `by`
+
+* if `by` is even, every column `bx = 0,1,2,…` is accepted,
+* if `by` is odd, only columns with `bx` even are accepted
+  (the odd ones are rejected because then `bx%2==1` and `by%2==1`).
+
+Thus the algorithm produces exactly the sequence
+
+```
+(0,0) (1,0) (2,0) …      # by = 0
+(0,1) (2,1) (4,1) …      # by = 1, only even bx
+(0,2) (1,2) (2,2) …      # by = 2
+(0,3) (1,3) (2,3) …      # by = 3
+...
+```
+
+which is precisely the required row‑major order with the odd‑odd blocks
+removed. ∎
+
+
+
+##### Lemma 3  
+For a given `k ≥ 0` the procedure `kth_existing_block(k)` returns the
+`k`‑th pair `(bx , by)` of `B` (0‑based).
+
+**Proof.**  
+The procedure starts with `remaining = k`.  
+It walks row after row.
+
+*When the current row `by` is even*  
+every column contributes a block, therefore the loop iterates over the
+columns `bx = 0,1,2,…`.  
+Whenever a column is **not** `(odd,odd)` (which never happens for an even
+row) the counter `remaining` is decreased by one.
+The first time `remaining` becomes `0` we have visited exactly `k`
+previous existing blocks, therefore the current `(bx , by)` is the
+`k`‑th element of `B`.
+
+*When the current row `by` is odd*  
+only even columns are accepted, i.e. the loop examines `bx = 0,2,4,…`.  
+Again each accepted column decreases `remaining` by one.
+When `remaining` reaches `0` we are at the `k`‑th existing block.
+
+Because the outer loop proceeds to the next row only after **all**
+columns of the current row have been examined, the order of visited
+blocks is exactly the row‑major order of `B`.  
+Consequently the algorithm returns the correct `(bx , by)`. ∎
+
+
+
+##### Lemma 4  
+For the given `n` the algorithm outputs the point that occupies position
+`n` in the global ordering of `S`.
+
+**Proof.**  
+
+* Let `pos = n % 8` and `k = n // 8`.  
+  By Lemma&nbsp;1 each existing block contributes eight consecutive points,
+  therefore the point with global index `n` belongs to the `k`‑th existing
+  block and has inner index `pos` inside this block.
+
+* By Lemma&nbsp;3 the function `kth_existing_block(k)` returns the block
+  coordinates `(bx , by)` of exactly that block.
+
+* Adding the inner offset `inner[pos]` and the block offset `3·(bx , by)`
+  gives the absolute coordinates of the point.
+  By Lemma&nbsp;1 this point is a member of `S`,
+  and by Lemma&nbsp;2 the ordering inside the block coincides with the
+  required ordering.
+
+Hence the printed pair `(x , y)` is exactly the `n`‑th element of `S`. ∎
+
+
+
+##### Theorem  
+`solve()` prints the correct coordinates for every non‑negative integer
+`n` supplied in the input.
+
+**Proof.**  
+`solve()` reads `n`, computes `pos` and `k = n // 8`,
+calls `kth_existing_block(k)` and finally adds the inner offset.
+By Lemma&nbsp;4 the produced pair is the `n`‑th point of the required
+sequence, which is exactly what the problem asks for. ∎
+
+
+
+--------------------------------------------------------------------
+
+#### 2.   Complexity Analysis  
+
+*Let `N = n + 1` (number of points that have to be generated).*
+
+* The outer loop walks over rows, the inner loop over columns, and stops
+  as soon as `k = n // 8` existing blocks have been found.
+* At most `k + 1` existing blocks are inspected, each block is examined once.
+* Hence the number of elementary operations is `Θ(k) = Θ(n/8) = Θ(n)`.
+
+Memory consumption is `O(1)` – only a few integer variables are stored.
+
+--------------------------------------------------------------------
+
+#### 3.   Reference Implementation  (Python 3)
+
+```python
+import sys
+
+# ----------------------------------------------------------------------
+# inner order of the eight points inside a 3×3 block
+INNER = [
+    (0, 0), (1, 0), (2, 0),   # (0,0) (1,0) (2,0)
+    (0, 1), (2, 1),           # (0,1) (2,1)
+    (0, 2), (1, 2), (2, 2)    # (0,2) (1,2) (2,2)
+]
+
+def kth_existing_block(k: int):
+    """
+    Return the block coordinates (bx , by) of the k‑th block
+    (k = 0,1,2,…) that is not (odd,odd).
+    """
+    # number of blocks already passed
+    passed = 0
+    by = 0
+    while True:
+        # walk through the columns of the current row
+        bx = 0
+        while True:
+            # a block (bx,by) exists unless both are odd
+            if not (bx & 1 and by & 1):
+                if passed == k:
+                    return bx, by          # found the wanted block
+                passed += 1
+            # stop as soon as we have passed the required block
+            if passed > k:
+                break
+            bx += 1
+        # go to the next row
+        by += 1
+
+
+def solve() -> None:
+    data = sys.stdin.read().strip().split()
+    if not data:
+        return
+    n = int(data[0])
+    if n < 0:
+        # according to the statement n is non‑negative, but we keep it safe
+        print("Invalid")
+        return
+
+    # position inside the block (0 … 7)
+    inner_pos = n % 8
+    # index of the block (0 …)
+    block_index = n // 8
+
+    bx, by = kth_existing_block(block_index)
+
+    dx, dy = INNER[inner_pos]
+    x = dx + 3 * bx
+    y = dy + 3 * by
+
+    print(f"{x} {y}")
+
+
+if __name__ == "__main__":
+    solve()
+```
+
+The program follows exactly the algorithm proven correct above
+and conforms to the required function signature `solve()`.

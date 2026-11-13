@@ -1,0 +1,39 @@
+To determine the position coordinates (x, y) based on a given index `n`, we can follow these steps:
+
+### Approach
+1. **Identify the Block**: Calculate which block of 8 numbers `n` falls into using integer division (`n // 8`). This helps in determining the base x-coordinate.
+2. **Determine Position within Block**: Use modulo operation (`n % 8`) to find the position within the current block, which influences both the y-coordinate and how x is calculated.
+3. **Calculate Coordinates**:
+   - For the first three positions (mod result < 3), set `y` to 0 and compute `x` by adding the base x with the mod result.
+   - For the next two positions (mod results 3 and 4), set `y` to 1 and compute `x` using a different offset based on the position within this subgroup.
+   - For the last three positions (mod results 5, 6, 7), set `y` to 2 and compute `x` using another specific offset.
+
+### Solution Code
+
+```python
+def get_position(n):
+    m = n % 8
+    base_x = 3 * (n // 8)
+    
+    if m < 3:
+        y = 0
+        x = base_x + m
+    elif 3 <= m < 5:
+        y = 1
+        x = base_x + (m - 3) * 2
+    else:  # 5 <= m < 8
+        y = 2
+        x = base_x + (m - 5)
+    
+    return (x, y)
+```
+
+### Explanation
+- **Block Calculation**: The integer division of `n` by 8 gives the block number. Each block consists of 8 consecutive numbers.
+- **Modulo Operation**: Using `n % 8` determines the position within the current block, which is crucial for setting the correct y-coordinate and adjusting x accordingly.
+- **Coordinate Calculation**:
+  - For positions 0, 1, 2 (mod results), `y` is 0, and `x` is the base x plus the mod result.
+  - Positions 3, 4 have `y` as 1, with `x` calculated by adding an offset based on their position within this subgroup.
+  - Positions 5, 6, 7 set `y` to 2, with `x` adjusted by a different offset.
+
+This approach efficiently maps the index `n` to its corresponding (x, y) coordinates using block-based calculations and modulo operations.

@@ -1,0 +1,22 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError
+    def cumulative(c):
+        return (c + 1) * (c + 2) * (c + 3) // 6
+    low, high = 0, 1
+    while cumulative(high) <= n:
+        high <<= 1
+    while low < high:
+        mid = (low + high) // 2
+        if cumulative(mid) <= n:
+            low = mid + 1
+        else:
+            high = mid
+    c = low
+    prev = cumulative(c - 1) if c else 0
+    offset = n - prev
+    b = (int((8 * offset + 1) ** 0.5) - 1) // 2
+    a = offset - b * (b + 1) // 2
+    return (a, b, c)
+```

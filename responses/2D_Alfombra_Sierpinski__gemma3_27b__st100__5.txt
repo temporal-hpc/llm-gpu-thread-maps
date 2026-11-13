@@ -1,0 +1,15 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input must be a non-negative integer.")
+
+    grid_size = 3
+    x = (n % grid_size)
+    y = (n // grid_size) % grid_size
+    z = (n // (grid_size * grid_size)) 
+
+    if z % 2 == 0:
+        return (x, y)
+    else:
+        return (x, y)
+```

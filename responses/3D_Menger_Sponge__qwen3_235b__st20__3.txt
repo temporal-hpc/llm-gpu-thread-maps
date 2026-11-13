@@ -1,0 +1,66 @@
+To solve this problem, we need to determine the 3D coordinates (x, y, z) of a point in a grid that has specific constraints. The grid has dimensions L (x-axis), M (y-axis), and N (z-axis). However, there are two important constraints:
+1. For the layer z=0, one specific point is skipped. The skipped point is located at (L//2, M//2, 0).
+2. For layers z ≥ 1, the grid is only L x 1 (i.e., M is effectively 1 for these layers).
+
+### Approach
+1. **Problem Analysis**:
+   - The total number of points in the grid is calculated as:
+     - (L * M - 1) points for z=0 (since one point is skipped).
+     - L * (N - 1) points for z ≥ 1 (each layer has L points).
+   - For z=0, the points are arranged in row-major order, but the point at (L//2, M//2) is skipped. This means all points after the skipped point in the original grid (without skip) are shifted left by one position.
+   - For z ≥ 1, each layer has exactly L points, arranged along the x-axis (y is always 0).
+
+2. **Key Insight**:
+   - For a given index `n`:
+     - If `n` is within the first (L*M - 1) points, it belongs to layer z=0.
+     - Otherwise, it belongs to one of the layers z ≥ 1.
+
+3. **Algorithm Selection**:
+   - **For z=0**:
+     - Calculate the index of the skipped point in the original grid (without skip) as `skip_index = (L // 2) * M + (M // 2)`.
+     - If `n` is less than `skip_index`, the coordinates are derived directly from `n`.
+     - If `n` is greater than or equal to `skip_index`, adjust `n` by adding 1 (to skip the point) before computing coordinates.
+   - **For z ≥ 1**:
+     - Compute the offset from the start of the z ≥ 1 layers as `offset = n - (L*M - 1)`.
+     - The layer `z` is `1 + offset // L`.
+     - The x-coordinate is `offset % L`, and y is always 0.
+
+### Solution Code
+```python
+def get_coordinates(n, L, M, N):
+    A = L * M - 1
+    if n < A:
+        z = 0
+        skip_index = (L // 2) * M + (M // 2)
+        if n < skip_index:
+            idx = n
+        else:
+            idx = n + 1
+        x = idx // M
+        y = idx % M
+        return (x, y, z)
+    else:
+        offset = n - A
+        z = 1 + offset // L
+        x = offset % L
+        y = 0
+        return (x, y, z)
+```
+
+### Explanation
+1. **Initialization**:
+   - `A` is the total number of points in layer z=0 (i.e., `L*M - 1`).
+
+2. **Handling z=0 Layer**:
+   - If `n` is within the range of points for z=0 (`n < A`):
+     - Calculate `skip_index` as the position of the skipped point in the original grid (without skip).
+     - If `n` is before `skip_index`, the coordinates are derived directly from `n`.
+     - If `n` is at or after `skip_index`, adjust `n` by adding 1 to skip the point, then compute coordinates.
+
+3. **Handling z ≥ 1 Layers**:
+   - If `n` is beyond the points in z=0 (`n >= A`):
+     - Compute `offset` as the position within the z ≥ 1 layers.
+     - Determine `z` as `1 + offset // L` (each layer has `L` points).
+     - The x-coordinate is `offset % L`, and y is always 0 since the grid is L x 1 for these layers.
+
+This approach efficiently maps the given index `n` to its corresponding 3D coordinates while respecting the constraints of the grid structure. The solution handles both the skipped point in z=0 and the reduced grid dimensions for higher layers seamlessly.

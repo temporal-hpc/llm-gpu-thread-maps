@@ -1,0 +1,40 @@
+To solve this problem, we need to determine the coordinates (x, y) based on a given index `n`. The pattern of these coordinates follows a specific cycle which can be broken down into segments. Each segment corresponds to a different value of `y`, and within each segment, `x` increases in a predictable manner.
+
+### Approach
+The problem can be approached by recognizing the cyclical nature of the coordinates. Each cycle consists of 8 indices (from 0 to 7). Within each cycle:
+- The first 3 indices correspond to `y = 0`, where `x` increases from 0 to 2.
+- The next 2 indices correspond to `y = 1`, where `x` increases by 2 starting from an initial value based on the cycle number.
+- The last 3 indices correspond to `y = 2`, where `x` increases from an initial value based on the cycle number.
+
+To determine the coordinates for a given index `n`:
+1. Compute which cycle `c` the index belongs to using integer division by 8.
+2. Determine the position `m` within the cycle using modulo operation with 8.
+3. Based on the value of `m`, assign `y` and compute `x` accordingly.
+
+### Solution Code
+```python
+def get_coordinates(n):
+    c = n // 8
+    m = n % 8
+    if m < 3:
+        y = 0
+        x = c * 3 + m
+    elif 3 <= m < 5:
+        y = 1
+        offset = m - 3
+        x = c * 3 + offset * 2
+    else:  # 5 <= m < 8
+        y = 2
+        x = c * 3 + (m - 5)
+    return (x, y)
+```
+
+### Explanation
+1. **Cycle Calculation**: The cycle number `c` is determined by integer division of `n` by 8. This tells us how many complete cycles have passed before reaching index `n`.
+2. **Position within Cycle**: The position `m` within the current cycle is found using modulo operation with 8.
+3. **Determine y**:
+   - If `m` is less than 3, `y` is set to 0 and `x` is calculated as `c * 3 + m`.
+   - If `m` is between 3 (inclusive) and 5 (exclusive), `y` is set to 1. The offset within this segment is used to compute `x` as `c * 3 + offset * 2`.
+   - For positions from 5 to 7, `y` is set to 2 and `x` is calculated based on the position within this segment.
+   
+This approach efficiently maps any given index `n` to its corresponding coordinates (x, y) by leveraging the cyclical pattern and segment-based calculations.

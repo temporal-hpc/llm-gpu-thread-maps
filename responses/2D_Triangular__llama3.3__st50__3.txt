@@ -1,0 +1,17 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer.")
+    layer = int((1 + (1 + 8 * n) ** 0.5) / 2)
+    offset = layer * (layer - 1) // 2
+    if n == offset:
+        return (layer - 1, layer - 1)
+    elif n < offset + layer:
+        return (n - offset, layer - 1)
+    else:
+        side_length = layer * 2 - 1
+        index_on_side = n - offset - layer
+        x = layer - 1 if index_on_side < layer - 1 else layer - 2 - (index_on_side - (layer - 1))
+        y = index_on_side + 1 if index_on_side < side_length // 2 else side_length - index_on_side
+        return (x, y)
+```

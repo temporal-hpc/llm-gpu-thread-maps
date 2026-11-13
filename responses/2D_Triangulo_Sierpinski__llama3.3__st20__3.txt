@@ -1,0 +1,17 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer")
+    row = 0
+    while True:
+        max_val_in_row = (row * (row + 1)) // 2 + row
+        if n < max_val_in_row:
+            break
+        row += 1
+    idx_in_row = n - ((row * (row - 1)) // 2)
+    col = row
+    while idx_in_row > 0:
+        col -= 1
+        idx_in_row -= 1
+    return (col, row)
+```

@@ -1,0 +1,60 @@
+To determine the position of a triple $(x, y, z)$ in the ordered list of all integer triples such that $x + y + z = n$, sorted in **descending order by $x$**, **then by $y$**, and **finally by $z$**, we can derive a general formula.
+
+---
+
+### 🧠 Key Observations
+
+- The list is sorted first by decreasing $x$, then decreasing $y$, and finally decreasing $z$.
+- For a fixed sum $n = x + y + z$, all valid triples $(x, y, z)$ with non-negative integers are considered.
+- We aim to compute the position of a given triple $(x, y, z)$ in this list.
+
+---
+
+### 📐 Formula for Position
+
+Given a triple $(x, y, z)$ such that $x + y + z = n$, the position in the ordered list is:
+
+$$
+\boxed{
+\text{position} = 1 + \frac{(n - x)(n - x + 1)}{2} + z
+}
+$$
+
+---
+
+### 📌 Explanation of the Formula
+
+- $n - x = y + z$: the total number of non-negative integer pairs $(y, z)$ that sum to $n - x$.
+- The term $\frac{(n - x)(n - x + 1)}{2}$ gives the number of such pairs, i.e., all triples with the same $x$ value.
+- Adding $z$ accounts for the position among those with the same $x$ and $y$ (since we are sorting by decreasing $z$).
+- The constant $1$ is included to adjust for 1-based indexing.
+
+---
+
+### ✅ Example
+
+Let’s find the position of the triple $(1, 1, 0)$ where $n = x + y + z = 2$.
+
+- $n - x = 2 - 1 = 1$
+- Then:
+  $$
+  \text{position} = 1 + \frac{1 \cdot (1 + 1)}{2} + 0 = 1 + 1 + 0 = 2
+  $$
+
+This matches the correct position in the list:
+1. (2, 0, 0)  
+2. (1, 1, 0)  
+3. (1, 0, 1)  
+4. (0, 2, 0)  
+5. (0, 1, 1)  
+6. (0, 0, 2)
+
+---
+
+### 🎯 Final Answer
+
+$$
+\boxed{
+\text{position} = 1 + \frac{(n - x)(n - x + 1)}{2} + z
+}
+$$

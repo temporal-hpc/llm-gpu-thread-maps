@@ -1,0 +1,31 @@
+To determine the values of \( x \), \( y \), and \( z \) for higher values of \( n \), we observe that each coordinate increases in turn up to certain limits before resetting or adjusting. After analyzing the sequence up to \( n = 19 \), the pattern suggests:
+
+1. **Incrementing \( x \)**: \( x \) increases until it reaches a new maximum.
+2. **Adjusting after maxima**: Upon reaching a new maximum, the next step reduces \( x \) by 1 and starts increasing another coordinate (\( y \) or \( z \)).
+3. **Cycling through coordinates**: The process cycles through prioritizing \( x \), then \( y \), and then \( z \).
+
+**Predictions for subsequent values:**
+
+- **\( n = 20 \)**:
+  - Following the pattern, after \( n = 19 \) where \( (x, y, z) = (4, 0, 1) \), we might increase \( y \) to 2 while keeping \( x \) at 4.
+  - **Result**: \( (4, 2, 1) \)
+
+- **\( n = 21 \)**:
+  - Continue by increasing \( z \) to 2 while keeping \( x \) and \( y \) as they are.
+  - **Result**: \( (4, 2, 2) \)
+
+- **\( n = 22 \)**:
+  - Increase \( y \) further to 3.
+  - **Result**: \( (4, 3, 2) \)
+
+- **\( n = 23 \)**:
+  - Increase \( z \) to 3.
+  - **Result**: \( (4, 3, 3) \)
+
+These predictions align with the observed pattern where each coordinate is incremented up to its maximum value before adjusting others.
+
+**Answer:**
+
+For \( n = 20 \), the values are \( x = 4 \), \( y = 2 \), and \( z = 1 \).
+
+\boxed{(4, 2, 1)}

@@ -1,0 +1,39 @@
+To solve this problem, we need to determine the time `n` (in seconds) when the robot is at a specific position `(a, b, c)` on its predefined path. The robot's path is structured in three distinct segments, and we need to identify which segment the given position belongs to in order to compute the correct time `n`.
+
+### Approach
+1. **Problem Analysis**: The robot moves along a path divided into three segments:
+   - **Segment 1**: From `(0, 0, 0)` to `(19, 0, 0)`. Here, the robot moves along the x-axis (a increases from 0 to 19), while b and c remain 0. The time `n` for any position `(a, 0, 0)` in this segment is exactly `a`.
+   - **Segment 2**: From `(19, 0, 0)` to `(19, 19, 0)`. Here, the robot moves along the y-axis (b increases from 0 to 19), while a remains 19 and c remains 0. The time `n` for any position `(19, b, 0)` in this segment is `19 + b`.
+   - **Segment 3**: From `(19, 19, 0)` to `(19, 19, 19)`. Here, the robot moves along the z-axis (c increases from 0 to 19), while a and b remain 19. The time `n` for any position `(19, 19, c)` in this segment is `38 + c`.
+
+2. **Key Insight**: The given position `(a, b, c)` must lie in one of the three segments. By checking the values of `b` and `c`, we can determine which segment the position belongs to:
+   - If `b` and `c` are both 0, the position is in Segment 1, and `n = a`.
+   - If `c` is 0 and `a` is 19, the position is in Segment 2, and `n = 19 + b`.
+   - Otherwise, the position must be in Segment 3 (where `a` and `b` are 19), and `n = 38 + c`.
+
+3. **Algorithm Selection**: The solution involves straightforward conditional checks based on the values of `a`, `b`, and `c` to determine the correct segment and compute `n` accordingly. The problem guarantees that the input position will always lie on one of the three segments, simplifying the logic.
+
+### Solution Code
+```python
+def main():
+    a, b, c = map(int, input().split())
+    if b == 0 and c == 0:
+        print(a)
+    elif c == 0 and a == 19:
+        print(19 + b)
+    else:
+        print(38 + c)
+
+if __name__ == "__main__":
+    main()
+```
+
+### Explanation
+1. **Reading Input**: The input consists of three integers `a`, `b`, and `c` representing the robot's position.
+2. **Condition Checks**:
+   - **First Condition (`b == 0 and c == 0`)**: This checks if the position is in Segment 1. If true, the time `n` is simply `a`.
+   - **Second Condition (`c == 0 and a == 19`)**: This checks if the position is in Segment 2. If true, the time `n` is `19 + b`.
+   - **Third Condition (Default Case)**: If the first two conditions are not met, the position must be in Segment 3. Here, the time `n` is `38 + c`.
+3. **Output**: The computed time `n` is printed based on the satisfied condition.
+
+This approach efficiently narrows down the segment in which the given position lies and computes the exact time `n` using simple arithmetic operations and conditional checks, ensuring optimal performance with constant time complexity O(1).

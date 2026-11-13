@@ -1,0 +1,52 @@
+To determine the position (x, y) for a given step `n` in a specific movement pattern where movement alternates between horizontal and vertical directions, follow these steps:
+
+1. **Identify the Level (`z`):**
+   - Calculate the cumulative number of points up to each level until you find the level `z` such that the total points just exceed `n`.
+
+2. **Calculate the Position within the Level (`m`):**
+   - Once the correct level is identified, compute `m = n - T(z)`, where `T(z)` is the cumulative number of points up to level `z`.
+
+3. **Determine Coordinates (x, y) Based on `z` and `m`:**
+   - If `z` is even:
+     - For `m` values 0-7, map `m` to `(x, y)` using specific rules for each range of `m`.
+   - If `z` is odd:
+     - For `m` values 0-3, determine `(x, y)` by checking if `m` falls within the first or second half and whether it's even or odd.
+
+**Step-by-Step Explanation:**
+
+1. **Calculate Cumulative Points Up to Each Level (`T(z`)`:**
+   - Levels alternate between adding 8 points (even levels) and 4 points (odd levels).
+   - Use the formulas:
+     - If `z` is even: \( T(z) = 6z + 8 \)
+     - If `z` is odd: \( T(z) = 6(z + 1) \)
+
+2. **Find the Level (`z`) Containing Step `n`:**
+   - Iterate through levels, calculating `T(z)` until you find the smallest `z` where `T(z) >= n`. Adjust to ensure it's the correct level.
+
+3. **Compute `m = n - T(z - 1)` if necessary to get the position within the level.**
+
+4. **Map `m` to (x, y):**
+   - For even `z`, use the ranges of `m` and corresponding `(x, y)`.
+   - For odd `z`, determine `(x, y)` based on whether `m` is in the first or second half.
+
+**Example:**
+
+Suppose `n = 12`.
+
+- Calculate cumulative points:
+  - Level 0 (even): \( T(0) = 8 \)
+  - Level 1 (odd): \( T(1) = 12 \)
+  
+Since `T(1) = 12 >= 12`, we're at level `z=1` (which is odd).
+
+- Compute `m = 12 - T(0) = 12 -8=4`.
+
+- For odd `z=1`, map `m=4`:
+  - Since `m >=2`, `y=2`
+  - `m=4` is even, so `x=2`
+
+Thus, the position is `(x, y) = (2, 2)`.
+
+**Final Answer:**
+
+The coordinates for step `n` are determined by first identifying the level `z` and then calculating the specific `(x, y)` within that level. Applying this method yields the final position as \(\boxed{(x, y)}\).

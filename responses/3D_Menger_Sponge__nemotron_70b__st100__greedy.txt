@@ -1,0 +1,19 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer")
+
+    z = n // 9
+    remainder = n % 9
+    y = remainder // 3
+    x = remainder % 3 + (2 * (remainder // 3 % 2)) - ((remainder % 3) * (remainder // 3 % 2))
+    if z % 2 == 1:
+        max_val = max(x, y)
+        x = max_val - x
+        y = max_val - y
+
+    offset_x = (z // 2) * 3
+    offset_y = ((z % 2) * (z // 2)) + (((z // 2) - 1) * ((z // 2) - 1) // 2) * 2
+
+    return (x + offset_x, y + offset_y, z)
+```

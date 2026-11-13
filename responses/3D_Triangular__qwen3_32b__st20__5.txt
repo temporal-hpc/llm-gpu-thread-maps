@@ -1,0 +1,74 @@
+To map a given integer $ N $ to coordinates $(x, y, z)$ such that $ x \leq y \leq z $, we utilize the **tetrahedral numbers**. These represent the cumulative count of such triples up to a certain $ z $, and the process to find the corresponding triple involves the following steps:
+
+---
+
+### **Step 1: Determine $ z $**
+Find the smallest integer $ z $ such that the **tetrahedral number** $ T(z) $ satisfies:
+$$
+T(z) = \frac{(z+1)(z+2)(z+3)}{6} \geq N
+$$
+This gives the "layer" $ z $ in the structure of all valid triples $ (x, y, z) $.
+
+---
+
+### **Step 2: Compute $ N' $**
+Once $ z $ is determined, calculate:
+$$
+N' = N - T(z-1)
+$$
+This $ N' $ represents the position within the current layer $ z $.
+
+---
+
+### **Step 3: Find $ x $**
+Within the layer $ z $, find the largest $ x $ such that the cumulative number of valid pairs $ (x, y) $ with $ x \leq y \leq z $ is less than $ N' $. The cumulative number up to $ x $ is:
+$$
+\sum_{i=0}^x (z - i + 1) = \frac{(x+1)(2z + 2 - x)}{2}
+$$
+Solve for the largest $ x $ satisfying:
+$$
+\sum_{i=0}^x (z - i + 1) < N'
+$$
+
+---
+
+### **Step 4: Find $ y $**
+After determining $ x $, calculate the remaining count:
+$$
+N'' = N' - \sum_{i=0}^{x-1} (z - i + 1)
+$$
+Then, $ y $ is given by:
+$$
+y = x + (N'' - 1)
+$$
+
+---
+
+### **Final Coordinates**
+The resulting triple is $ (x, y, z) $, satisfying $ x \leq y \leq z $.
+
+---
+
+### **Example: $ N = 5 $**
+1. Compute $ T(0) = 1 $, $ T(1) = 4 $, $ T(2) = 10 $. Since $ T(1) < 5 \leq T(2) $, $ z = 2 $.
+2. $ N' = 5 - T(1) = 1 $.
+3. For $ z = 2 $, find $ x $ such that:
+   $$
+   \sum_{i=0}^x (2 - i + 1) < 1
+   $$
+   For $ x = 0 $, $ \sum = 3 $, so $ x = 0 $.
+4. $ N'' = 1 $, so $ y = 0 + (1 - 1) = 0 $.
+
+**Result:** $ (x, y, z) = (0, 0, 2) $.
+
+---
+
+### **Clarification on Output**
+If the problem is indeed about **pairs** $ (x, y) $ with $ x \leq y $, the tetrahedral approach is incorrect. Instead, use **triangular numbers** and adjust the logic accordingly. However, based on the context provided (tetrahedral numbers and the structure of the problem), the correct interpretation is for **triples** $ (x, y, z) $.
+
+---
+
+### **Final Answer**
+$$
+\boxed{(x, y, z)}
+$$

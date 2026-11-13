@@ -1,0 +1,9 @@
+To determine the coordinates (x, y, z) based on the given index `n`, we observe a pattern where each coordinate increments in a specific order. The mapping can be derived by noting that each step alternates between incrementing x, y, and z in a cyclic manner with increasing values.
+
+**Answer:**
+
+The coordinates for \( n \) are determined as follows:
+- For \( n = 0 \): (0, 0, 0)
+- For \( n > 0 \), the sequence alternates between incrementing x, then y, then z in a cyclical pattern with each cycle increasing the maximum value by 1.
+
+Thus, the coordinates for any given \( n \) can be calculated using this alternating increment approach.

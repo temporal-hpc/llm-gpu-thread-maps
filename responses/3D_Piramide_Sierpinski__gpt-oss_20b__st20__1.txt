@@ -1,0 +1,18 @@
+Under the “enumeration’’ we have a bijection  
+
+\[
+\pi_{3}:\{0,1,2\}^{3}\;\longleftrightarrow\;\mathbb N ,
+\qquad  
+(x,y,z)\longmapsto \pi_{3}(x,y,z)\;=\;\pi_{2}\!\bigl(\pi_{2}(x,y),\,z\bigr)
+\]
+
+(the Cantor pairing function composed twice).  
+The map \(f(n)=2n-1\) therefore translates into a map on the triples: it sends a triple \((x,y,z)\) to the triple that corresponds (under the enumeration) to the odd number \(2\pi_{3}(x,y,z)-1\).  In formula
+
+\[
+\boxed{\;f':\{0,1,2\}^{3}\to\{0,1,2\}^{3},
+\qquad 
+f'(x,y,z)=\pi_{3}^{-1}\!\bigl(2\,\pi_{3}(x,y,z)-1\bigr)\; } .
+\]
+
+That is, the odd‑doubling map on indices becomes the corresponding map on the three–digit “ternary’’ representation of natural numbers.

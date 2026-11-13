@@ -1,0 +1,17 @@
+```python
+def map_to_coordinates(n):
+    def cantor_pairing(x, y):
+        return ((x + y) * (x + y + 1)) // 2 + y
+
+    z = int(((8 * n + 1)**0.5 - 1) / 2)
+    p = (z * (z + 1)) // 2
+    n -= p
+    x, y = 0, z
+    while y > 0:
+        if cantor_pairing(x, y - 1) <= n:
+            x += 1
+            n -= cantor_pairing(x, y - 1)
+        else:
+            y -= 1
+    return (x, y, z)
+```

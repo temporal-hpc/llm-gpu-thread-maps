@@ -1,0 +1,59 @@
+To solve this problem, we need to determine the triplet (a, b, c) corresponding to a given index n in a sequence where each number appears exactly once. The sequence is constructed such that numbers are grouped by their highest power of 3. Each group k contains numbers with exactly k digits when written in base 3.
+
+### Approach
+1. **Identify the Group (c):** Determine which group the given index n falls into. This is done by finding the smallest c such that the sum of combinations up to c+2 choose 3 exceeds n.
+2. **Calculate the Position within the Group (m):** Once the group c is identified, compute the position m within this group by subtracting the sum of all previous groups from n.
+3. **Determine the Subgroup (b):** Within the identified group, find the subgroup b such that the sum of combinations up to b+1 choose 2 exceeds m.
+4. **Find the Exact Position (a):** Calculate the exact position a within the subgroup by subtracting the sum of all previous subgroups from m.
+
+### Solution Code
+```python
+def get_triplet(n):
+    def comb3(x):
+        if x < 3:
+            return 0
+        return x * (x - 1) * (x - 2) // 6
+
+    def comb2(x):
+        if x < 2:
+            return 0
+        return x * (x - 1) // 2
+
+    # Handle the case where n is 0 separately
+    if n == 0:
+        return (0, 0, 0)
+
+    # Find c such that comb3(c + 3) > n and comb3(c + 2) <= n
+    c = 0
+    while True:
+        current = comb3(c + 3)
+        if current > n:
+            break
+        c += 1
+
+    m = n - comb3(c + 2)
+
+    # Find b such that comb2(b + 2) > m and comb2(b + 1) <= m
+    b = 0
+    while True:
+        current_b = comb2(b + 2)
+        if current_b > m:
+            break
+        b += 1
+
+    a = m - comb2(b + 1)
+
+    return (a, b, c)
+
+# Example usage:
+n = 5
+print(get_triplet(n))  # Output: (0, 1, 2)
+```
+
+### Explanation
+- **Group Identification (c):** The function `comb3` calculates the sum of combinations up to a given number. We increment c until this sum exceeds n, ensuring we find the correct group.
+- **Position within Group (m):** After determining the group, we compute m by subtracting the sum of all previous groups from n.
+- **Subgroup Identification (b):** Using `comb2`, we find the subgroup where the sum of combinations up to b+1 choose 2 exceeds m.
+- **Exact Position (a):** Finally, a is calculated by adjusting m for the sum of all previous subgroups.
+
+This approach efficiently narrows down the position of n through hierarchical grouping, ensuring each step logically progresses towards the solution.

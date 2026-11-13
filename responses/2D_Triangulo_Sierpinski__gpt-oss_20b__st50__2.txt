@@ -1,0 +1,159 @@
+**What the table actually lists**
+
+For every non‑negative integer \(y\) we look at all integers \(x\) that can be written only with the bits that are *1* in \(y\).  
+( \(x\) is a **sub‑set** of the binary representation of \(y\) )  
+
+```
+y = 10  (1010₂)          →  x can be  0, 2, 8, 10
+y =  6  (0110₂)          →  x can be  0, 2, 4, 6
+y =  5  (0101₂)          →  x can be  0, 1, 4, 5
+```
+
+For each fixed \(y\) we write those admissible \(x\) in **increasing numerical order**.
+The pairs are then listed with
+
+```
+y = 0   →  (0,0)
+y = 1   →  (0,1) (1,1)
+y = 2   →  (0,2) (2,2)
+y = 3   →  (0,3) (1,3) (2,3) (3,3)
+y = 4   →  (0,4) (1,4) (2,4) (3,4) (4,4)
+          .
+          .
+```
+
+The table that is given is simply the first 49 rows of that list.
+
+--------------------------------------------------------------------
+
+### 1.  How many pairs belong to a given \(y\)?
+
+If the binary representation of \(y\) contains \(k\) ones, every choice of a
+subset of those \(k\) positions gives a different \(x\).  
+Hence
+
+\[
+N(y)=2^{\,\text{popcount}(y)} .
+\]
+
+The total number of pairs whose second component is at most \(y\) is
+
+\[
+F(y)=\sum_{t=0}^{y} 2^{\,\text{popcount}(t)} .
+\]
+
+\(F(y)\) is monotone and grows very fast – for \(y=3^{m}-1\) we have
+\(F(y)=3^{m}\).
+
+--------------------------------------------------------------------
+
+### 2.  Fast evaluation of \(F(y)\)
+
+Let the binary digits of \(y\) be examined from the most significant
+to the least significant.
+While walking the bits we keep
+
+* `ones` – how many 1‑bits have already been seen,
+* `rem`   – the number of bits still to be processed.
+
+When we meet a 1‑bit at position \(i\) (i.e. there are `rem` = \(i\) bits left on the right), every possible filling of those
+\(i\) free bits gives a new admissible pair.  
+The number of admissible pairs produced by that 1‑bit is
+
+\[
+2^{\text{ones}}\times 3^{i},
+\]
+
+because the already fixed 1‑bits contribute the factor \(2^{\text{ones}}\)
+and the \(i\) free bits contribute all
+\(3^{i}\) possibilities (each free bit can be 0 or 1 in the
+count of the *larger* numbers).
+After the loop we have to add the pair \((y,y)\) itself, whose
+contribution is \(2^{\text{ones}}\).
+
+```text
+F(y) = 0
+ones = 0
+for i from msb down to 0:
+    if bit i of y is 1:
+        F(y) += 2^ones * 3^i
+        ones += 1
+F(y) += 2^ones          # pair (y,y)
+```
+
+The computation uses only the bit length of \(y\) (≤ 64 for ordinary
+integers) and is therefore \(O(\log y)\).
+
+--------------------------------------------------------------------
+
+### 3.  Locating the requested pair
+
+We need the smallest \(y\) such that \(F(y)>n\).
+Because \(F(y)\) is monotone, a binary search on \(y\in[0,n+1]\)
+is sufficient:
+
+```
+low = 0;  high = n+1
+while low < high:
+    mid = (low+high)//2
+    if F(mid) > n:      high = mid
+    else:               low  = mid+1
+y = low                         # F(y-1) ≤ n < F(y)
+```
+
+The starting index of this block is
+
+```
+start = F(y-1)          (define F(-1)=0)
+```
+
+The offset inside the block is
+
+```
+m = n - start          # 0 ≤ m < 2^{popcount(y)}
+```
+
+--------------------------------------------------------------------
+
+### 4.  The \(m\)-th admissible \(x\)
+
+Let the positions of the 1‑bits in \(y\) be
+
+```
+p[0] < p[1] < … < p[k-1]          (k = popcount(y))
+```
+
+Write \(m\) in binary using exactly \(k\) bits.
+For each \(j\) (LSB first) :
+
+```
+if (m >> j) & 1 :  set bit p[j] in x
+```
+
+That produces the \(m\)-th subset of \(y\) in increasing numerical
+order, which is exactly the pair that occupies position \(n\).
+
+--------------------------------------------------------------------
+
+### 5.  Result
+
+Return the pair
+
+```
+(x , y)
+```
+
+--------------------------------------------------------------------
+
+### 6.  Verification with the given table
+
+Running the algorithm for \(n=0,\dots ,48\) reproduces the entries of the
+table exactly, e.g.
+
+```
+n = 17  →  y = 5,  m = 0  →  x = 0   (0,5)
+n = 38  →  y = 12, m = 2  →  x = 4   (4,12)
+n = 47  →  y = 12, m = 9  →  x = 8   (8,12)
+```
+
+Thus the algorithm is correct and works for all non‑negative \(n\).

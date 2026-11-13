@@ -1,0 +1,8 @@
+```python
+def map_to_coordinates(n):
+    z = n // 9
+    remainder = n % 9
+    y = remainder // 3
+    x = remainder % 3
+    return (x, y, z)
+```

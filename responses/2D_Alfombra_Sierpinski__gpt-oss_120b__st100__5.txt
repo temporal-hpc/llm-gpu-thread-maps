@@ -1,0 +1,16 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError
+    offsets = [(0,0),(1,0),(2,0),(0,1),(2,1),(0,2),(1,2),(2,2)]
+    x = y = 0
+    power = 1
+    while n:
+        d = n & 7
+        dx, dy = offsets[d]
+        x += dx * power
+        y += dy * power
+        n >>= 3
+        power *= 3
+    return (x, y)
+```

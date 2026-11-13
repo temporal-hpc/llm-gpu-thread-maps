@@ -1,0 +1,59 @@
+To determine the explicit formula for \( f(n) = x - y \), we analyze how \( x \) and \( y \) are determined from \( n \). 
+
+1. **Calculate \( k \) and \( m \):**
+   - Let \( k = \left\lfloor \frac{n}{8} \right\rfloor \).
+   - Let \( m = n \mod 8 \).
+
+2. **Determine \( x \) and \( y \) based on \( m \):**
+   - If \( 0 \leq m \leq 2 \):
+     - \( y = 0 \)
+     - \( x = 3k + m \)
+   - Else if \( m = 3 \) or \( m = 4 \):
+     - \( y = 1 \)
+     - \( x = 3k \) if \( m = 3 \), else \( x = 3k + 2 \).
+   - Else (i.e., \( 5 \leq m \leq 7 \)):
+     - \( y = 2 \)
+     - \( x = 3k + (m - 5) \).
+
+3. **Compute \( f(n) = x - y \):**
+   Using the values of \( x \) and \( y \) from above, subtract \( y \) from \( x \).
+
+**Final Formula:**
+
+\[
+f(n) =
+\begin{cases}
+3k + m, & \text{if } 0 \leq m \leq 2 \\
+3k - 1, & \text{if } m = 3 \\
+3k + 1, & \text{if } m = 4 \\
+3k - 2, & \text{if } m = 5 \\
+3k - 1, & \text{if } m = 6 \\
+3k, & \text{if } m = 7
+\end{cases}
+\]
+
+Where \( k = \left\lfloor \frac{n}{8} \right\rfloor \) and \( m = n \mod 8 \).
+
+**Answer:**
+
+The explicit formula for \( f(n) = x - y \) is:
+
+\[
+f(n) =
+\begin{cases}
+3k + (n \bmod 8), & \text{if } 0 \leq n \bmod 8 \leq 2 \\
+3k - 1, & \text{if } n \bmod 8 = 3 \\
+3k + 1, & \text{if } n \bmod 8 = 4 \\
+3k - 2, & \text{if } n \bmod 8 = 5 \\
+3k - 1, & \text{if } n \bmod 8 = 6 \\
+3k, & \text{if } n \bmod 8 = 7
+\end{cases}
+\]
+
+where \( k = \left\lfloor \frac{n}{8} \right\rfloor \). Thus,
+
+\[
+f(n) = 3 \left\lfloor \frac{n}{8} \right\rfloor + g(n \bmod 8)
+\]
+
+with \( g(m) \) defined as above.

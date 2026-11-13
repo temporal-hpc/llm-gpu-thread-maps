@@ -1,0 +1,44 @@
+To solve this problem, we need to determine the coordinates (x, y, z) for a given integer n. The coordinates are determined based on specific layering and ordering rules where each layer is defined by increasing values of z. Each layer contains points (x, y, z) such that 0 ≤ x ≤ y ≤ z.
+
+### Approach
+1. **Identify the Layer**: Determine which layer (value of z) the given integer n falls into. This is done by calculating cumulative sums of points until we find the layer where n is located.
+2. **Determine Position within Layer**: Once the correct layer is identified, compute the position of n within that layer.
+3. **Find y and x Coordinates**: Within the determined layer, calculate the exact y and x coordinates based on the position.
+
+### Solution Code
+```python
+def compute_coords(n):
+    if n < 0:
+        return None
+    if n == 0:
+        return (0, 0, 0)
+    
+    # Find z and pos_in_layer
+    previous_sum = 0
+    for z in range(0, 10000):  # Arbitrary high number to prevent infinite loops
+        layer_points = (z + 1) * (z + 2) // 2
+        if previous_sum + layer_points > n:
+            pos_in_layer = n - previous_sum
+            break
+        else:
+            previous_sum += layer_points
+    
+    # Find y and x within the determined z and pos_in_layer
+    total = 0
+    for y in range(0, z + 1):
+        count = y + 1
+        if total + count > pos_in_layer:
+            x = pos_in_layer - total
+            return (x, y, z)
+        else:
+            total += count
+    
+    return None
+```
+
+### Explanation
+1. **Layer Identification**: The function iterates through possible values of z to find the layer where n is located. Each layer's cumulative points are calculated using the triangular number formula.
+2. **Position Calculation**: Once the correct layer is found, the position within that layer is determined by subtracting the cumulative points of all previous layers from n.
+3. **Coordinate Determination**: For each possible y value within the identified layer, the function calculates how many points fall under that y and determines if the current position lies within those points. The x coordinate is then derived based on the remaining count.
+
+This approach efficiently narrows down the exact coordinates by leveraging mathematical properties of triangular numbers and cumulative sums, ensuring optimal performance even for large values of n.

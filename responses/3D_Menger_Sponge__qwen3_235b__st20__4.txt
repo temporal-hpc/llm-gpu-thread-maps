@@ -1,0 +1,40 @@
+To solve this problem, we need to determine the row and position of a given nonnegative integer \( n \) in a specific sequence where numbers are arranged in rows such that row \( z \) contains \( z + 1 \) elements. The sequence starts as follows:
+- Row 0: [0]
+- Row 1: [1, 2]
+- Row 2: [3, 4, 5]
+- Row 3: [6, 7, 8, 9]
+- and so on.
+
+### Approach
+1. **Problem Analysis**: The key observation is that the starting number of row \( z \) is the triangular number \( T_z = \frac{z(z + 1)}{2} \). The row \( z \) contains \( z + 1 \) elements, from \( T_z \) to \( T_z + z \).
+2. **Insight**: For any given \( n \), we need to find the largest integer \( z \) such that \( T_z \leq n \). This \( z \) will be the row number, and the position within the row is \( i = n - T_z \).
+3. **Mathematical Formulation**: The value \( z \) can be derived by solving the quadratic equation \( z^2 + z - 2n \leq 0 \). The solution involves computing \( z = \left\lfloor \frac{-1 + \sqrt{1 + 8n}}{2} \right\rfloor \).
+4. **Efficient Calculation**: Using integer square root operations, we compute \( z \) as \( (\text{isqrt}(1 + 8n) - 1) // 2 \), where \( \text{isqrt} \) is the integer square root function. This avoids floating-point inaccuracies and ensures correctness for large \( n \).
+
+### Solution Code
+```python
+import math
+
+def main():
+    n = int(input().strip())
+    root = math.isqrt(1 + 8 * n)
+    z = (root - 1) // 2
+    start_of_row = z * (z + 1) // 2
+    i = n - start_of_row
+    print(f"({z}, {i})")
+
+if __name__ == "__main__":
+    main()
+```
+
+### Explanation
+1. **Reading Input**: The input is a nonnegative integer \( n \).
+2. **Calculating Row Number \( z \)**:
+   - Compute \( \text{root} = \sqrt{1 + 8n} \) using integer square root to avoid precision issues.
+   - Derive \( z \) as \( (\text{root} - 1) // 2 \). This formula efficiently finds the largest \( z \) such that the triangular number \( T_z \leq n \).
+3. **Finding Position \( i \)**:
+   - Calculate the starting number of row \( z \) as \( T_z = \frac{z(z + 1)}{2} \).
+   - The position within the row is \( i = n - T_z \).
+4. **Output**: The result is formatted as \( (z, i) \), representing the row number and the position within that row.
+
+This approach efficiently locates \( n \) in the sequence using mathematical insights and integer operations, ensuring correctness and optimal performance even for very large values of \( n \).

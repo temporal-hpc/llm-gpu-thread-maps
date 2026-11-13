@@ -1,0 +1,53 @@
+To determine the values of `x` and `y` for a given `n`, we analyze the recursive structure of the problem, which builds a sequence of blocks, each associated with a `y` value and containing a fixed number of elements (the block size). The block size for each `y` is defined recursively:
+
+- `block_size(y)` =  
+  - `1`, if `y = 0`  
+  - `block_size(y // 2)`, if `y` is even  
+  - `2 * block_size((y - 1) // 2)`, if `y` is odd  
+
+The starting index of each block is the sum of the block sizes of all previous blocks. Once we locate the block containing `n`, we determine the `y` value and calculate `x` based on the position of `n` within that block.
+
+---
+
+### Example: `n = 13`
+
+1. **Determine the block size for each `y` up to a point where the cumulative sum exceeds `n`:**
+
+   | y | block_size(y) | cumulative_sum |
+   |---|----------------|----------------|
+   | 0 | 1              | 1              |
+   | 1 | 2              | 3              |
+   | 2 | 2              | 5              |
+   | 3 | 4              | 9              |
+   | 4 | 2              | 11             |
+   | 5 | 4              | 15             |
+
+   The cumulative sum exceeds `13` at `y = 5`. So, `n = 13` is in the block corresponding to `y = 5`.
+
+2. **Find the position of `n` within the block:**
+
+   - The block for `y = 5` starts at index `11` (cumulative sum before `y = 5`).
+   - The position within the block is `13 - 11 = 2`.
+
+3. **Determine `x`:**
+
+   - The block for `y = 5` has a size of `4`.
+   - The first two values in the block are the `x` values of the block for `y = 2` (which are `0` and `1`).
+   - The next two values are `0 + block_size(y = 2)` and `1 + block_size(y = 2)` → `0 + 2 = 2`, `1 + 2 = 3`.
+
+   So, the x values in the block are: `[0, 1, 2, 3]`.
+
+   - The position within the block is `2`, so `x = 2`.
+
+---
+
+### Final Answer:
+
+For `n = 13`, we find:
+
+- `y = 5`
+- `x = 2`
+
+$$
+\boxed{5}, \boxed{2}
+$$

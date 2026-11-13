@@ -1,0 +1,45 @@
+To solve this problem, we need to determine the coordinate (x, y) for a given non-negative integer `n` based on a specific pattern. The pattern arranges numbers in blocks where each block `y` contains `y + 1` numbers. The coordinates are derived such that for any `n`, it falls into a specific block `y`, and its position within the block determines the `x` coordinate.
+
+### Approach
+1. **Problem Analysis**: The problem involves mapping a non-negative integer `n` to a coordinate (x, y) in a 2D grid. The grid is structured such that:
+   - Block `y = 0` contains 1 number: `[0]`
+   - Block `y = 1` contains 2 numbers: `[1, 2]`
+   - Block `y = 2` contains 3 numbers: `[3, 4, 5]`
+   - Block `y = 3` contains 4 numbers: `[6, 7, 8, 9]`
+   - And so on.
+
+2. **Key Insight**: For any given `n`, the block `y` it belongs to can be found by solving the quadratic equation derived from the sum of the first `y` blocks. The sum of the first `y` blocks is given by `T(y) = y*(y + 1)/2`. The block `y` for `n` is the largest integer such that `T(y) <= n`.
+
+3. **Mathematical Formulation**: 
+   - The discriminant `d = 8*n + 1` is derived from rearranging the quadratic equation `y^2 + y - 2n <= 0`.
+   - The integer square root of `d` helps compute `y` as `(s - 1) // 2`, where `s` is the integer square root of `d`.
+   - Once `y` is determined, the starting index of the block is `T(y) = y*(y + 1)/2`. The `x` coordinate is then `n - T(y)`.
+
+4. **Algorithm Selection**: 
+   - Use the integer square root of `8*n + 1` to efficiently compute the block `y`.
+   - Calculate the starting index of block `y` to find the offset `x` within the block.
+
+### Solution Code
+```python
+import math
+
+def map_to_coordinates(n):
+    if n < 0:
+        raise ValueError("Input must be a non-negative integer")
+    d = 8 * n + 1
+    s = math.isqrt(d)
+    y = (s - 1) // 2
+    start_index = y * (y + 1) // 2
+    x = n - start_index
+    return (x, y)
+```
+
+### Explanation
+1. **Input Validation**: The function first checks if the input `n` is non-negative. If `n` is negative, it raises a `ValueError`.
+2. **Discriminant Calculation**: The discriminant `d = 8*n + 1` is computed to solve the quadratic equation derived from the block structure.
+3. **Integer Square Root**: The integer square root `s` of `d` is found using `math.isqrt`, which efficiently handles large integers.
+4. **Block Identification**: The block index `y` is calculated as `(s - 1) // 2`. This formula comes from solving the quadratic inequality for the block number.
+5. **Starting Index Calculation**: The starting index of block `y` is computed as `y*(y + 1)/2`, which is the sum of all numbers in previous blocks.
+6. **Coordinate Calculation**: The `x` coordinate is the offset of `n` within its block, calculated as `n - start_index`. The function returns the tuple `(x, y)`.
+
+This approach efficiently maps any non-negative integer `n` to its corresponding coordinate (x, y) in the structured grid by leveraging mathematical insights and integer arithmetic. The solution handles very large values of `n` gracefully due to the use of exact integer operations.

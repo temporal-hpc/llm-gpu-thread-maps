@@ -1,0 +1,56 @@
+To determine the $ n $-th pair $(y, x)$ in the sequence where:
+
+- For each integer $ y \geq 0 $,
+- We generate all possible values of $ x $ such that $ x $ is a sum of some subset of the powers of 2 corresponding to the positions of the set bits in $ y $,
+- And the sequence is ordered by $ y $, and within each $ y $, by the values of $ x $,
+
+We follow a structured algorithm.
+
+---
+
+### **Step-by-Step Algorithm**
+
+1. **Initialize Counters**:
+   - `cumulative` = 0
+   - `y` = 0
+
+2. **Iterate to Find the Correct $ y $**:
+   - For each $ y $, compute the number of $ x $ values it contributes: $ \text{count} = 2^k $, where $ k $ is the number of set bits in $ y $.
+   - If `cumulative + count < n`, then `cumulative += count`, and increment `y` by 1.
+   - Otherwise, we've found the correct $ y $.
+
+3. **Determine the Position Within $ y $'s Contributions**:
+   - `pos_in_group = n - cumulative`
+   - `pos_in_group_0 = pos_in_group - 1` (convert to 0-based index)
+
+4. **Generate $ x $**:
+   - Extract the positions of the set bits in $ y $.
+   - For each bit in the binary representation of `pos_in_group_0` (with length equal to the number of set bits), if the bit is set, include the corresponding power of 2 in the sum for $ x $.
+
+---
+
+### **Example: $ n = 5 $**
+
+- Start with `cumulative = 0`, `y = 0`
+- $ y = 0 $: set bits = 0 → count = 1 → cumulative = 1
+- $ y = 1 $: set bits = 1 → count = 2 → cumulative = 3
+- $ y = 2 $: set bits = 1 → count = 2 → cumulative = 5
+- Since cumulative + count = 5 and $ n = 5 $, we stop.
+
+- `pos_in_group = 5 - 5 = 2`
+- `pos_in_group_0 = 2 - 1 = 1`
+
+- Set bits in $ y = 2 $: [1]
+- `pos_in_group_0` in binary (1 bit) = '1'
+
+- So, $ x = 2^1 = 2 $
+
+**Result: $ (y, x) = (2, 2) $**
+
+---
+
+### **Final Answer**
+
+$$
+\boxed{(2, 2)}
+$$

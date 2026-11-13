@@ -1,0 +1,27 @@
+To determine the coordinates (x, y) corresponding to a given index `n` in a grid filled column-wise starting from (0, 0), follow these steps:
+
+1. **Calculate `y`:**
+   - Compute `y` using the formula:
+     \[
+     y = \left\lfloor \frac{\sqrt{8n + 1} - 1}{2} \right\rfloor
+     \]
+   This gives the largest integer `y` such that \( T_y \leq n \), where \( T_y = \frac{y(y+1)}{2} \) is the y-th triangular number.
+
+2. **Calculate `x`:**
+   - Compute `x` as:
+     \[
+     x = n - \frac{y(y + 1)}{2}
+     \]
+   This finds how far `n` is from the start of column `y`.
+
+3. **Return the coordinates (x, y).**
+
+**Example:**
+
+For `n = 5`:
+
+- Compute \( y = \left\lfloor \frac{\sqrt(41) - 1}{2} \right\rfloor = 2 \)
+- Compute \( x = 5 - \frac{2 \times 3}{2} = 2 \)
+- Coordinates: (2, 2)
+
+**Answer:** The coordinates are \(\boxed{(x, y)}\) where \( x = n - \frac{y(y + 1)}{2} \) and \( y = \left\lfloor \frac{\sqrt{8n + 1} - 1}{2} \right\rfloor \).

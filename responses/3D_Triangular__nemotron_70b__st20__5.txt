@@ -1,0 +1,14 @@
+```python
+def map_to_coordinates(n):
+    coords = []
+    dim = 0
+    while n >= (dim + 1) ** 3 - dim ** 3:
+        n -= (dim + 1) ** 3 - dim ** 3
+        dim += 1
+    offset = dim ** 3
+    for _ in range(3):
+        coords.append(n // (offset // (dim + 1)))
+        n %= (offset // (dim + 1))
+        offset //= (dim + 1)
+    return tuple(coords)
+```

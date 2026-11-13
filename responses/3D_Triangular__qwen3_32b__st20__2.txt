@@ -1,0 +1,104 @@
+To determine the coordinates $(x, y)$ corresponding to a given number $ n $, we follow a structured approach involving the concept of **layers** and a **position-based mapping** within those layers.
+
+---
+
+### Step 1: Determine the Layer $ z $
+
+Each number $ n $ belongs to a **layer** defined by the formula:
+
+$$
+S(z) = \frac{z(z+1)(z+2)}{6}
+$$
+
+This represents the **starting index** of layer $ z $. We find the **largest integer $ z $** such that:
+
+$$
+S(z) \leq n
+$$
+
+This can be done using binary search or by solving the cubic inequality.
+
+---
+
+### Step 2: Compute the Position within the Layer
+
+Once the layer $ z $ is determined, compute the **position within the layer**:
+
+$$
+\text{pos} = n - S(z)
+$$
+
+This position $ \text{pos} $ tells us how far into the layer $ z $ the number $ n $ is.
+
+---
+
+### Step 3: Determine the $ y $-Coordinate
+
+Within the layer, the elements are arranged in a sequence based on the values of $ y $, starting from 0 up to $ z $. The number of elements up to and including a certain $ y $ is given by:
+
+$$
+T(y) = \frac{y(y+1)}{2}
+$$
+
+We find the **maximum integer $ y $** such that:
+
+$$
+T(y) \leq \text{pos}
+$$
+
+This can be computed as:
+
+$$
+y = \left\lfloor \frac{-1 + \sqrt{1 + 8 \cdot \text{pos}}}{2} \right\rfloor
+$$
+
+---
+
+### Step 4: Determine the $ x $-Coordinate
+
+Finally, the $ x $-coordinate is computed as the **remainder** after accounting for the elements up to $ y $:
+
+$$
+x = \text{pos} - T(y)
+$$
+
+---
+
+### Final Result
+
+The coordinates corresponding to the number $ n $ are:
+
+$$
+\boxed{(x, y)}
+$$
+
+Where:
+
+- $ z $ is the layer number such that $ \frac{z(z+1)(z+2)}{6} \leq n $,
+- $ \text{pos} = n - \frac{z(z+1)(z+2)}{6} $,
+- $ y = \left\lfloor \frac{-1 + \sqrt{1 + 8 \cdot \text{pos}}}{2} \right\rfloor $,
+- $ x = \text{pos} - \frac{y(y+1)}{2} $
+
+---
+
+### Example
+
+Let’s compute the coordinates for $ n = 7 $:
+
+1. **Find $ z $:**  
+   $ S(2) = \frac{2 \cdot 3 \cdot 4}{6} = 4 $, $ S(3) = 10 $.  
+   So $ z = 2 $.
+
+2. **Compute pos:**  
+   $ \text{pos} = 7 - 4 = 3 $
+
+3. **Find $ y $:**  
+   $ y = \left\lfloor \frac{-1 + \sqrt{1 + 8 \cdot 3}}{2} \right\rfloor = \left\lfloor \frac{-1 + \sqrt{25}}{2} \right\rfloor = \left\lfloor \frac{4}{2} \right\rfloor = 2 $
+
+4. **Find $ x $:**  
+   $ x = 3 - \frac{2 \cdot 3}{2} = 3 - 3 = 0 $
+
+**Result:**  
+$$
+\boxed{(0, 2)}
+$$

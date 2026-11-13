@@ -1,0 +1,15 @@
+The function `map_to_coordinates` calculates the x and y coordinates for a given thread number n using a mathematical approach based on triangular numbers. The algorithm determines y by solving a quadratic equation derived from the pattern observed in the mapping data, ensuring it works for any non-negative integer.
+
+```python
+import math
+
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non-negative integer")
+    sqrt_val = math.sqrt(8 * n + 1)
+    y = (sqrt_val - 1) // 2
+    start_n = y * (y + 1) // 2
+    pos = n - start_n
+    x = pos
+    return (x, int(y))
+```

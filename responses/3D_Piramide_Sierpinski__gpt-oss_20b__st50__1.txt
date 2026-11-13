@@ -1,0 +1,27 @@
+**Use a *mixed‑radix* representation (or, equivalently, a 3‑dimensional Cantor pairing function).**  
+
+The idea is to think of the 1‑dimensional index as a single integer that can be expressed in a product of the three “base” sizes.  For a system that contains 100 distinct triples \((x ,y ,z)\) the index can be broken into three parts that give the coordinates:
+
+```
+sizeX  = 4          // 0 … 3
+sizeY  = 5          // 0 … 4
+sizeZ  = 5          // 0 … 4   (4×5×5 = 100)
+```
+
+Then the mapping is obtained simply by:
+
+```cpp
+int index;          // 0 … 99
+int x = index % sizeX;                          // 0 … 3
+int y = (index / sizeX) % sizeY;                // 0 … 4
+int z = index / (sizeX * sizeY);                // 0 … 4
+```
+
+If the third coordinate in the table is allowed to be larger than 4 (e.g. 0…13), you just change `sizeZ` accordingly and the same logic applies.
+
+In other words:  
+1. **Choose a base for each dimension** (`sizeX`, `sizeY`, `sizeZ`).  
+2. **Express the 1‑D index in mixed‑radix** by repeatedly taking the remainder (`%`) and integer division (`/`).  
+3. The remainders give you the coordinates `(x, y, z)`.
+
+This algorithm is a direct, generalised Cantor‑pairing / mixed‑radix mapping from a single integer to a 3‑dimensional coordinate and will produce exactly the mapping shown for indices 0…99.

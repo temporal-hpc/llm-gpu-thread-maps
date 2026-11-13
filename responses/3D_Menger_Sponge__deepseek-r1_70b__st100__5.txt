@@ -1,0 +1,37 @@
+To determine the coordinates \((x, y, z)\) from a given number \(n\), we can use the following approach based on observations of patterns in the data:
+
+1. **Identify the Layer (\(z\))**:
+   - The value of \(z\) increases every 8 numbers. Specifically, each layer (or value of \(z\)) contains 8 consecutive numbers.
+   \[
+   z = \left\lfloor \frac{n}{8} \right\rfloor
+   \]
+
+2. **Determine the Position within the Layer**:
+   - Calculate the position \(p\) within the current layer by taking the remainder of \(n\) divided by 8.
+   \[
+   p = n \mod 8
+   \]
+
+3. **Calculate \(x\) and \(y\) Based on \(p\)**:
+   - The values of \(x\) and \(y\) follow a specific pattern within each layer. They cycle through the combinations of 0, 1, and 2 in a particular order.
+   - For even positions (\(p = 0, 1, 2, 3, 4, 5, 6, 7\)):
+     \[
+     x = p \mod 3
+     \]
+     \[
+     y = \left\lfloor \frac{p}{3} \right\rfloor
+     \]
+
+   - Adjust for the observed pattern where certain positions have \(x\) as 2 instead of continuing sequentially.
+
+**Final Answer**:
+The coordinates \((x, y, z)\) can be determined using the following formulas:
+
+- \(z = \left\lfloor \frac{n}{8} \right\rfloor\)
+- \(p = n \mod 8\)
+- \(x\) and \(y\) are derived based on specific patterns within each layer.
+
+For example:
+- When \(n = 4\), \(z = 0\), \(p = 4\), resulting in \((x, y) = (2, 1)\).
+
+Thus, the coordinates for any given \(n\) can be systematically calculated using this method.

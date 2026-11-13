@@ -1,0 +1,41 @@
+To solve this problem, we need to map a given non-negative integer index `n` to a 2D coordinate `(x, y)` such that the coordinates are enumerated in a specific order. The enumeration starts at `(0, 0)` for `n = 0`, followed by `(0, 1)` and `(1, 1)` for `n = 1` and `n = 2`, then `(0, 2)`, `(1, 2)`, and `(2, 2)` for `n = 3`, `n = 4`, and `n = 5`, and so on. This pattern indicates that for each `y` (starting from 0), the `x` values range from `0` to `y`, inclusive.
+
+### Approach
+1. **Problem Analysis**: The key observation is that the starting index of each row `y` is given by the triangular number \( T_y = \frac{y(y + 1)}{2} \). For any given `n`, we need to find the largest `y` such that \( T_y \leq n \). Once `y` is determined, the `x` coordinate is simply \( n - T_y \).
+
+2. **Mathematical Insight**: The value of `y` can be derived by solving the quadratic inequality \( y^2 + y - 2n \leq 0 \). The solution is \( y = \left\lfloor \frac{-1 + \sqrt{1 + 8n}}{2} \right\rfloor \). This formula efficiently computes the row index `y` for any given `n`.
+
+3. **Algorithm Selection**: 
+   - Compute the discriminant \( \text{disc} = 8n + 1 \).
+   - Calculate the integer square root of `disc` using `math.isqrt` for precision.
+   - Derive `y` (denoted as `k` in the code) as \( (\text{root} - 1) // 2 \).
+   - Compute the starting index of row `y` as \( \text{start} = \frac{y(y + 1)}{2} \).
+   - The `x` coordinate is then \( n - \text{start} \).
+
+4. **Complexity Analysis**: The operations involved (multiplication, division, square root) are all constant time operations \( O(1) \). Thus, the solution efficiently computes the coordinates in constant time for any given `n`.
+
+### Solution Code
+```python
+import math
+
+def map_index_to_coordinate(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non-negative integer")
+    disc = 8 * n + 1
+    root = math.isqrt(disc)
+    k = (root - 1) // 2
+    start = k * (k + 1) // 2
+    x = n - start
+    return (x, k)
+```
+
+### Explanation
+1. **Input Validation**: The function first checks if `n` is a non-negative integer. If not, it raises a `ValueError`.
+2. **Discriminant Calculation**: The discriminant \( 8n + 1 \) is computed to solve the quadratic equation derived from the triangular number formula.
+3. **Square Root Calculation**: The integer square root of the discriminant is found using `math.isqrt`, ensuring precision even for large values of `n`.
+4. **Row Index (y) Calculation**: The row index `k` (equivalent to `y`) is calculated as \( (\text{root} - 1) // 2 \). This gives the largest integer `k` such that the triangular number \( T_k \leq n \).
+5. **Starting Index Calculation**: The starting index of row `k` is \( T_k = \frac{k(k + 1)}{2} \).
+6. **x Coordinate Calculation**: The `x` coordinate is the offset within the row, computed as \( n - T_k \).
+7. **Result**: The function returns the tuple `(x, k)`, representing the 2D coordinate corresponding to the index `n`.
+
+This approach efficiently maps any non-negative integer index to its corresponding 2D coordinate by leveraging mathematical insights and precise integer arithmetic. The solution handles all valid inputs correctly and operates in constant time.

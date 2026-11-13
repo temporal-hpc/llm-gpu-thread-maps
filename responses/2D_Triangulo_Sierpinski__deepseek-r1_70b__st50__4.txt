@@ -1,0 +1,28 @@
+To solve this problem, we need to determine the coordinates (x, y) corresponding to a given non-negative integer n. The coordinates are determined based on a triangular number system where each layer y starts from a specific index and contains y+1 elements.
+
+### Approach
+The approach involves two main steps:
+1. **Determine the Layer (y):** Calculate the layer y in which the given number n falls. This is done using the formula derived from solving the quadratic equation related to triangular numbers.
+2. **Calculate the Position within the Layer (x):** Once the layer y is determined, compute the position x of n within that layer.
+
+The steps are as follows:
+1. Compute y using the formula \( y = \left\lfloor \frac{\sqrt{8n + 1} - 1}{2} \right\rfloor \). This gives the largest integer y such that the sum of the first y natural numbers is less than or equal to n.
+2. Calculate x as \( x = n - \frac{y(y + 1)}{2} \). This finds the position within the layer starting from 0.
+
+### Solution Code
+```python
+import math
+
+def get_coordinates(n):
+    if n < 0:
+        raise ValueError("n must be a non-negative integer")
+    y = int((math.sqrt(8 * n + 1) - 1) // 2)
+    x = n - (y * (y + 1)) // 2
+    return (x, y)
+```
+
+### Explanation
+1. **Layer Calculation (y):** The formula \( \left\lfloor \frac{\sqrt{8n + 1} - 1}{2} \right\rfloor \) is derived from solving the quadratic inequality that determines the largest triangular number less than or equal to n. This gives us the layer y where n resides.
+2. **Position Calculation (x):** Once the layer y is known, x is computed by subtracting the sum of the first y natural numbers from n. This gives the zero-based index within the layer.
+
+This approach efficiently computes the coordinates using mathematical properties of triangular numbers, ensuring optimal performance even for very large values of n.

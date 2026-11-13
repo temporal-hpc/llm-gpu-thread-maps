@@ -1,0 +1,47 @@
+Given a certain position within an even z-layer, we can determine the corresponding (x, y) coordinates using the following method:
+
+### Step-by-Step Explanation:
+
+1. **Understand the Grid Structure:**
+   - The even z-layers are assumed to be based on a 3×3 grid, where only specific points are selected.
+   - The selected points are arranged in a specific order, which can be mapped to a 0-based index `position_in_z`.
+
+2. **Determine Coordinates:**
+   - For `position_in_z < 3` (i.e., 0, 1, 2), the points lie along the bottom row (y=0) with x-values equal to the index.
+   - For `position_in_z >= 3` (i.e., 3 to 7), the points are distributed across the middle (y=1) and top (y=2) rows:
+     - **Middle Row (y=1):** Positions 3 and 4 (offsets 0 and 1) have x-values 0 and 2, respectively.
+     - **Top Row (y=2):** Positions 5, 6, and 7 (offsets 2, 3, and 4) have x-values 0, 1, and 2, respectively.
+
+3. **Formulas:**
+   - If `position_in_z < 3`:
+     - `x = position_in_z`
+     - `y = 0`
+   - Else:
+     - `offset = position_in_z - 3`
+     - If `offset < 2`:
+       - `y = 1`
+       - `x = 2 * offset`
+     - Else:
+       - `y = 2`
+       - `x = offset - 2`
+
+### Example Mappings:
+
+| position_in_z | x | y |
+|---------------|---|---|
+| 0             | 0 | 0 |
+| 1             | 1 | 0 |
+| 2             | 2 | 0 |
+| 3             | 0 | 1 |
+| 4             | 2 | 1 |
+| 5             | 0 | 2 |
+| 6             | 1 | 2 |
+| 7             | 2 | 2 |
+
+### Final Answer:
+
+To determine the (x, y) coordinates for a given `position_in_z` in an even z-layer, use the derived formulas. For example, if `position_in_z = 6`, the coordinates are:
+
+$$
+\boxed{(1, 2)}
+$$

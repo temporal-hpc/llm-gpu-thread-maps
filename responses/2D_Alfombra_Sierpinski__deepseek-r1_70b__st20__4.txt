@@ -1,0 +1,1 @@
+For \( n = 17 \), the corresponding point is \((\boxed{7}, \boxed{0})\).

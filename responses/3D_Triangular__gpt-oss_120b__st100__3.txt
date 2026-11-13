@@ -1,0 +1,18 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError
+    remaining = n
+    z = 0
+    while True:
+        count_z = (z + 1) * (z + 2) // 2
+        if remaining < count_z:
+            y = 0
+            while remaining >= (y + 1) * (y + 2) // 2:
+                y += 1
+            prev = y * (y + 1) // 2
+            x = remaining - prev
+            return (x, y, z)
+        remaining -= count_z
+        z += 1
+```

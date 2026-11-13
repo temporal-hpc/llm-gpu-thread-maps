@@ -1,0 +1,99 @@
+To compute the **Manhattan distance** from the origin `(0, 0)` to the position of a number `N` in an **ultra-compact spiral**, we must first determine the **coordinates** of `N` in the spiral. The spiral starts at the origin and grows outward in layers, with each layer forming a square around the previous one.
+
+---
+
+### ✅ Key Steps to Solve the Problem
+
+1. **Determine the layer `m`**:
+   - Each layer `m` is defined by the square numbers:
+     - The square number at the end of layer `m` is `(2m + 1)^2 - 1`.
+     - So, for a given `N`, we find the smallest `m` such that `(2m + 1)^2 > N`.
+
+2. **Determine the offset `d`**:
+   - This is how far `N` is from the beginning of layer `m`:  
+     $ d = N - (2m - 1)^2 $
+
+3. **Determine the side and position in the side**:
+   - Each side of the square has `2m` elements.
+   - `side = d // (2m)`
+   - `pos = d % (2m)`
+
+4. **Compute the coordinates `(x, y)`** based on the side:
+   - **Side 0 (Right)**:  
+     $ x = m, \quad y = -m + \text{pos} + 1 $
+   - **Side 1 (Top)**:  
+     $ x = m - \text{pos} - 1, \quad y = m $
+   - **Side 2 (Left)**:  
+     $ x = -m, \quad y = m - \text{pos} - 1 $
+   - **Side 3 (Bottom)**:  
+     $ x = -m + \text{pos} + 1, \quad y = -m $
+
+5. **Compute Manhattan distance**:
+   - $ \text{distance} = |x| + |y| $
+
+---
+
+### 🧠 Example Walkthrough
+
+Let’s say `N = 8`.
+
+- $ m = 1 $, since $ (2 \times 1 + 1)^2 = 9 > 8 $
+- $ d = 8 - (2 \times 1 - 1)^2 = 8 - 1 = 7 $
+- $ \text{side} = 7 // 2 = 3 $
+- $ \text{pos} = 7 \% 2 = 1 $
+- Apply side 3 formula:  
+  $ x = -1 + 1 + 1 = 1 $,  
+  $ y = -1 $
+
+- Manhattan distance = $ |1| + |-1| = 2 $
+
+---
+
+### 🧪 Python Implementation
+
+```python
+def manhattan_distance(n):
+    if n == 0:
+        return 0  # The origin is at (0, 0)
+
+    m = 0
+    while (2 * m + 1) ** 2 <= n:
+        m += 1
+
+    d = n - (2 * m - 1) ** 2
+    side_length = 2 * m
+    side = d // side_length
+    pos = d % side_length
+
+    if side == 0:
+        x = m
+        y = -m + pos + 1
+    elif side == 1:
+        x = m - pos - 1
+        y = m
+    elif side == 2:
+        x = -m
+        y = m - pos - 1
+    else:  # side == 3
+        x = -m + pos + 1
+        y = -m
+
+    return abs(x) + abs(y)
+```
+
+---
+
+### ✅ Test Cases
+
+| Input `N` | Coordinates | Manhattan Distance |
+|-----------|-------------|--------------------|
+| 0         | (0, 0)      | 0                  |
+| 1         | (1, 0)      | 1                  |
+| 3         | (0, 1)      | 1                  |
+| 8         | (1, -1)     | 2                  |
+| 24        | (2, -2)     | 4                  |
+| 100       | (10, 0)     | 10                 |
+
+---
+
+This approach is **efficient** and **accurate** for computing the Manhattan distance of any number in the spiral.

@@ -1,0 +1,17 @@
+**Answer – 18**
+
+The list is built by taking the coordinates in a very regular “block‑by‑block’’ order.  
+For each integer \(k\) we consider the block of points whose \(x\)-coordinate satisfies  
+
+\[
+x = 3k + r,\qquad r\in\{0,1,2\}
+\]
+
+and whose \(y\)-coordinate is any non‑negative integer.  
+Inside a block the points are enumerated according to a fixed Cantor‑pairing pattern.  
+
+For the block where \(k=2\) (so \(x=6,7,8\)) the base index is \(18\).  
+The first point in this block is \((6,2)\) – which corresponds to \(r=0,\; y=2\).  
+Thus the entry with \(x=6,\;y=2\) appears as the **19th element of the list**, i.e. at index **18** (the list is 0‑based).  
+
+So the coordinate \((6,2)\) occurs at index 18 in the sequence.

@@ -1,0 +1,26 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non‑negative integer")
+    cumulative = 0
+    y = 0
+    while True:
+        count = 1 << bin(y).count('1')
+        if cumulative + count > n:
+            offset = n - cumulative
+            positions = []
+            temp = y
+            idx = 0
+            while temp:
+                if temp & 1:
+                    positions.append(idx)
+                temp >>= 1
+                idx += 1
+            x = 0
+            for i, pos in enumerate(positions):
+                if (offset >> i) & 1:
+                    x |= 1 << pos
+            return (x, y)
+        cumulative += count
+        y += 1
+```

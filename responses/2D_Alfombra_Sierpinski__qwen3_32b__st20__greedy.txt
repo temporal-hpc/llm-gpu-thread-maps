@@ -1,0 +1,114 @@
+To determine the coordinates of a number $ n $ in a spiral grid, we can use a structured approach based on the concept of layers in the spiral. Here's a step-by-step breakdown of the process:
+
+---
+
+### **Step 1: Determine the Layer $ l $**
+Each layer $ l $ in the spiral corresponds to a square ring around the center. The number of elements in each layer increases as the square of the odd numbers. The formula to find the layer $ l $ for a given $ n $ is:
+
+$$
+l = \left\lfloor \frac{\sqrt{n} - 1}{2} \right\rfloor + 1
+$$
+
+This gives the smallest integer $ l $ such that $ (2l - 1)^2 < n \leq (2l + 1)^2 $.
+
+---
+
+### **Step 2: Compute the Previous Corner**
+The previous corner is the largest square number less than $ n $, which is:
+
+$$
+\text{previous\_corner} = (2l - 1)^2
+$$
+
+---
+
+### **Step 3: Compute the Offset $ m $**
+The offset $ m $ is the number of steps from the previous corner to $ n $:
+
+$$
+m = n - \text{previous\_corner}
+$$
+
+---
+
+### **Step 4: Determine the Side and Position**
+Each layer has four sides, each with $ 2l $ steps. The side is determined by:
+
+$$
+\text{side} = \left\lfloor \frac{m}{2l} \right\rfloor
+$$
+
+The remainder $ r $ gives the position along the side:
+
+$$
+r = m \mod 2l
+$$
+
+---
+
+### **Step 5: Compute the Coordinates**
+Based on the side and remainder, the coordinates are computed as follows:
+
+- **Side 0 (Right):**  
+  $$
+  x = l, \quad y = -l + r
+  $$
+
+- **Side 1 (Top):**  
+  $$
+  x = l - r, \quad y = l
+  $$
+
+- **Side 2 (Left):**  
+  $$
+  x = -l, \quad y = l - r
+  $$
+
+- **Side 3 (Bottom):**  
+  $$
+  x = -l + r, \quad y = -l
+  $$
+
+---
+
+### **Example: $ n = 2 $**
+
+1. **Layer $ l $:**
+   $$
+   l = \left\lfloor \frac{\sqrt{2} - 1}{2} \right\rfloor + 1 = \left\lfloor \frac{1.414 - 1}{2} \right\rfloor + 1 = \left\lfloor 0.207 \right\rfloor + 1 = 0 + 1 = 1
+   $$
+
+2. **Previous Corner:**
+   $$
+   \text{previous\_corner} = (2l - 1)^2 = (2 \cdot 1 - 1)^2 = 1^2 = 1
+   $$
+
+3. **Offset $ m $:**
+   $$
+   m = n - \text{previous\_corner} = 2 - 1 = 1
+   $$
+
+4. **Side and Remainder:**
+   $$
+   \text{side} = \left\lfloor \frac{1}{2} \right\rfloor = 0, \quad r = 1 \mod 2 = 1
+   $$
+
+5. **Coordinates (Side 0):**
+   $$
+   x = l = 1, \quad y = -l + r = -1 + 1 = 0
+   $$
+
+Wait! This gives $ (1, 0) $, but we know $ n = 2 $ should be at $ (1, 1) $. This discrepancy arises because the formula assumes the spiral starts at $ (0, 0) $, but in reality, the spiral starts at $ (0, 0) $, and the first number $ n = 1 $ is at $ (0, 0) $, $ n = 2 $ is at $ (1, 0) $, and $ n = 3 $ is at $ (1, 1) $.
+
+So, the correct coordinates for $ n = 2 $ are:
+
+$$
+\boxed{(1, 0)}
+$$
+
+---
+
+### **Final Answer:**
+$$
+\boxed{(1, 0)}
+$$

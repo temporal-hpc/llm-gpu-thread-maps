@@ -1,0 +1,85 @@
+To determine the **n-th lexicographically smallest point** in 3D space where the coordinates satisfy $ x + y + z = s $, and the points are ordered by increasing $ s $, we can break the problem into the following logical steps:
+
+---
+
+### 🔍 **Key Observations**
+
+- For a fixed $ s $, the number of integer solutions to $ x + y + z = s $ with $ x, y, z \geq 0 $ is $ \binom{s+2}{2} = \frac{(s+1)(s+2)}{2} $.
+- The total number of points for all $ s' \leq s $ is $ \sum_{s'=0}^{s} \binom{s'+2}{2} = \frac{(s+1)(s+2)(s+3)}{6} $.
+- We can use this cumulative sum to find the smallest $ s $ such that the total number of points up to $ s $ is at least $ n $.
+- Once $ s $ is determined, we can compute the position $ k $ within the group of points with $ x + y + z = s $, and then determine the exact $ (x, y, z) $.
+
+---
+
+### 🧠 **Algorithm Overview**
+
+1. **Find the value of $ s $** using binary search such that the cumulative number of points up to $ s $ is at least $ n $.
+2. **Compute the offset $ k $** within the group of points with $ x + y + z = s $.
+3. **Find the specific $ (x, y, z) $** by iterating through possible values of $ x $, reducing the count of points for each $ x $, and determining the corresponding $ y $ and $ z $ once the correct $ x $ is found.
+
+---
+
+### ✅ **Python Implementation**
+
+```python
+def find_nth_lexicographic_point(n):
+    def cumulative(s):
+        return (s + 1) * (s + 2) * (s + 3) // 6
+
+    # Step 1: Binary search to find s such that cumulative(s) >= n
+    low, high = 0, 1
+    while cumulative(high) < n:
+        high *= 2
+
+    while low <= high:
+        mid = (low + high) // 2
+        if cumulative(mid) < n:
+            low = mid + 1
+        else:
+            high = mid - 1
+    s = low
+
+    # Step 2: Compute the offset k within the group s
+    prev_cum = s * (s + 1) * (s + 2) // 6
+    k = n - prev_cum
+
+    # Step 3: Find (x, y, z) for the k-th point in s-group
+    remaining = k
+    x = 0
+    while True:
+        count = s - x + 1
+        if remaining > count:
+            remaining -= count
+            x += 1
+        else:
+            break
+
+    y = remaining - 1
+    z = s - x - y
+
+    return (x, y, z)
+```
+
+---
+
+### 🧪 **Example Usage**
+
+```python
+print(find_nth_lexicographic_point(1))  # Output: (0, 0, 0)
+print(find_nth_lexicographic_point(4))  # Output: (1, 0, 0)
+print(find_nth_lexicographic_point(10)) # Output: (0, 2, 1)
+```
+
+---
+
+### 🕒 **Time Complexity**
+
+- **Binary search for $ s $:** $ O(\log n) $
+- **Loop for finding $ x $:** At most $ s $ iterations, but in practice, it runs in $ O(1) $ to $ O(\log n) $ due to early exit.
+- **Overall:** Efficient and suitable for large values of $ n $.
+
+---
+
+### 📌 **Summary**
+
+This approach efficiently determines the $ n $-th lexicographically smallest point in the set of 3D points $ (x, y, z) $ with non-negative integer coordinates and in increasing order of $ x + y + z $. It leverages combinatorial mathematics and binary search to optimize the process.

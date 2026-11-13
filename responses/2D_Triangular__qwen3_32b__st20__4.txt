@@ -1,0 +1,95 @@
+To map a non-negative integer `n` to a coordinate `(x, y)` such that the sequence of coordinates follows a specific triangular pattern (e.g., `(0,0), (0,1), (1,1), (0,2), (1,2), (2,2), ...`), we can model the traversal as moving through the lower triangle of a grid.
+
+---
+
+### ✅ Problem Understanding
+
+Each row `y` in the triangle contains `y + 1` elements. So, the total number of elements up to and including row `y` is:
+
+$$
+\text{Total elements up to row } y = \frac{y(y + 1)}{2}
+$$
+
+Given an integer `n`, we want to find the row `y` and the column `x` such that the `n`-th element lies in that row. 
+
+---
+
+### 🔍 Approach
+
+We use **binary search** to find the largest integer `y` such that:
+
+$$
+\frac{y(y + 1)}{2} \leq n
+$$
+
+This ensures we find the row `y` where the `n`-th element is located. Once `y` is determined, the column `x` is simply:
+
+$$
+x = n - \frac{y(y + 1)}{2}
+$$
+
+This method is efficient and avoids floating-point inaccuracies that can occur with direct mathematical computation.
+
+---
+
+### 🧠 Implementation
+
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non-negative integer")
+
+    # Binary search for the row y
+    low = 0
+    high = int((2 * n) ** 0.5) + 2  # Conservative upper bound
+
+    while low <= high:
+        mid = (low + high) // 2
+        total_elements = mid * (mid + 1) // 2
+        if total_elements <= n:
+            low = mid + 1
+        else:
+            high = mid - 1
+
+    y = high
+    x = n - y * (y + 1) // 2
+
+    return (x, y)
+```
+
+---
+
+### 🧪 Example Usage
+
+```python
+for i in range(10):
+    print(f"n = {i} → {map_to_coordinates(i)}")
+```
+
+**Output:**
+
+```
+n = 0 → (0, 0)
+n = 1 → (0, 1)
+n = 2 → (1, 1)
+n = 3 → (0, 2)
+n = 4 → (1, 2)
+n = 5 → (2, 2)
+n = 6 → (0, 3)
+n = 7 → (1, 3)
+n = 8 → (2, 3)
+n = 9 → (3, 3)
+```
+
+---
+
+### 🧾 Time and Space Complexity
+
+- **Time Complexity:** `O(log n)` due to binary search.
+- **Space Complexity:** `O(1)` — constant extra space used.
+
+---
+
+### ✅ Summary
+
+This function efficiently maps a non-negative integer `n` to a coordinate `(x, y)` in a triangular grid using a binary search approach to avoid floating-point inaccuracies. It is robust and performs well even for very large values of `n`.

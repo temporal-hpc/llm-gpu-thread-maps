@@ -1,0 +1,19 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer")
+    
+    coord_x, coord_y = 0, 0
+    direction = 1
+    
+    for _ in range(n):
+        if (coord_x == coord_y and coord_x >= 0) or (coord_x > 0 and coord_x == -coord_y + (2 * (coord_y // (2 * abs(coord_y)) + 1))):
+            direction *= -1
+        coord_x += direction
+        if coord_x < 0:
+            coord_x, coord_y = 0, coord_x + coord_y + 1
+        elif coord_x > coord_y:
+            coord_x, coord_y = coord_y, coord_x
+    
+    return (coord_x, coord_y)
+```

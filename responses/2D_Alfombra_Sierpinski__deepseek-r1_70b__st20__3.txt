@@ -1,0 +1,50 @@
+To solve this problem, we need to determine the coordinates (x, y) based on a given integer n. The solution involves recognizing a repeating pattern every 8 numbers, which allows us to break down the problem into manageable steps.
+
+### Approach
+The approach is based on identifying cycles of 8 numbers each. Each cycle consists of three segments:
+1. Numbers where y = 0.
+2. Numbers where y = 1.
+3. Numbers where y = 2.
+
+Within each segment, x values are determined differently:
+- For y = 0, x values start at the beginning of the cycle and increment by 1 for each subsequent number in this segment.
+- For y = 1, x values are spaced out within the cycle.
+- For y = 2, x values continue from where they left off after the previous segments.
+
+The steps to determine (x, y) for a given n are:
+1. Compute the cycle number k using integer division of n by 8.
+2. Compute the position m within the current cycle using modulo operation.
+3. Determine y based on the value of m.
+4. Calculate x based on the values of k and m.
+
+### Solution Code
+```python
+def get_xy(n):
+    k = n // 8
+    m = n % 8
+    if m <= 2:
+        y = 0
+        x = 3 * k + m
+    elif m <= 4:
+        y = 1
+        offset = m - 3
+        x = 3 * k + 2 * offset
+    else:
+        y = 2
+        x = 3 * k + (m - 5)
+    return (x, y)
+```
+
+### Explanation
+- **Cycle Identification**: Each cycle consists of 8 numbers. The cycle number k is determined by integer division of n by 8.
+- **Position within Cycle**: The position m within the current cycle is found using modulo operation.
+- **Determine y**: 
+  - If m is between 0 and 2, y is set to 0.
+  - If m is between 3 and 4, y is set to 1.
+  - If m is between 5 and 7, y is set to 2.
+- **Calculate x**:
+  - For y = 0: x starts at the beginning of the cycle (3k) and increments by 1 for each subsequent number in this segment.
+  - For y = 1: x values are spaced out within the cycle, calculated as 3k + 2*(m - 3).
+  - For y = 2: x continues from where it left off after the previous segments, calculated as 3k + (m - 5).
+
+This approach efficiently breaks down the problem using cycles and positions, ensuring that each coordinate is computed correctly based on the given integer n.

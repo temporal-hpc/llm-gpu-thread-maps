@@ -1,0 +1,248 @@
+**Solution Explanation**
+
+For every non‑negative integer `n` we have to return the `n`‑th point
+`(x , y)` of the following infinite set of points
+
+```
+S = { (x , y) | in every ternary digit position the pair of digits
+                (digit of x , digit of y) is never (1 , 1) }
+```
+
+The points are listed in *row major* order  
+(first `y = 0` from left to right, then `y = 1`, …).  
+The first points are exactly the ones given in the statement.
+
+--------------------------------------------------------------------
+
+#### 1.  Geometry behind the order  
+
+Write `x` and `y` in base‑3
+
+```
+x = xk … x1 x0   (each xi ∈ {0,1,2})
+y = yk … y1 y0   (each yi ∈ {0,1,2})
+```
+
+A point is **removed** if for some position `i` we have `xi = 1` **and**
+`yi = 1`.  
+The remaining points form the (discrete) Sierpinski carpet – a
+3‑by‑3 block where the centre `(1,1)` is missing, repeated recursively.
+For one ternary digit pair there are `9 – 1 = 8` admissible possibilities,
+therefore the whole set can be described by a *base‑8* number:
+
+```
+n = d0 + d1·8 + d2·8² + …        (0 ≤ di ≤ 7)
+```
+
+`di` tells which of the eight allowed pairs `(xi , yi)` appears at the
+`i`‑th ternary digit (the least significant digit corresponds to the
+finest 3×3 block).
+
+The eight allowed pairs in row‑major order inside a 3×3 block are  
+
+| index `di` | (dx , dy) |
+|------------|-----------|
+| 0 | (0,0) |
+| 1 | (1,0) |
+| 2 | (2,0) |
+| 3 | (0,1) |
+| 4 | (2,1) |
+| 5 | (0,2) |
+| 6 | (1,2) |
+| 7 | (2,2) |
+
+--------------------------------------------------------------------
+
+#### 2.  From `n` to `(x , y)`
+
+```
+x = 0 , y = 0 , power = 1                # power = 3ⁱ
+while n > 0:
+        d = n % 8                       # current base‑8 digit
+        (dx , dy) = table[d]            # table from the previous section
+        x += dx * power
+        y += dy * power
+        n //= 8
+        power *= 3
+```
+
+When the loop finishes we have built the ternary representation of `x`
+and `y` digit by digit, therefore the obtained `(x , y)` is exactly the
+`n`‑th point in the required order.
+
+The algorithm works for `n = 0` as well – the loop body is never
+executed and `(x , y) = (0 , 0)`.
+
+--------------------------------------------------------------------
+
+#### 3.  Correctness Proof  
+
+We prove that the algorithm returns the correct coordinates for every
+`n ≥ 0`.
+
+---
+
+##### Lemma 1  
+For one ternary digit position the table  
+
+```
+0 → (0,0) , 1 → (1,0) , 2 → (2,0) ,
+3 → (0,1) , 4 → (2,1) , 5 → (0,2) , 6 → (1,2) , 7 → (2,2)
+```
+
+lists the admissible pairs `(dx , dy)` in the same order as they appear
+when scanning a 3×3 block row‑major and skipping the centre `(1,1)`.
+
+**Proof.**  
+Row `y = 0` of the block contains the three points `(0,0) , (1,0) , (2,0)`
+→ indices `0,1,2`.  
+Row `y = 1` contains `(0,1)` then skips `(1,1)` and continues with
+`(2,1)` → indices `3,4`.  
+Row `y = 2` contains the three points `(0,2) , (1,2) , (2,2)` →
+indices `5,6,7`. ∎
+
+
+
+##### Lemma 2  
+Let `n = d0 + d1·8 + … + dk·8ᵏ` be the base‑8 representation of `n`
+(`0 ≤ di ≤ 7`).  
+Define  
+
+```
+x = Σ  (dxi)·3ⁱ ,   y = Σ  (dyi)·3ⁱ
+```
+
+where `(dxi , dyi)` is the pair taken from the table of Lemma&nbsp;1 for
+`di`.  
+Then the point `(x , y)` belongs to the set `S` (no digit pair is `(1,1)`)
+and is the `n`‑th point of `S` in row‑major order.
+
+**Proof.**  
+*Membership.*  
+For each digit position `i` the pair `(dxi , dyi)` is never `(1,1)` by
+construction of the table. Therefore at no ternary position do the
+digits of `x` and `y` both equal `1`. Consequently `(x , y) ∈ S`.
+
+*Order.*  
+Consider the enumeration of `S` in row‑major order.
+The least significant ternary digit pair of a point decides its position
+inside the smallest 3×3 block. Inside this block the eight admissible
+pairs appear exactly in the order of Lemma&nbsp;1, i.e. they correspond to
+base‑8 digits `0 … 7`.  
+After all eight points of the block have been listed, the next point is
+the first point of the next block to the right (or, after the last block
+in a row, the first block of the next row).  
+Increasing the higher base‑8 digit by one corresponds precisely to
+moving to the next 3×3 block in row‑major order, while the lower digit
+again runs through `0 … 7`.  
+Thus the mixed‑radix representation “base‑8 digit → (dx,dy) pair” reproduces
+the global row‑major enumeration of `S`. ∎
+
+
+
+##### Lemma 3  
+The algorithm described in section&nbsp;2 computes the numbers `x` and
+`y` defined in Lemma&nbsp;2.
+
+**Proof.**  
+The algorithm iterates over the base‑8 digits of `n` from least to most
+significant (`d0 , d1 , …`).  
+During the `i`‑th iteration `power = 3ⁱ`.  
+It adds `dxi·power` to `x` and `dyi·power` to `y`.  
+Consequently after processing all digits the accumulated sums are exactly
+the series given in Lemma&nbsp;2. ∎
+
+
+
+##### Theorem  
+For every integer `n ≥ 0` the function `index_to_xy(n)` (the algorithm)
+returns the coordinates `(x , y)` that correspond to the `n`‑th element
+of the list in the problem statement.
+
+**Proof.**  
+*Validity.*  
+By Lemma&nbsp;3 the algorithm yields the pair `(x , y)` built from the
+base‑8 digits of `n` using the table of Lemma&nbsp;1.  
+Lemma&nbsp;2 guarantees that this pair belongs to the set `S`.
+
+*Correct position.*  
+Lemma&nbsp;2 also states that the construction produces the `n`‑th
+element of `S` when `S` is ordered row‑major.  
+Therefore the algorithm returns exactly the required coordinates. ∎
+
+
+
+--------------------------------------------------------------------
+
+#### 4.  Complexity Analysis  
+
+Let `L = ⌈log₈ (n+1)⌉` be the number of base‑8 digits of `n`.
+
+```
+time   : O(L) = O(log n)          (one loop iteration per digit)
+memory : O(1)                     (a few integer variables)
+```
+
+Both bounds satisfy the requirement of not enumerating all previous
+points.
+
+--------------------------------------------------------------------
+
+#### 5.  Reference Implementation  (Python 3)
+
+```python
+def index_to_xy(n: int) -> tuple[int, int]:
+    """
+    Convert a non‑negative integer index n to the (x, y) coordinate
+    of the n‑th point in the Sierpinski‑carpet (Cantor dust) ordering.
+    The ordering is row‑major, skipping every point whose ternary
+    representation contains a digit pair (1, 1) at the same position.
+
+    Parameters
+    ----------
+    n : int
+        Non‑negative index (0 corresponds to (0, 0)).
+
+    Returns
+    -------
+    tuple[int, int]
+        The coordinates (x, y).
+
+    Raises
+    ------
+    ValueError
+        If n is negative or not an integer.
+    """
+    if not isinstance(n, int):
+        raise ValueError("n must be an integer")
+    if n < 0:
+        raise ValueError("n must be non‑negative")
+
+    # mapping of a base‑8 digit to the (dx, dy) inside a 3×3 block,
+    # row‑major order with the centre (1,1) removed.
+    table = [
+        (0, 0),  # 0
+        (1, 0),  # 1
+        (2, 0),  # 2
+        (0, 1),  # 3
+        (2, 1),  # 4
+        (0, 2),  # 5
+        (1, 2),  # 6
+        (2, 2),  # 7
+    ]
+
+    x = y = 0
+    power = 1            # 3⁰, 3¹, 3², …
+    while n:
+        digit = n % 8
+        dx, dy = table[digit]
+        x += dx * power
+        y += dy * power
+        n //= 8
+        power *= 3
+
+    return x, y
+```
+
+The function follows exactly the algorithm proven correct above and
+conforms to the required signature `index_to_xy(n) -> (x, y)`.

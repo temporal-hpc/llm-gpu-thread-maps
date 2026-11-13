@@ -1,0 +1,29 @@
+To determine the coordinates (x, y) corresponding to each number n, we observe the following pattern:
+
+1. The numbers are traversed in rows where even-numbered rows are filled left to right, and odd-numbered rows alternate direction but reset after certain steps.
+
+2. Each row contains three numbers before moving to the next row.
+
+3. For each group of three consecutive numbers, the first number starts at x=0 and increases by 1 for each subsequent number in that group.
+
+Applying this pattern:
+
+- **n = 0:** (0, 0)
+- **n = 1:** (1, 0)
+- **n = 2:** (2, 0)
+
+Continuing this logic, the coordinates for n up to 23 are as provided in the thought process.
+
+**Final Answer:**
+
+The coordinates corresponding to each number n follow a specific traversal pattern across rows and columns. For example:
+
+- \( n = 0 \rightarrow (x, y) = (0, 0) \)
+- \( n = 1 \rightarrow (1, 0) \)
+- \( n = 2 \rightarrow (2, 0) \)
+- \( n = 3 \rightarrow (0, 1) \)
+- And so on up to \( n = 23 \).
+
+Each step increments x until the end of a row is reached, then y increases and x resets accordingly.
+
+\boxed{(x, y)}

@@ -1,0 +1,30 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer.")
+    
+    dimensions = []
+    remainder = n
+    
+    while remainder >= 0 and (dimensions == [] or max(dimensions) != len(dimensions) - 1):
+        next_dim_val = len(dimensions)
+        if remainder < next_dim_val + 1:
+            dimensions.append(remainder)
+            break
+        else:
+            dimensions.append(next_dim_val)
+            remainder -= next_dim_val + 1
+    
+    # Normalize to ensure each integer is >= 0 and the sequence doesn't overshoot
+    offset = min(dimensions)
+    if offset < 0:
+        dimensions = [d - offset for d in dimensions]
+    
+    # Pad with zeros up to the highest dimension index
+    max_dim = max(dimensions)
+    coordinates = [0] * (max_dim + 1)
+    for i, val in enumerate(dimensions):
+        coordinates[val] = i
+    
+    return tuple(coordinates)
+```

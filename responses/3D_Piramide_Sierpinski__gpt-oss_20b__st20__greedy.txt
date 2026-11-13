@@ -1,0 +1,7 @@
+Use the compiler’s “ignore attributes” switch. For example, with GCC/Clang you can add
+
+```bash
+-Wno-attributes
+```
+
+to the command line (or add `#pragma GCC diagnostic ignored "-Wattributes"` in the code) to suppress the “attribute ‘deprecated’ used on non‑function” warning.

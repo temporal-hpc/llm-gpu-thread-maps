@@ -1,0 +1,31 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer.")
+
+    def deinterleave(x):
+        x, y, z = 0, 0, 0
+        face, next_bit = 1, 0
+        while x + y + z <= n:
+            bit = (n >> next_bit) & 1
+            if face in [1, 2]:
+                if bit: y += 1
+                else: 
+                    if face == 1: 
+                        x += 1
+                    else: 
+                        z += 1
+                    face += bit
+            elif face in [3, 4]:
+                if bit: z += 1
+                else: 
+                    if face == 3: 
+                        x += 1
+                    else: 
+                        y += 1
+                    face += bit - 2
+            next_bit += 1
+        return (x, y, z)
+
+    return deinterleave(n)
+```

@@ -1,0 +1,10 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non‑negative integer")
+    g, r = divmod(n, 8)
+    base = 3 * g
+    offsets = (0, 1, 2, 0, 2, 0, 1, 2)
+    ys = (0, 0, 0, 1, 1, 2, 2, 2)
+    return (base + offsets[r], ys[r])
+```

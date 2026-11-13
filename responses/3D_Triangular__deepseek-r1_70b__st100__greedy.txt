@@ -1,0 +1,23 @@
+The number of ordered triplets \((x, y, z)\) such that \(x \leq y \leq z\) and \(x + y + z = N\) can be determined using the following formula:
+
+\[
+\sum_{x=0}^{\left\lfloor \frac{N}{3} \right\rfloor} \left( \left\lfloor \frac{N - x}{2} \right\rfloor - x + 1 \right)
+\]
+
+**Step-by-Step Explanation:**
+
+1. **Understand the Problem:** We need to count all non-decreasing triplets \((x, y, z)\) where \(x \leq y \leq z\) and their sum equals \(N\).
+
+2. **Fix \(x\) and Count Possible \(y\) and \(z\):** For each possible value of \(x\) from 0 up to \(\left\lfloor \frac{N}{3} \right\rfloor\), determine the range of \(y\) such that \(y \geq x\) and \(z \geq y\). This translates to \(y\) ranging from \(x\) to \(\left\lfloor \frac{N - x}{2} \right\rfloor\).
+
+3. **Sum Over All Valid \(x\):** For each \(x\), the number of valid pairs \((y, z)\) is given by \(\left\lfloor \frac{N - x}{2} \right\rfloor - x + 1\). Summing this expression over all valid \(x\) yields the total count.
+
+4. **Formula Application:** Apply the formula for specific values of \(N\) to compute the number of triplets, as demonstrated in the examples above.
+
+**Answer:**
+
+The number of ordered triplets \((x, y, z)\) with \(x \leq y \leq z\) and \(x + y + z = N\) is given by:
+
+\[
+\boxed{\sum_{x=0}^{\left\lfloor \frac{N}{3} \right\rfloor} \left( \left\lfloor \frac{N - x}{2} \right\rfloor - x + 1 \right)}
+\]

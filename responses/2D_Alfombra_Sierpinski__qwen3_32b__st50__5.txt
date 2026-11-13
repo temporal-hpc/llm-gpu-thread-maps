@@ -1,0 +1,63 @@
+To determine the value of `delta_x` based on a given `m` in the range `[0, 7]`, we can follow a well-defined, piecewise mathematical approach. The sequence of `delta_x` values for this range is:
+
+```
+m:       0  1  2  3  4  5  6  7
+delta_x: 0  1  2  0  2  0  1  2
+```
+
+---
+
+### **Step-by-Step Derivation**
+
+We define a function `delta_x(m)` as follows:
+
+$$
+\delta_x(m) =
+\begin{cases}
+m, & \text{if } m < 3 \\
+2(m - 3), & \text{if } 3 \leq m < 5 \\
+m - 5, & \text{if } m \geq 5
+\end{cases}
+$$
+
+This piecewise function accurately captures the behavior of `delta_x` for all integer values of `m` in the range `[0, 7]`.
+
+---
+
+### **Optional Generalization with `y`**
+
+If we define:
+
+$$
+y = \left\lfloor \frac{m + 2}{3} \right\rfloor
+$$
+
+Then we can also express `delta_x` in terms of `y`:
+
+$$
+\delta_x(m) =
+\begin{cases}
+m, & \text{if } y = 0 \\
+2(m - 3), & \text{if } y = 1 \\
+m - 5, & \text{if } y = 2
+\end{cases}
+$$
+
+This provides an alternative, slightly more abstract but equivalent, formulation using `y` to group the ranges of `m`.
+
+---
+
+### **Final Answer**
+
+Given an integer `m` in `[0, 7]`, the value of `delta_x` is determined by the following **piecewise function**:
+
+$$
+\boxed{
+\delta_x(m) =
+\begin{cases}
+m, & \text{if } m < 3 \\
+2(m - 3), & \text{if } 3 \leq m < 5 \\
+m - 5, & \text{if } m \geq 5
+\end{cases}
+}
+$$

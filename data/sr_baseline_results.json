@@ -1,0 +1,25 @@
+{
+  "x": {
+    "expr": "sqrt(sub(add(sqrt(div(X0, 0.427)), mul(-0.516, X0)), log(X0)))",
+    "r2": 0.24965796391434902,
+    "mse": 83268.1678931637,
+    "exact_raw": 1e-06,
+    "exact_rounded": 0.001417,
+    "max_abs_err": 716.5744531692825
+  },
+  "y": {
+    "expr": "sub(sqrt(add(X0, X0)), neg(-0.980))",
+    "r2": 0.999999246831651,
+    "mse": 0.08368539100218461,
+    "exact_raw": 0.0,
+    "exact_rounded": 0.980721,
+    "max_abs_err": 0.9798461885530774
+  },
+  "pair": {
+    "exact_both": 0.001415,
+    "unique_pairs": 2131,
+    "gt_pairs": 1000000,
+    "covered": 2129,
+    "negative": 1
+  }
+}

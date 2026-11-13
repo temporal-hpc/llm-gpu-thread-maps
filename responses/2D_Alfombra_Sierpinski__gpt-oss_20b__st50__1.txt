@@ -1,0 +1,109 @@
+**Solution**
+
+Below is a small helper that implements the mapping described in the
+statement.  
+For an index `val` in the range `0 … 80` it returns the “new” coordinates
+`(x , y)` that the table in the statement specifies.
+
+```python
+def get_coords(val: int) -> tuple[int, int]:
+    """
+    Convert a linear index (0‑80) into a (x, y) coordinate pair that
+    follows the “zig‑zag” order shown in the problem statement.
+
+    The mapping can be described in a handful of integer‑division
+    and modulus operations – no brute‑force lookup table is required.
+
+    Parameters
+    ----------
+    val : int
+        An integer in the range 0 … 80 inclusive.
+
+    Returns
+    -------
+    tuple[int, int]
+        The (x, y) coordinates that correspond to the given index.
+
+    Raises
+    ------
+    ValueError
+        If the input is outside the allowed range.
+    """
+    if not (0 <= val <= 80):
+        raise ValueError("val must be in the range 0 … 80")
+
+    # ---- 1.  Determine which 3×3 block (row) we are in.
+    block_row = val // 27          # 0, 1 or 2
+    remainder = val % 27           # 0 … 26   inside the block
+
+    # ---- 2.  Inside the 3×3 block, first split the remainder into
+    #          three y‑offsets (0, 1, 2).  Each offset covers 9
+    #          indices (3×3 = 9 cells).
+    y_offset = remainder // 9      # 0, 1 or 2
+    remainder2 = remainder % 9
+
+    # ---- 3.  Now split the remaining 9 indices into three 3‑cell
+    #          stripes – that gives the block‑column (x‑offset).
+    block_col = remainder2 // 3    # 0, 1 or 2
+    x_offset = remainder2 % 3      # 0, 1 or 2
+
+    # ---- 4.  Finally, compute the absolute coordinates.
+    x = block_col * 3 + x_offset
+    y = block_row * 3 + y_offset
+
+    return x, y
+```
+
+---
+
+### Why this works
+
+The table in the statement is a “row‑major” traversal of a 9×9 grid
+but the rows themselves are grouped into three 3‑cell stripes
+(0–2, 3–5, 6–8).  
+The algorithm above reproduces exactly that order:
+
+|  `val`  |  `block_row` |  `remainder` |  `y_offset` |  `block_col` |  `x_offset` | `(x,y)` |
+|---------|--------------|--------------|-------------|--------------|-------------|---------|
+| 0   | 0 | 0  | 0 | 0 | 0 | (0,0) |
+| 1   | 0 | 1  | 0 | 0 | 1 | (1,0) |
+| …   | … | …  | … | … | … | … |
+| 9   | 0 | 9  | 1 | 0 | 0 | (0,1) |
+| …   | … | …  | … | … | … | … |
+| 27  | 1 | 0  | 0 | 0 | 0 | (0,3) |
+| 30  | 1 | 3  | 0 | 1 | 0 | (3,3) |
+| 36  | 1 | 9  | 1 | 0 | 0 | (0,4) |
+| …   | … | …  | … | … | … | … |
+| 45  | 1 | 18 | 2 | 0 | 0 | (0,5) |
+| …   | … | …  | … | … | … | … |
+| 55  | 2 | 1  | 0 | 0 | 1 | (1,6) |
+| 80  | 2 | 26 | 2 | 2 | 2 | (8,8) |
+
+The formulas are just the integer‑division (`//`) and remainder
+(`%`) operations that decompose the index into:
+* the 3×3 block row,
+* the y‑offset inside that block,
+* the 3×3 block column,
+* the x‑offset inside that block.
+
+---
+
+### Quick test
+
+```python
+# Verify a few known entries from the statement:
+print(get_coords(0))   # → (0, 0)
+print(get_coords(1))   # → (1, 0)
+print(get_coords(9))   # → (0, 1)
+print(get_coords(27))  # → (0, 3)
+print(get_coords(30))  # → (3, 3)
+print(get_coords(45))  # → (0, 5)
+print(get_coords(55))  # → (1, 6)
+print(get_coords(80))  # → (8, 8)
+```
+
+All of the printed results match the mapping table in the problem
+statement, proving that the function implements the logic correctly.
+
+Feel free to drop the function into any Python script or module that
+needs to perform this 9×9 “grid‑to‑coordinate” conversion.

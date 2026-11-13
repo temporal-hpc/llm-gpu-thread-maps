@@ -1,0 +1,42 @@
+To solve this problem, we need to determine the coordinates (x, y) for a given integer n in a sequence where each row y contains exactly y+1 elements. The sequence starts from 0 and increments by 1 for each subsequent element.
+
+### Approach
+The approach involves determining the row y such that the sum of all previous rows is less than or equal to n. This can be achieved using mathematical insights:
+
+1. **Identify the Row (y):** Calculate the largest integer y such that the sum of the first y+1 natural numbers (i.e., 1 + 2 + ... + (y+1)) is less than or equal to n. This sum can be represented by the formula \( S(y) = \frac{y(y+1)}{2} \).
+
+2. **Determine Position within Row:** Once y is determined, compute the position of n within this row. This is done by subtracting the sum of all previous rows from n.
+
+3. **Calculate x:** The position within the row gives us the value of x directly.
+
+### Solution Code
+```python
+import math
+
+def find_xy(n):
+    if n < 0:
+        return None, None  # Assuming invalid input returns None for both coordinates
+    
+    y = int((math.sqrt(8 * n + 1) - 1) // 2)
+    
+    # Ensure that we have the correct y by checking if S(y) exceeds n
+    while y * (y + 1) // 2 > n:
+        y -= 1
+    
+    pos = n - (y * (y + 1) // 2)
+    x = pos
+    
+    return x, y
+
+# Example usage:
+n = 5
+x, y = find_xy(n)
+print(f"For n={n}, the coordinates are ({x}, {y})")
+```
+
+### Explanation
+- **Mathematical Insight:** The sum of the first m natural numbers is given by \( S(m) = \frac{m(m+1)}{2} \). We use this to determine the row y where the element n lies.
+- **Row Calculation:** Using the quadratic formula, we solve for y such that \( S(y) \leq n < S(y+1) \).
+- **Position within Row:** Once y is found, the position of n within this row is calculated by subtracting the sum up to the previous row from n.
+
+This approach efficiently determines the coordinates (x, y) using mathematical properties and ensures optimal performance even for large values of n.

@@ -1,0 +1,69 @@
+To determine the coordinates $(x, y, z)$ corresponding to a given integer $n$, we can follow a structured and mathematical approach based on the observed patterns in the data. The mapping is such that for each $n$, the coordinate space is divided into layers (or slices) along the $z$-axis, and within each layer, the $x$ and $y$ coordinates are generated using a repeating 2D pattern.
+
+---
+
+### 🧮 Step-by-Step Formula
+
+Given a non-negative integer $n$, the corresponding 3D coordinate $(x, y, z)$ is computed as follows:
+
+1. **Determine the layer (z-coordinate):**
+   $$
+   z = \left\lfloor \frac{n}{8} \right\rfloor
+   $$
+   Each layer contains 8 points, and this gives the vertical position in 3D space.
+
+2. **Find the position within the layer (adjusted index $n'$):**
+   $$
+   n' = n \mod 8
+   $$
+   This gives the index within the current layer (0 to 7).
+
+3. **Compute the group $k$ and the offset $m$ within the group:**
+   $$
+   k = \left\lfloor \frac{n'}{5} \right\rfloor \\
+   m = n' \mod 5
+   $$
+   Here, each group of 5 points corresponds to a unique pattern in the 2D grid for $x$ and $y$.
+
+4. **Determine the $x$ and $y$ coordinates based on the pattern:**
+
+   - **If $m < 3$:**
+     $$
+     x = m \\
+     y = 2k
+     $$
+     This corresponds to the even $y$-row in the pattern.
+
+   - **If $m = 3$ or $m = 4$:**
+     $$
+     y = 2k + 1 \\
+     x = \begin{cases}
+     0 & \text{if } m = 3 \\
+     2 & \text{if } m = 4
+     \end{cases}
+     $$
+     This corresponds to the odd $y$-row in the pattern.
+
+---
+
+### ✅ Example
+
+Let's compute the coordinates for $n = 13$:
+
+1. $z = \left\lfloor \frac{13}{8} \right\rfloor = 1$  
+2. $n' = 13 \mod 8 = 5$  
+3. $k = \left\lfloor \frac{5}{5} \right\rfloor = 1$  
+4. $m = 5 \mod 5 = 0$  
+5. Since $m < 3$:
+   - $x = 0$
+   - $y = 2k = 2$
+
+**Result:** $(x, y, z) = (0, 2, 1)$
+
+---
+
+### 📌 Summary
+
+This method allows for a clean and deterministic mapping of any integer $n$ to a 3D coordinate $(x, y, z)$ using a well-defined 2D pattern repeated across layers. The key insight is that each layer contains 8 points, and within each layer, the $x$ and $y$ coordinates follow a consistent 5-point group pattern.
+
+This approach is efficient, scalable, and works for all $n \geq 0$.

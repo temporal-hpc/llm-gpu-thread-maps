@@ -1,0 +1,44 @@
+The list is built block‑wise.  
+Each 3×3 block of lattice points is scanned row‑by‑row, but the centre
+cell \((1,1)\) of every block is omitted.  
+The blocks themselves are processed in row‑major order, skipping any
+block whose block–indices \((\lfloor x/3 \rfloor,\; \lfloor y/3 \rfloor)\) are
+both odd.
+
+For the point \((11,2)\):
+
+1. **Block containing (11,2)**  
+   \[
+   \text{block\_x}= \Big\lfloor\frac{11}{3}\Big\rfloor = 3,\qquad
+   \text{block\_y}= \Big\lfloor\frac{2}{3}\Big\rfloor = 0.
+   \]
+   The block starts at \((9,0)\) and it is not an “odd‑odd” block, so
+   it is included.
+
+2. **Threads before this block**  
+   All preceding full blocks contribute \(8\) threads each.  
+   Blocks before \((9,0)\) are:
+   - \(y=0\) row: blocks \((0,0),(1,0),(2,0)\) → \(3\times8 = 24\) threads
+   - \(y=3\) row: blocks \((0,1),(2,1)\) → \(2\times8 = 16\) threads
+   - \(y=6\) row: blocks \((0,2),(1,2),(2,2)\) → \(3\times8 = 24\) threads
+
+   Total preceding threads  
+   \[
+   24+16+24 = 64.
+   \]
+
+3. **Position inside the block \((9,0)\)**  
+   Inside the block \((9,0)\) the points (scanned row‑by‑row, centre
+   omitted) are:
+   \[
+   (9,0),(10,0),(11,0),(9,1),(11,1),(9,2),(10,2),(11,2).
+   \]
+   The point \((11,2)\) is the 8th entry in this block.
+
+4. **Thread ID**  
+   \[
+   \text{thread}(11,2)=64 \;(\text{threads before block}) + 8
+   = 71.
+   \]
+
+Hence the thread number for the lattice point \((11,2)\) is **71**.

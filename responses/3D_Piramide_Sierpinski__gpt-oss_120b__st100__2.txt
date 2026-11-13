@@ -1,0 +1,18 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError
+    x = y = z = 0
+    shift = 0
+    while n:
+        pair = n & 3
+        if pair == 1:
+            x += 1 << shift
+        elif pair == 2:
+            y += 1 << shift
+        elif pair == 3:
+            z += 1 << shift
+        n >>= 2
+        shift += 1
+    return (x, y, z)
+```

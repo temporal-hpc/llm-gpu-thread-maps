@@ -1,0 +1,32 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError
+    def cum(z):
+        return (z + 1) * (z + 2) * (z + 3) // 6
+    low, high = 0, 1
+    while cum(high) <= n:
+        high <<= 1
+    while low < high:
+        mid = (low + high) // 2
+        if cum(mid) > n:
+            high = mid
+        else:
+            low = mid + 1
+    z = low
+    prev_cum = 0 if z == 0 else cum(z - 1)
+    offset = n - prev_cum
+    def pairs_up(y):
+        return (y + 1) * (y + 2) // 2
+    y_low, y_high = 0, z
+    while y_low < y_high:
+        y_mid = (y_low + y_high) // 2
+        if pairs_up(y_mid) > offset:
+            y_high = y_mid
+        else:
+            y_low = y_mid + 1
+    y = y_low
+    prev_pairs = 0 if y == 0 else pairs_up(y - 1)
+    x = offset - prev_pairs
+    return (x, y, z)
+```

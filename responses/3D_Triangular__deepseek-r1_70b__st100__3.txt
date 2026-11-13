@@ -1,0 +1,85 @@
+To determine the values of \( z \), \( x \), and \( y \) for a given position \( n \) in a sequence where each layer \( k = z \) contains \( T(k+1) = \frac{(k+1)(k+2)}{2} \) points:
+
+### Step-by-Step Explanation
+
+1. **Convert to Zero-Based Index:**
+   Let \( m = n - 1 \).
+
+2. **Determine the Layer \( k \):**
+   Find the largest integer \( k \) such that:
+   \[
+   S(k) = \frac{k(k+1)(k+2)}{6} \leq m < S(k+1)
+   \]
+   Here, \( S(k) \) is the cumulative number of points up to layer \( k \).
+
+3. **Compute Position within Layer:**
+   Calculate \( p = m - S(k-1) \), where \( S(-1) = 0 \).
+
+4. **Determine \( x \) and \( y \):**
+   Within layer \( k \), the points are ordered such that for each possible sum \( s = x + y \) from 0 to \( 2k \):
+   - The number of points for each \( s \) is determined by how many pairs \( (x, y) \) satisfy \( x + y = s \).
+   
+   Iterate through possible sums \( s \) starting from 0:
+   - For each \( s \), calculate the number of valid \( (x, y) \) pairs in layer \( k \). Subtract this count from \( p \) until \( p \) falls within the current sum's range.
+   - Once the correct \( s \) is found, determine \( x \) and \( y \) based on their order.
+
+### Formula
+
+After determining \( k \), to find \( x \) and \( y \):
+
+1. **Calculate Cumulative Counts:**
+   For each possible sum \( s \):
+   - The number of points with \( x + y = s \) is:
+     \[
+     \text{count}(s) = 
+     \begin{cases} 
+     s + 1 & \text{if } s \leq k \\
+     (2k - s) + 1 & \text{if } s > k 
+     \end{cases}
+     \]
+   
+2. **Find the Correct Sum \( s \):**
+   Iterate through \( s = 0, 1, ..., 2k \):
+   - Subtract \( \text{count}(s) \) from \( p \) until \( p < \text{count}(s) \).
+
+3. **Determine \( x \) and \( y \):**
+   Once \( s \) is found, the specific pair \( (x, y) \) can be determined based on their order within that sum.
+
+### Example
+
+For \( n = 5 \) (0-based \( m = 4 \)):
+
+1. **Find Layer \( k \):**
+   Solve \( S(k) \leq 4 < S(k+1) \).
+   
+   Calculate:
+   - \( S(2) = 2 \times 3 \times 4 / 6 = 4 \)
+   - Thus, \( k = 2 \).
+
+2. **Compute \( p = 4 - S(1) = 4 - 1 = 3 \).
+
+3. **Determine \( x \) and \( y \):**
+   For layer \( k=2 \):
+   - Possible sums \( s \) from 0 to 4.
+   
+   Calculate cumulative counts:
+   - \( s=0 \): count=1 → p becomes 3-1=2
+   - \( s=1 \): count=2 → p becomes 2-2=0 (now within this sum)
+   
+   For \( s=1 \), the points are ordered as \( (0,1) \) and \( (1,0) \). Since \( p=0 \), it's the first point: \( x=0 \), \( y=1 \).
+
+Thus, for \( n = 5 \), \( z=2 \), \( x=0 \), \( y=1 \).
+
+### Final Answer
+
+For a given position \( n \):
+- Compute \( m = n - 1 \).
+- Determine the layer \( k \) using cumulative sums.
+- Calculate \( p = m - S(k-1) \).
+- Map \( p \) to \( x \) and \( y \) within layer \( k \).
+
+The final values are:
+\[
+z = \boxed{k}, \quad x = \boxed{x}, \quad y = \boxed{y}
+\]
+where \( k \), \( x \), and \( y \) are determined by the steps above.

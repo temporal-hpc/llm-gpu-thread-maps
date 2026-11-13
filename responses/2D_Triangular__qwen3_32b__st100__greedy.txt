@@ -1,0 +1,75 @@
+To determine the coordinate $(x, y)$ of the $n$-th number in the sequence, we use the following mathematical approach:
+
+---
+
+### **Step-by-Step Explanation**
+
+1. **Understanding the Pattern**:
+   - The sequence is arranged in rows where each row $y$ contains $y+1$ elements.
+   - For example:
+     - Row $y=0$: 1 element → $(0,0)$
+     - Row $y=1$: 2 elements → $(0,1), (1,1)$
+     - Row $y=2$: 3 elements → $(0,2), (1,2), (2,2)$
+     - Row $y=3$: 4 elements → $(0,3), (1,3), (2,3), (3,3)$
+     - And so on.
+
+2. **Finding the Row $y$**:
+   - The total number of elements up to row $y$ is given by the sum of the first $y+1$ natural numbers:
+     $$
+     S(y) = \frac{(y+1)(y+2)}{2}
+     $$
+   - To find the row $y$ that contains the $n$-th number, solve for $y$ in the inequality:
+     $$
+     \frac{y(y+1)}{2} \leq n < \frac{(y+1)(y+2)}{2}
+     $$
+   - This simplifies to:
+     $$
+     y = \left\lfloor \frac{\sqrt{8n + 1} - 1}{2} \right\rfloor
+     $$
+
+3. **Finding the Column $x$**:
+   - Once $y$ is determined, the position within the row is:
+     $$
+     x = n - \frac{y(y+1)}{2}
+     $$
+
+---
+
+### **Final Formula**
+
+Given the index $n$, the coordinate $(x, y)$ is:
+
+$$
+y = \left\lfloor \frac{\sqrt{8n + 1} - 1}{2} \right\rfloor
+$$
+$$
+x = n - \frac{y(y+1)}{2}
+$$
+
+---
+
+### **Example**
+
+For $n = 6$:
+
+- Compute $y$:
+  $$
+  y = \left\lfloor \frac{\sqrt{8 \cdot 6 + 1} - 1}{2} \right\rfloor = \left\lfloor \frac{\sqrt{49} - 1}{2} \right\rfloor = \left\lfloor \frac{7 - 1}{2} \right\rfloor = 3
+  $$
+- Compute $x$:
+  $$
+  x = 6 - \frac{3 \cdot 4}{2} = 6 - 6 = 0
+  $$
+- Result: $(x, y) = (0, 3)$
+
+---
+
+### **Answer**
+
+The coordinate of the $n$-th number in the sequence is:
+
+$$
+\boxed{
+\left( n - \frac{y(y+1)}{2}, \left\lfloor \frac{\sqrt{8n + 1} - 1}{2} \right\rfloor \right)
+}
+$$

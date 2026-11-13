@@ -1,0 +1,16 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non‑negative integer")
+    arrangement = n // 64
+    rem = n % 64
+    block = rem // 8
+    offset = rem % 8
+    block_offsets = [(0, 0), (3, 0), (6, 0), (0, 3), (6, 3), (0, 6), (3, 6), (6, 6)]
+    offset_offsets = [(0, 0), (1, 0), (2, 0), (0, 1), (2, 1), (0, 2), (1, 2), (2, 2)]
+    bx, by = block_offsets[block]
+    ox, oy = offset_offsets[offset]
+    x = arrangement * 9 + bx + ox
+    y = by + oy
+    return (x, y)
+```

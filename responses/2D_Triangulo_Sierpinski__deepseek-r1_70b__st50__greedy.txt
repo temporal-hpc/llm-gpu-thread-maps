@@ -1,0 +1,22 @@
+To determine the value of \( y \) for a given \( n \), observe the following pattern:
+
+1. **Identify Blocks**: The numbers are divided into blocks where each block's size doubles every two increments of \( y \).
+   - Block 0: Size = 1 (covers \( n = 0 \))
+   - Blocks 1 & 2: Size = 2 each
+   - Blocks 3 & 4: Size = 4 each
+   - Blocks 5 & 6: Size = 8 each
+   - And so on.
+
+2. **Determine Block**: Find which block \( n \) falls into by summing the sizes until you reach or exceed \( n + 1 \).
+
+3. **Calculate \( y \)**: The value of \( y \) corresponds to the block number.
+
+**Example**:
+- For \( n = 5 \):
+  - Block 0: 0
+  - Blocks 1 & 2: 1, 2; 3, 4
+  - Blocks 3 & 4: 5, 6, 7, 8
+  - Since 5 falls in Block 3, \( y = 3 \).
+
+**Answer**:  
+\( y = 3 \)

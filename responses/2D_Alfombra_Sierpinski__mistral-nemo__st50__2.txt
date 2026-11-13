@@ -1,0 +1,2 @@
+def map_to_coordinates(n):
+    return (n % 9, n // 9)

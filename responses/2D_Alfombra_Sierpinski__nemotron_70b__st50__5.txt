@@ -1,0 +1,12 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer")
+    
+    row = int(((3 * n + np.sqrt(81 * n**2 + 108 * n)) / 54) ** (1/3))
+    col = n - ((row * (row - 1)) // 2) * 3
+    if col >= row:
+        return (col - row, row)
+    else:
+        return (row, (col * -1) - 1 + row)
+```

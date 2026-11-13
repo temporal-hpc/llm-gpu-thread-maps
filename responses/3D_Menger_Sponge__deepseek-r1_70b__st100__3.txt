@@ -1,0 +1,54 @@
+To determine the coordinates (x, y, z) for a given thread number `n`, observe the following:
+
+1. **Identify the Pattern**:
+   - For each increment in `n`, either `x` or `y` increments, and sometimes they reset.
+   - Notice that every 4 threads, the pattern repeats with an increment in `z`.
+
+2. **Formulate the Rules**:
+   - **x**: Increments by 1 for even `n`, resets when reaching 3.
+   - **y**: Increments by 1 for odd `n`, resets when reaching 3.
+   - **z**: Increments every 4 threads.
+
+3. **Calculate Coordinates**:
+   - Compute `x` and `y` based on their respective rules.
+   - Determine `z` by integer division of `n` by 4.
+
+---
+
+**Step-by-Step Explanation and Answer:**
+
+Given a thread number `n`, the coordinates (x, y, z) can be determined as follows:
+
+1. **Determine x**:
+   - For even values of `n`, increment `x` by 1.
+   - If `x` reaches 3, reset it to 0.
+
+2. **Determine y**:
+   - For odd values of `n`, increment `y` by 1.
+   - If `y` reaches 3, reset it to 0.
+
+3. **Determine z**:
+   - Increment `z` every 4 threads (i.e., for each group of 4 consecutive thread numbers).
+
+By applying these rules, you can compute the exact coordinates for any given thread number `n`.
+
+---
+
+**Final Answer:**
+
+To find the coordinates (x, y, z) for a thread number `n`, use the following method:
+
+1. **Calculate x**:
+   - If `n` is even, \( x = (x_{previous} + 1) \mod 3 \).
+   - If `x` reaches 3, reset to 0.
+
+2. **Calculate y**:
+   - If `n` is odd, \( y = (y_{previous} + 1) \mod 3 \).
+   - If `y` reaches 3, reset to 0.
+
+3. **Calculate z**:
+   - \( z = \left\lfloor \frac{n}{4} \right\rfloor \).
+
+---
+
+This structured approach ensures that each coordinate is updated correctly based on the thread number's properties.

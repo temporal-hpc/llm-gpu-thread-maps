@@ -1,0 +1,43 @@
+To solve this problem, we need to map a given non-negative integer `n` to a coordinate pair `(x, y)` based on a specific pattern. The pattern follows that for each `y`, the values of `x` range from `0` to `y`, and the sequence of `n` starts at the triangular number `s = y(y + 1)/2` for each `y`. The goal is to determine `y` such that `s` is the largest triangular number less than or equal to `n`, and then compute `x` as `n - s`.
+
+### Approach
+1. **Problem Analysis**: The problem requires transforming a single integer `n` into a coordinate pair `(x, y)` where:
+   - `y` is the largest integer such that the triangular number `s = y(y + 1)/2` is less than or equal to `n`.
+   - `x` is the difference between `n` and `s`, i.e., `x = n - s`.
+
+2. **Key Insight**: The value of `y` can be derived by solving the quadratic inequality `y(y + 1)/2 ≤ n`. Rearranging this gives `y² + y - 2n ≤ 0`. The solution involves finding `y = floor((-1 + sqrt(1 + 8n))/2)`.
+
+3. **Algorithm Selection**:
+   - **Binary Search**: To efficiently compute `k = floor(sqrt(1 + 8n))` without using floating-point operations or external libraries, we use binary search over the range `[1, 8n + 1]`.
+   - **Derive `y`**: Once `k` is found, `y` is computed as `(k - 1) // 2`.
+   - **Compute `x`**: The value `x` is simply `n - y(y + 1)/2`.
+
+4. **Complexity Analysis**: The binary search runs in `O(log n)` time since the search space is proportional to `n`. The space complexity is `O(1)` as we only use a few variables.
+
+### Solution Code
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError
+    x_val = 8 * n + 1
+    low, high = 1, x_val
+    while low <= high:
+        mid = (low + high) // 2
+        if mid * mid <= x_val:
+            low = mid + 1
+        else:
+            high = mid - 1
+    k = high
+    y = (k - 1) // 2
+    return (n - y * (y + 1) // 2, y)
+```
+
+### Explanation
+1. **Input Validation**: The function first checks if `n` is a non-negative integer. If not, it raises a `ValueError`.
+2. **Binary Search Setup**: The variable `x_val` is set to `8n + 1`, which is derived from the quadratic equation solution. The binary search is initialized with `low` as 1 and `high` as `x_val`.
+3. **Binary Search Execution**: The loop adjusts `low` and `high` to find the largest integer `k` such that `k² ≤ x_val`. This `k` is essentially `floor(sqrt(8n + 1))`.
+4. **Compute `y`**: Using `k`, `y` is calculated as `(k - 1) // 2`, which effectively solves the quadratic equation for `y`.
+5. **Compute `x`**: The value `x` is derived by subtracting the triangular number `y(y + 1)/2` from `n`.
+6. **Return Result**: The function returns the coordinate pair `(x, y)`.
+
+This approach efficiently maps the integer `n` to the required coordinate pair using binary search to avoid floating-point inaccuracies and ensure optimal performance.

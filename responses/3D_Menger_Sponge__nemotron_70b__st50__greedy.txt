@@ -1,0 +1,24 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer")
+
+    z = n // 9
+    remainder = n % 9
+    y = remainder // 3
+    x = remainder % 3
+
+    # Adjust for patterns observed in the mapping data
+    if x == 2:
+        x, y = y, x
+        if y > 0:
+            y -= 1
+    x += (z * 3)
+    
+    # Further adjustments to align with provided coordinates
+    if z % 2 != 0:
+        max_x_for_z = 2 + (z * 3)
+        x = max_x_for_z - x
+    
+    return (x, y, z)
+```

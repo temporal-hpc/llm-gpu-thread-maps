@@ -1,0 +1,29 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError
+    cum = 0
+    y = 0
+    while True:
+        block = 1 << y.bit_count()
+        if cum + block > n:
+            r = n - cum
+            pos = []
+            t = y
+            b = 0
+            while t:
+                if t & 1:
+                    pos.append(b)
+                b += 1
+                t >>= 1
+            x = 0
+            i = 0
+            while r:
+                if r & 1:
+                    x |= 1 << pos[i]
+                i += 1
+                r >>= 1
+            return (x, y)
+        cum += block
+        y += 1
+```

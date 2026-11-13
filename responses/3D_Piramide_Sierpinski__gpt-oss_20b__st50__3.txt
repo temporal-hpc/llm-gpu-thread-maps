@@ -1,0 +1,20 @@
+It turns out there isn’t a magic “max‑digit” knob that you hit – the number of digits that you can put on one line is just the number of characters that make up the value (or the width of the console you’re writing to).  
+
+In practice the way to get that number is to look at the string representation of the value:
+
+| Language | Code to get the number of digits |
+|----------|----------------------------------|
+| JavaScript | `let digits = number.toString().length;` |
+| Python | `digits = len(str(number))` |
+| Java | `int digits = String.valueOf(number).length();` |
+| C / C++ | `char buf[64]; int n = snprintf(buf, sizeof buf, "%lld", number); int digits = n;` |
+
+If you prefer a mathematical shortcut for an integer `n` (and `n` > 0):
+
+```cpp
+int digits = floor(log10(n)) + 1;
+```
+
+(For negative numbers, use `abs(n)` first.)
+
+That gives you the exact count of decimal digits, which is the maximum number of digits that can be rendered on one line **provided your output width (the terminal or console) is wide enough**. If you want to guard against wrapping, just compare `digits` with the terminal’s column count (`$COLUMNS` on POSIX shells, `GetConsoleScreenBufferInfo` on Windows, etc.) and truncate or wrap as needed.

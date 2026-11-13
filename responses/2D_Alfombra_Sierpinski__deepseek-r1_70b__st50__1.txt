@@ -1,0 +1,22 @@
+To solve the problem of determining the coordinates (x, y) for a given index \( n \), we can observe that the pattern follows a specific sequence where both \( x \) and \( y \) increment in a particular manner. By examining the initial values provided:
+
+- When \( n = 0 \): \( x = 0 \), \( y = 0 \)
+- When \( n = 1 \): \( x = 1 \), \( y = 0 \)
+- When \( n = 2 \): \( x = 2 \), \( y = 0 \)
+- When \( n = 3 \): \( x = 0 \), \( y = 1 \)
+- When \( n = 4 \): \( x = 2 \), \( y = 1 \)
+- When \( n = 5 \): \( x = 0 \), \( y = 2 \)
+- When \( n = 6 \): \( x = 1 \), \( y = 2 \)
+
+We can deduce that the sequence alternates between moving right across columns (incrementing \( x \)) and then moving down rows (incrementing \( y \)). 
+
+The solution involves calculating \( x \) and \( y \) using the following approach:
+- \( y \) is determined by \( n // 3 \), which gives the quotient when \( n \) is divided by 3.
+- \( x \) is determined by \( n \% 3 \), which gives the remainder when \( n \) is divided by 3.
+
+Thus, the formulas are:
+\[ x = n \% 3 \]
+\[ y = \left\lfloor \frac{n}{3} \right\rfloor \]
+
+**Answer:** For a given \( n \), the coordinates are \( (x, y) = (n \% 3, \lfloor n / 3 \rfloor) \). So, the final answer is:
+\[ \boxed{(x, y) = (n \% 3, \left\lfloor \dfrac{n}{3} \right\rfloor)} \]

@@ -1,0 +1,26 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer")
+
+    def cantor_pairing(x, y):
+        return ((x + y) * (x + y + 1)) // 2 + y
+
+    z = 0
+    while True:
+        max_cantor = ((3 * n) * (3 * n + 1)) // 2 - 1
+        if cantor_pairing(n, 0) <= max_cantor:
+            break
+        n -= max_cantor + 1
+        z += 1
+
+    def inverse_cantor_pairing(v):
+        w = int(((8 * v + 1) ** 0.5 - 1) / 2)
+        t = (w * w + w) // 2
+        y = v - t
+        x = w - y
+        return x, y
+
+    x, y = inverse_cantor_pairing(n)
+    return (x, y, z)
+```

@@ -1,0 +1,22 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input must be a non-negative integer.")
+
+    x = 0
+    y = 0
+
+    if n == 0:
+        return (0, 0)
+
+    sqrt_n = int(n**0.5)
+
+    if sqrt_n * sqrt_n == n:
+        x = sqrt_n
+        y = sqrt_n
+    else:
+        x = sqrt_n
+        y = n // sqrt_n
+
+    return (x, y)
+```

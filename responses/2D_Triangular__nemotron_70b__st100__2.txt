@@ -1,0 +1,20 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer")
+    
+    sum_val = 0
+    i = 0
+    
+    while sum_val < n:
+        sum_val += i
+        i += 1
+    
+    x = n - (sum_val - i) + i - 1
+    y = i - 1
+    
+    if x > y:
+        x, y = y, x
+    
+    return (x, y)
+```

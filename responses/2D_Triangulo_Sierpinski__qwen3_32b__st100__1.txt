@@ -1,0 +1,53 @@
+To determine the coordinates of a number $ n $ in the Ulam spiral, follow these steps:
+
+### **Step-by-Step Explanation:**
+
+1. **Find the Layer $ k $:**
+   - Identify the integer $ k $ such that $ (2k - 1)^2 < n \leq (2k + 1)^2 $.
+   - This $ k $ represents the "layer" of the spiral where $ n $ is located.
+
+2. **Calculate the Side Length $ s $:**
+   - $ s = 2k $. This is the side length of the square in the $ k $-th layer.
+
+3. **Compute the Distance $ m $:**
+   - $ m = n - (2k - 1)^2 - 1 $. This gives the position of $ n $ within the layer.
+
+4. **Determine the Side and Coordinates:**
+   - **Top Side ($ m \leq s $):**  
+     $ x = k - m $, $ y = k $.
+   - **Right Side ($ s < m \leq 2s $):**  
+     $ x = -k $, $ y = k - (m - s) $.
+   - **Bottom Side ($ 2s < m \leq 3s $):**  
+     $ x = -k + (m - 2s) $, $ y = -k $.
+   - **Left Side ($ 3s < m \leq 4s $):**  
+     $ x = k $, $ y = -k + (m - 3s) $.
+
+5. **Special Case for Perfect Squares:**
+   - If $ n = (2k - 1)^2 $, the coordinates are $ (k - 1, k - 1) $.
+
+---
+
+### **Example:**
+**Find the coordinates of $ n = 8 $:**
+
+1. **Find $ k $:**  
+   $ (2k - 1)^2 < 8 \leq (2k + 1)^2 $.  
+   For $ k = 1 $: $ (2*1 - 1)^2 = 1 < 8 \leq 9 $. Valid.
+
+2. **Calculate $ s $:**  
+   $ s = 2*1 = 2 $.
+
+3. **Compute $ m $:**  
+   $ m = 8 - 1 - 1 = 6 $.
+
+4. **Determine the Side:**  
+   Since $ 3s = 6 $, $ m = 6 $ is on the **left side**.
+
+5. **Calculate Coordinates:**  
+   $ x = 1 $, $ y = -1 + (6 - 6) = -1 $.  
+   **Coordinates: $ (1, -1) $**.
+
+---
+
+### **Final Answer:**
+The coordinates for $ n $ in the Ulam spiral are determined by the layer $ k $, side length $ s $, and position $ m $, as outlined above. For $ n = 8 $, the coordinates are $ \boxed{(1, -1)} $.

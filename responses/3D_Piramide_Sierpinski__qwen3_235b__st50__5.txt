@@ -1,0 +1,45 @@
+To solve this problem, we need to determine the position of a given triple (x, y, z) in a specific ordering of all possible non-negative integer triples. The ordering is defined such that triples are sorted first by their sum (s = x + y + z) in ascending order, and within triples of the same sum, they are sorted in descending order of x, then descending order of y, and finally ascending order of z.
+
+### Approach
+1. **Problem Analysis**: The problem requires finding the position of a triple (x, y, z) in a sequence where:
+   - Triples are grouped by their sum \( s = x + y + z \).
+   - Within each group of sum \( s \), triples are ordered by descending \( x \), then descending \( y \), and finally ascending \( z \).
+
+2. **Key Insight**: 
+   - **Triples with Sum Less Than \( s \)**: The number of triples with sum less than \( s \) is given by the combination formula \( C(s + 2, 3) \), which simplifies to \( \frac{s(s + 1)(s + 2)}{6} \).
+   - **Triples with Sum \( s \) and \( x > x_{\text{given}} \)**: For the given triple (x, y, z), the number of triples in the same sum group \( s \) that come before it due to a larger \( x \) value is \( \frac{(s - x)(s - x + 1)}{2} \).
+   - **Triples with Sum \( s \), \( x = x_{\text{given}} \), and \( y > y_{\text{given}} \)**: Within the subgroup where \( x \) is fixed, the number of triples with a larger \( y \) value is \( z \) (since \( s - x = y + z \), so \( s - x - y = z \)).
+
+3. **Formula Derivation**: The position of the triple (x, y, z) is the sum of:
+   - The count of all triples with sum less than \( s \): \( \frac{s(s + 1)(s + 2)}{6} \).
+   - The count of triples in the sum \( s \) group with \( x > x_{\text{given}} \): \( \frac{(s - x)(s - x + 1)}{2} \).
+   - The count of triples in the subgroup \( x = x_{\text{given}} \) with \( y > y_{\text{given}} \): \( z \).
+   - Plus 1 for the triple itself.
+
+Thus, the final position is calculated as:
+\[
+\text{position} = \frac{s(s + 1)(s + 2)}{6} + \frac{(s - x)(s - x + 1)}{2} + z + 1
+\]
+
+### Solution Code
+```python
+T = int(input().strip())
+for _ in range(T):
+    x, y, z = map(int, input().split())
+    s = x + y + z
+    term1 = s * (s + 1) * (s + 2) // 6
+    t = s - x
+    term2 = t * (t + 1) // 2
+    ans = term1 + term2 + z + 1
+    print(ans)
+```
+
+### Explanation
+1. **Reading Input**: The number of test cases \( T \) is read first. For each test case, the triple (x, y, z) is read.
+2. **Sum Calculation**: The sum \( s = x + y + z \) is computed for the triple.
+3. **Term1 Calculation**: This term counts all triples with sum less than \( s \) using the combination formula \( \frac{s(s + 1)(s + 2)}{6} \).
+4. **Term2 Calculation**: This term counts triples in the sum \( s \) group where \( x \) is greater than the given \( x \), computed as \( \frac{(s - x)(s - x + 1)}{2} \).
+5. **Position Calculation**: The final position is the sum of Term1 (triples with smaller sums), Term2 (triples with the same sum but larger \( x \)), \( z \) (triples with the same \( x \) but larger \( y \)), and 1 (for the triple itself).
+6. **Output**: The computed position is printed for each test case.
+
+This approach efficiently calculates the position by leveraging combinatorial mathematics to avoid brute-force enumeration, making it optimal for large inputs as specified in the problem constraints.

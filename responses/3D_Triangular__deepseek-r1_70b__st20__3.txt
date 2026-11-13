@@ -1,0 +1,28 @@
+To determine the coordinates \((x, y)\) from a given number \(n\), we can use the following steps:
+
+1. **Identify the highest power of 2 less than or equal to \(n\):** Let \(z\) be such that \(2^z\) is the largest power of 2 where \(2^z \leq n < 2^{z+1}\). This gives us \(z = \lfloor \log_2(n) \rfloor\).
+
+2. **Calculate \(l\):** Subtract this power from \(n\) to get \(l = n - 2^z\).
+
+3. **Determine coordinates:**
+   - If \(l < 2^{z-1}\), then set \(x = l\) and \(y = 0\).
+   - Otherwise, set \(x = l - 2^{z-1}\) and \(y = 1\).
+
+**Example Calculations:**
+
+- For \(n = 5\):
+  - \(z = 2\) since \(2^2 = 4 \leq 5 < 8 = 2^3\).
+  - \(l = 5 - 4 = 1\).
+  - Since \(1 < 2^{1} = 2\), set \(x = 1\) and \(y = 0\). Thus, coordinates are \((1, 0)\).
+
+- For \(n = 6\):
+  - \(z = 2\), so \(l = 6 - 4 = 2\).
+  - Since \(2 \geq 2^{1} = 2\), set \(x = 2 - 2 = 0\) and \(y = 1\). Thus, coordinates are \((0, 1)\).
+
+**Final Answer:**
+
+The coordinates for a given number \(n\) can be found using the above method. For example, \(n = 5\) results in \((1, 0)\) and \(n = 6\) results in \((0, 1)\). 
+
+\[
+\boxed{(x, y)}
+\]

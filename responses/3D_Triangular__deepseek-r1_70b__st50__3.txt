@@ -1,0 +1,49 @@
+To solve this problem, we need to map a given integer `n` to its corresponding 3D coordinates `(x, y, z)`. The approach involves determining the layer `z` in which `n` resides and then finding the exact position `(x, y)` within that layer.
+
+### Approach
+1. **Identify the Layer (z-coordinate)**: 
+   - Compute the tetrahedral number for each possible `k` until we find the largest `k` such that the tetrahedral number is less than or equal to `n`. The tetrahedral number is given by \( T(k) = \frac{k(k+1)(k+2)}{6} \).
+   
+2. **Determine Position within Layer (x and y coordinates)**:
+   - Once the layer `z` is determined, compute the position `m` of `n` within that layer as `m = n - T(z)`.
+   - Find the x-coordinate using the formula derived from triangular numbers: \( x = \left\lfloor \frac{\sqrt{8m + 1} - 1}{2} \right\rfloor \).
+   - Compute the y-coordinate as `y = m - (x * (x + 1)) // 2`.
+
+### Solution Code
+```python
+import math
+
+def get_coords(n):
+    if n < 0:
+        return None
+    
+    def tetra(k):
+        return k * (k + 1) * (k + 2) // 6
+    
+    # Find the appropriate layer z
+    z = 0
+    while True:
+        t = tetra(z)
+        if t > n:
+            z -= 1
+            break
+        else:
+            z += 1
+    if z < 0:
+        z = 0  # Ensure z is non-negative
+    
+    m = n - tetra(z)
+    
+    sqrt_val = math.sqrt(8 * m + 1)
+    x = int((sqrt_val - 1) // 2)
+    
+    y = m - (x * (x + 1)) // 2
+    
+    return (x, y, z)
+```
+
+### Explanation
+- **Layer Identification**: The function `tetra(k)` calculates the tetrahedral number for a given `k`. We increment `k` until we exceed `n`, then adjust to find the correct layer `z`.
+- **Position Calculation**: Using the position within the layer `m`, we determine `x` by solving a quadratic equation derived from triangular numbers. The y-coordinate is found by subtracting the sum of integers up to `x` from `m`.
+
+This approach efficiently maps an integer `n` to its 3D coordinates, ensuring correct positioning within the identified layer using mathematical properties and efficient search techniques.

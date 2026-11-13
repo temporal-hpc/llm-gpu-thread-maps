@@ -1,0 +1,41 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError
+    block, offset = divmod(n, 20)
+    base_x = block * 3
+    if offset < 8:
+        z = 0
+        idx = offset
+        if idx < 3:
+            y = 0
+            dx = idx
+        elif idx < 5:
+            y = 1
+            dx = (idx - 3) * 2
+        else:
+            y = 2
+            dx = idx - 5
+    elif offset < 12:
+        z = 1
+        idx = offset - 8
+        if idx < 2:
+            y = 0
+            dx = idx * 2
+        else:
+            y = 2
+            dx = (idx - 2) * 2
+    else:
+        z = 2
+        idx = offset - 12
+        if idx < 3:
+            y = 0
+            dx = idx
+        elif idx < 5:
+            y = 1
+            dx = (idx - 3) * 2
+        else:
+            y = 2
+            dx = idx - 5
+    return (base_x + dx, y, z)
+```

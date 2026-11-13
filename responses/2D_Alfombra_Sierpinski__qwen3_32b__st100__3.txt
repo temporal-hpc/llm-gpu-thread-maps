@@ -1,0 +1,83 @@
+To convert a 1D index $ n $ into 2D coordinates $ (x, y) $ in a specific space-filling curve (as observed in the pattern), we can use the following **iterative mathematical formula**. This approach is based on decomposing $ n $ into recursive substructures of size 9, similar to a variant of the Hilbert curve.
+
+---
+
+### **Mathematical Formula**
+
+Given a 1D index $ n $, the corresponding 2D coordinates $ (x, y) $ can be computed as follows:
+
+1. **Determine the recursive level (cycle):**
+   $$
+   \text{cycle} = \left\lfloor \frac{n}{9} \right\rfloor
+   $$
+
+2. **Determine the position within the current level:**
+   $$
+   p = n \mod 9
+   $$
+
+3. **Compute the quadrant within the 3x3 block:**
+   $$
+   y_{\text{adjust}} = \left\lfloor \frac{p}{3} \right\rfloor, \quad r = p \mod 3
+   $$
+
+4. **Compute the adjusted x-coordinate within the 3x3 block:**
+   - If $ y_{\text{adjust}} = 0 $:
+     $$
+     x_{\text{adjust}} = r
+     $$
+   - If $ y_{\text{adjust}} = 1 $:
+     $$
+     x_{\text{adjust}} = 2 \cdot (r \mod 2)
+     $$
+   - If $ y_{\text{adjust}} = 2 $:
+     $$
+     x_{\text{adjust}} = 1 + r
+     $$
+
+5. **Compute the final coordinates:**
+   $$
+   x = 3 \cdot \text{cycle} + x_{\text{adjust}}, \quad y = 3 \cdot \text{cycle} + y_{\text{adjust}}
+   $$
+
+---
+
+### **Example**
+
+Let’s compute $ (x, y) $ for $ n = 4 $:
+
+- $ \text{cycle} = \left\lfloor \frac{4}{9} \right\rfloor = 0 $
+- $ p = 4 \mod 9 = 4 $
+- $ y_{\text{adjust}} = \left\lfloor \frac{4}{3} \right\rfloor = 1 $, $ r = 4 \mod 3 = 1 $
+- Since $ y_{\text{adjust}} = 1 $, $ x_{\text{adjust}} = 2 \cdot (1 \mod 2) = 2 $
+- $ x = 3 \cdot 0 + 2 = 2 $, $ y = 3 \cdot 0 + 1 = 1 $
+
+✅ Result: $ (x, y) = (2, 1) $
+
+---
+
+### **Key Observations**
+
+- The curve is **recursive**, with each level being a 3×3 block of the previous level.
+- The coordinate transformation within a 3×3 block depends on the **quadrant** (determined by $ y_{\text{adjust}} $) and the **relative position** (determined by $ r $).
+- The formula is **iterative**, allowing for computation without recursion.
+
+---
+
+### **Final Answer**
+
+$$
+\boxed{
+\begin{aligned}
+\text{Given } n, \quad & \text{let } \text{cycle} = \left\lfloor \frac{n}{9} \right\rfloor, \quad p = n \mod 9, \\
+& y_{\text{adjust}} = \left\lfloor \frac{p}{3} \right\rfloor, \quad r = p \mod 3, \\
+& x_{\text{adjust}} = 
+\begin{cases}
+r & \text{if } y_{\text{adjust}} = 0, \\
+2 \cdot (r \mod 2) & \text{if } y_{\text{adjust}} = 1, \\
+1 + r & \text{if } y_{\text{adjust}} = 2,
+\end{cases} \\
+& x = 3 \cdot \text{cycle} + x_{\text{adjust}}, \quad y = 3 \cdot \text{cycle} + y_{\text{adjust}}.
+\end{aligned}
+}
+$$

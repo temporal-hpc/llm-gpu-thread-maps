@@ -1,0 +1,20 @@
+To determine the grouping logic based on the provided sequence of starting points (0, 1, 3, 5, 9, 11), we can analyze the differences between consecutive starts:
+
+- From 0 to 1: +1
+- From 1 to 3: +2
+- From 3 to 5: +2
+- From 5 to 9: +4
+- From 9 to 11: +2
+
+Observing these differences, we notice that they follow a pattern of powers of two with some repetition:
+- \(2^0 = 1\)
+- \(2^1 = 2\) (used twice)
+- \(2^2 = 4\)
+
+Thus, the starting points increment by powers of two in an alternating manner. This suggests that each group is defined based on increments that are powers of two, though not strictly increasing.
+
+Therefore, the final answer for the grouping logic is:
+
+**The sequence increases by powers of two alternately: +1, +2, +2, +4, +2, etc., leading to group starts at 0, 1, 3, 5, 9, 11.**
+
+\boxed{0}, \boxed{1}, \boxed{3}, \boxed{5}, \boxed{9}, \boxed{11}

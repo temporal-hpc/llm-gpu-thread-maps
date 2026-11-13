@@ -1,0 +1,66 @@
+To determine how many points in the given structure have a **y-coordinate equal to 2013**, we need to analyze the pattern of how points are distributed in the coordinate plane.
+
+---
+
+### Pattern Analysis
+
+From the problem and earlier observations, we deduce that for any given **y**, the number of points that have that **y-coordinate** is:
+
+$$
+\text{count}(y) = 2^k
+$$
+
+where $ k $ is the **largest integer** such that:
+
+$$
+2^k \leq y + 1
+$$
+
+This can be rewritten as:
+
+$$
+k = \left\lfloor \log_2(y + 1) \right\rfloor
+$$
+
+So, the number of points with a given y-coordinate is:
+
+$$
+\text{count}(y) = 2^{\left\lfloor \log_2(y + 1) \right\rfloor}
+$$
+
+---
+
+### Applying the Formula to $ y = 2013 $
+
+We compute:
+
+$$
+y + 1 = 2013 + 1 = 2014
+$$
+
+Now, we find the largest integer $ k $ such that $ 2^k \leq 2014 $.
+
+We know:
+
+- $ 2^{10} = 1024 $
+- $ 2^{11} = 2048 $
+
+Since $ 2048 > 2014 $, the largest $ k $ is:
+
+$$
+k = 10
+$$
+
+Thus, the number of points with y-coordinate 2013 is:
+
+$$
+2^{10} = 1024
+$$
+
+---
+
+### Final Answer
+
+$$
+\boxed{1024}
+$$

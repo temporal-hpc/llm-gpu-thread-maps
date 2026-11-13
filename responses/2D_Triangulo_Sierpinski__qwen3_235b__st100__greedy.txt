@@ -1,0 +1,60 @@
+To solve this problem, we need to compute the nth term of the Stern-Brocot sequence efficiently without storing all values up to n, especially since n can be as large as \(10^{18}\). The Stern-Brocot sequence is defined recursively as follows:
+- \(a(0) = 1\)
+- \(a(1) = 1\)
+- For \(n \geq 1\), \(a(2n) = a(n)\) and \(a(2n+1) = a(n) + a(n+1)\)
+
+However, a more efficient recursive definition is:
+- \(a(0) = 1\)
+- \(a(1) = 1\)
+- For \(k \geq 1\), \(a(2k) = a(k)\) and \(a(2k+1) = a(k) + a(k+1)\)
+
+Given the constraints, a direct recursive approach or dynamic programming storing all values up to n is infeasible. Instead, we use a depth-first search (DFS) approach with memoization to compute only the necessary terms, leveraging the recursive structure of the sequence.
+
+### Approach
+1. **Problem Analysis**: The Stern-Brocot sequence grows in a way that each term \(a(n)\) depends on terms at positions roughly \(n/2\). This recursive dependency tree has a depth of \(O(\log n)\), meaning only \(O(\log n)\) terms need to be computed for any \(n\).
+2. **Intuition**: Instead of computing all terms up to \(n\), we can traverse the dependency tree from \(n\) down to the base cases (0 and 1), computing and storing only the necessary terms along the path.
+3. **Algorithm Selection**: We use an iterative DFS approach with a stack to manage the terms that need computation. For each term \(x\):
+   - If \(x\) is even, it depends on \(x/2 - 1\) and \(x/2\).
+   - If \(x\) is odd, it depends on \((x-1)/2\).
+   - We push dependencies onto the stack if they haven't been computed yet.
+4. **Optimization**: Using a dictionary (hash map) for memoization ensures that each term is computed only once, and the stack efficiently manages the order of computation.
+
+### Solution Code
+```python
+def stern_brocot(n):
+    memo = {0: 1, 1: 1}
+    stack = [n]
+    while stack:
+        x = stack.pop()
+        if x in memo:
+            continue
+        if x & 1:
+            y = (x - 1) >> 1
+            if y in memo:
+                memo[x] = memo[y]
+            else:
+                stack.append(x)
+                stack.append(y)
+        else:
+            y1 = (x >> 1) - 1
+            y2 = x >> 1
+            if y1 in memo and y2 in memo:
+                memo[x] = memo[y1] + memo[y2]
+            else:
+                stack.append(x)
+                if y1 not in memo:
+                    stack.append(y1)
+                if y2 not in memo:
+                    stack.append(y2)
+    return memo[n]
+```
+
+### Explanation
+1. **Initialization**: The `memo` dictionary starts with the base cases \(a(0) = 1\) and \(a(1) = 1\).
+2. **Stack Processing**: The stack is initialized with the target term \(n\). The loop processes each term \(x\) popped from the stack:
+   - **If \(x\) is in `memo`**: Skip further processing for \(x\).
+   - **If \(x\) is odd**: Compute \(y = (x-1)/2\). If \(y\) is computed, set \(a(x) = a(y)\); otherwise, push \(x\) and \(y\) back onto the stack.
+   - **If \(x\) is even**: Compute \(y1 = x/2 - 1\) and \(y2 = x/2\). If both are computed, set \(a(x) = a(y1) + a(y2)\); otherwise, push \(x\) and any uncomputed dependencies onto the stack.
+3. **Termination**: Once the stack is empty, all necessary terms have been computed, and \(a(n)\) is retrieved from `memo`.
+
+This approach efficiently computes the nth term by leveraging the recursive dependencies and memoization, ensuring only \(O(\log n)\) terms are stored and processed, making it feasible for very large \(n\) (up to \(10^{18}\)). The use of bit shifts (`>>` and `&`) optimizes the arithmetic operations for performance.

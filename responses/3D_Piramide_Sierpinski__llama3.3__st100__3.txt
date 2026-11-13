@@ -1,0 +1,31 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input must be a non-negative integer")
+    x = 0
+    y = 0
+    z = 0
+    layer = 0
+    while True:
+        side_length = 2 * layer + 1
+        if n < side_length ** 3 - 1:
+            break
+        n -= side_length ** 3 - 1
+        layer += 1
+    base = (side_length - 1) // 2
+    offset = n % (side_length ** 2)
+    ring_position = n // (side_length ** 2)
+    if ring_position < side_length:
+        y = layer
+        x = ring_position + base - n // (side_length * (side_length - 1))
+    elif ring_position < 2 * side_length:
+        x = layer
+        z = ring_position - side_length + offset // (side_length - 1)
+    elif ring_position < 3 * side_length:
+        y = -layer
+        z = ring_position - 2 * side_length + base - offset % (side_length - 1)
+    else:
+        z = -layer
+        x = -ring_position + 4 * side_length - 3 - offset // (side_length - 1)
+    return x, y, z
+```

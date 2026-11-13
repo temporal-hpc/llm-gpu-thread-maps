@@ -1,0 +1,54 @@
+To solve this problem, we need to determine the coordinates (x, y, z) of a point at a given position `n` in a specific 3D grid traversal sequence. The sequence follows a pattern where points are ordered based on the sum of their coordinates (x + y + z), and within the same sum, points are ordered lexicographically.
+
+### Approach
+1. **Problem Analysis**: The problem involves finding the coordinates (x, y, z) for a given position `n` in a sequence where points are ordered by their Manhattan distance (x + y + z) from the origin. Points with the same distance are ordered lexicographically (i.e., by x, then y, then z).
+
+2. **Key Insight**: 
+   - The number of points with a Manhattan distance less than `k` is given by the formula \( \frac{k(k+1)(k+2)}{6} \). This formula counts all points (x, y, z) such that \( x + y + z < k \).
+   - For a given `n`, we first determine the smallest integer `k` such that the cumulative count of points with distance less than `k` exceeds `n`. This `k` will be the z-coordinate (since \( z = k - 1 \) for points where \( x + y + z = k - 1 \)).
+
+3. **Algorithm Selection**:
+   - **Binary Search**: We use binary search to efficiently find `k` such that the cumulative count of points with distance less than `k` is just greater than `n`.
+   - **Coordinate Calculation**: Once `k` is found, the remaining position `r` within the current layer (where \( x + y + z = k - 1 \)) is computed. The y-coordinate `j` is derived from `r` using the formula \( j = \left\lfloor \frac{-1 + \sqrt{1 + 8r}}{2} \right\rfloor \), and the x-coordinate `s` is \( r - \frac{j(j+1)}{2} \).
+
+### Solution Code
+```python
+import math
+
+def solve(n):
+    lo, hi = 0, 2000000
+    while lo < hi:
+        mid = (lo + hi) // 2
+        a, b, c = mid + 1, mid + 2, mid + 3
+        prod = a * b * c
+        f_mid = prod // 6
+        if f_mid > n:
+            hi = mid
+        else:
+            lo = mid + 1
+    k = lo
+
+    if k == 0:
+        r = n
+    else:
+        a, b, c = k, k + 1, k + 2
+        prev_total = a * b * c // 6
+        r = n - prev_total
+
+    j = (math.isqrt(1 + 8 * r) - 1) // 2
+    s = r - j * (j + 1) // 2
+    return (s, j, k)
+```
+
+### Explanation
+1. **Binary Search for `k`**:
+   - We perform a binary search over possible values of `k` (from 0 to 2,000,000) to find the smallest `k` where the cumulative count of points with Manhattan distance less than `k` exceeds `n`. The count is calculated as \( \frac{(k+1)(k+2)(k+3)}{6} \).
+
+2. **Remaining Position Calculation**:
+   - Once `k` is determined, the remaining position `r` within the current layer (where \( x + y + z = k - 1 \)) is computed by subtracting the cumulative count of points from previous layers (i.e., \( \frac{k(k+1)(k+2)}{6} \)) from `n`.
+
+3. **Coordinate Calculation**:
+   - The y-coordinate `j` is found by solving \( \frac{j(j+1)}{2} \leq r \), which simplifies to \( j = \left\lfloor \frac{-1 + \sqrt{1 + 8r}}{2} \right\rfloor \).
+   - The x-coordinate `s` is then \( r - \frac{j(j+1)}{2} \), representing the position within the current y-slice.
+
+This approach efficiently narrows down the layer containing the nth point using binary search and then computes the exact coordinates within that layer using mathematical formulas, ensuring optimal performance even for large values of `n`. The solution handles edge cases such as `n = 0` correctly and processes inputs up to \( 10^{18} \) efficiently.

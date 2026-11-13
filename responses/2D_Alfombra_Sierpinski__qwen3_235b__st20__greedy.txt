@@ -1,0 +1,32 @@
+To solve this problem, we need to determine the k-th occurrence of the pattern that a given non-negative integer `n` belongs to. The pattern is structured such that every block of 9 consecutive numbers is divided into three parts, each containing 3 numbers. Specifically:
+- Numbers 0, 1, 2 form the first part.
+- Numbers 3, 4, 5 form the second part.
+- Numbers 6, 7, 8 form the third part.
+- This pattern repeats every 9 numbers (e.g., 9, 10, 11 form the first part of the next block, and so on).
+
+The key insight is that for any number `n`, its position within its respective part can be derived by:
+1. Calculating the block index: `n // 9` (which gives the quotient when `n` is divided by 9).
+2. Determining the offset within the block: `n % 3` (which gives the remainder when `n` is divided by 3, effectively the position within its part).
+
+The k-th occurrence is then computed as `3 * (n // 9) + (n % 3)`. This formula works because:
+- Each block contributes 3 occurrences to each part.
+- The term `3 * (n // 9)` accounts for all complete blocks before the current block.
+- The term `(n % 3)` gives the position within the current block's part.
+
+### Approach
+1. **Problem Analysis**: The problem involves categorizing each number `n` into one of three repeating parts within blocks of 9 numbers. The goal is to find the zero-based index of `n` within its specific part sequence.
+2. **Key Insight**: The sequence of numbers in each part follows a predictable pattern. For any number `n`, the block it belongs to is determined by `n // 9`, and its position within the part is given by `n % 3`.
+3. **Algorithm Selection**: The solution leverages integer division and modulus operations to efficiently compute the required index without iterating through sequences, ensuring optimal performance even for very large `n`.
+
+### Solution Code
+```python
+def get_k(n):
+    return 3 * (n // 9) + (n % 3)
+```
+
+### Explanation
+- **Block Calculation**: The expression `n // 9` determines which 9-number block `n` falls into. For example, if `n` is 12, `12 // 9` equals 1 (indicating the second block, since blocks are zero-indexed).
+- **Position within Block**: The expression `n % 3` finds the position of `n` within its 3-number part. For instance, `12 % 3` equals 0, meaning `n` is the first number in its part (the part starting at 12).
+- **Combining Results**: Multiplying the block index by 3 (since each block contributes 3 numbers to the part) and adding the position within the block gives the zero-based index in the infinite sequence of the part. For `n = 12`, this results in `3 * 1 + 0 = 3`, indicating it is the 4th occurrence (0-indexed as the 3rd position) in its part's sequence.
+
+This approach efficiently computes the desired index using basic arithmetic operations, making it both optimal and straightforward. The solution handles all non-negative integers correctly, including edge cases like `n = 0` (resulting in 0) and very large values.

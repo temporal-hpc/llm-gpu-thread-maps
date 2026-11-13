@@ -1,0 +1,2 @@
+def map_to_coordinates(n):
+    return divmod(n * 3 // 2, n + 1)

@@ -1,0 +1,63 @@
+To solve this problem, we need to map a given integer \( n \) to its corresponding 3D coordinates (x, y, z). The mapping is based on tetrahedral numbers and triangular number arrangements within each layer.
+
+### Approach
+1. **Identify the Layer (z):** Determine the layer \( z \) such that the sum of tetrahedral numbers up to \( z-1 \) is less than or equal to \( n \), and the sum up to \( z \) exceeds \( n \). This can be efficiently found using a mathematical approach.
+2. **Compute m:** Calculate the offset \( m \) within the identified layer by subtracting the sum of tetrahedral numbers up to layer \( z-1 \) from \( n \).
+3. **Determine s:** Find the triangular number section \( s \) such that the sum of the first \( s \) natural numbers is less than or equal to \( m \), and the next sum exceeds \( m \). This helps in identifying which triangle within the layer \( z \) contains the point.
+4. **Calculate Offset and Coordinates:** Using \( s \), compute the offset within that triangular section and derive the coordinates (x, y) by considering \( x \) as the offset and \( y \) as \( s - x \).
+
+### Solution Code
+```python
+import math
+
+def tetrahedral_to_coords(n):
+    if n < 0:
+        raise ValueError("n must be a non-negative integer")
+    
+    # Step 1: Find z such that S(z) <= n < S(z+1)
+    # Using binary search to find the correct z
+    low = 0
+    high = 10000  # A large enough upper bound
+    while low <= high:
+        mid = (low + high) // 2
+        s_mid = mid * (mid + 1) * (mid + 2) // 6
+        if s_mid == n:
+            z = mid - 1
+            break
+        elif s_mid < n:
+            low = mid + 1
+        else:
+            high = mid - 1
+    # After loop, check high and low to determine z correctly
+    # Adjust because initial condition may not have exact match
+    while (z := high) >=0 and (high*(high+1)*(high+2)//6) > n:
+        high -=1
+    if high <0:
+        z=0
+    else:
+        z = high
+    
+    m = n - (z * (z + 1) * (z + 2) // 6)
+    
+    # Step 2: Find s where sum_{k=0}^{s-1}(k+1)<=m <sum_{k=0}^s(k+1)}
+    s = int((math.sqrt(8*m +1) -1)//2)
+    
+    # Calculate offset
+    offset = m - (s*(s+1))//2
+    
+    x = offset
+    y = s - x
+    
+    return (x, y, z)
+
+# Example usage:
+n = 10
+print(tetrahedral_to_coords(n))
+```
+
+### Explanation
+- **Layer Identification:** The code uses binary search to efficiently find the layer \( z \) where the given number \( n \) lies. This avoids a linear search and speeds up the process.
+- **Triangular Number Calculation:** Within each identified layer, the code calculates which triangular section contains the point using mathematical properties of triangular numbers.
+- **Coordinate Derivation:** Using the offset within the triangular section, the coordinates (x, y) are derived by simple arithmetic operations.
+
+This approach ensures that we efficiently and accurately map the given integer \( n \) to its corresponding 3D coordinates in a structured manner.

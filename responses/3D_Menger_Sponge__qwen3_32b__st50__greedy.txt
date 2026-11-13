@@ -1,0 +1,68 @@
+To determine the coordinates $(x, y, z)$ for a given integer $n$, we can follow a structured approach based on the observed pattern in the data. Here's a step-by-step breakdown:
+
+---
+
+### **Step 1: Determine the Position in the Cycle**
+The pattern repeats every **20 entries**. For any $n$, compute the position within the cycle:
+$$
+\text{pos\_in\_cycle} = n \mod 20
+$$
+
+---
+
+### **Step 2: Determine the $z$-Coordinate**
+Based on the position within the cycle, assign the $z$-coordinate:
+- If $0 \leq \text{pos\_in\_cycle} \leq 7$: $z = 0$
+- If $8 \leq \text{pos\_in\_cycle} \leq 11$: $z = 1$
+- If $12 \leq \text{pos\_in\_cycle} \leq 19$: $z = 2$
+
+---
+
+### **Step 3: Determine the Position Within the $z$-Block**
+Calculate the position within the block corresponding to the $z$-coordinate:
+- For $z = 0$: $\text{pos\_in\_block} = \text{pos\_in\_cycle}$
+- For $z = 1$: $\text{pos\_in\_block} = \text{pos\_in\_cycle} - 8$
+- For $z = 2$: $\text{pos\_in\_block} = \text{pos\_in\_cycle} - 12$
+
+---
+
+### **Step 4: Determine $x$ and $y$ Based on $z$ and $\text{pos\_in\_block}$**
+Use the following rules to compute $x$ and $y$:
+
+#### **For $z = 0$:**
+- If $0 \leq \text{pos\_in\_block} \leq 2$:  
+  $y = 0$, $x = \text{pos\_in\_block}$
+- If $3 \leq \text{pos\_in\_block} \leq 4$:  
+  $y = 1$, $x = 0$ if $\text{pos\_in\_block} = 3$, $x = 2$ if $\text{pos\_in\_block} = 4$
+- If $5 \leq \text{pos\_in\_block} \leq 7$:  
+  $y = 2$, $x = \text{pos\_in\_block} - 5$
+
+#### **For $z = 1$:**
+- If $\text{pos\_in\_block} = 0$: $x = 0$, $y = 1$
+- If $\text{pos\_in\_block} = 1$: $x = 2$, $y = 1$
+- If $\text{pos\_in\_block} = 2$: $x = 0$, $y = 2$
+- If $\text{pos\_in\_block} = 3$: $x = 1$, $y = 2$
+
+#### **For $z = 2$:**
+- If $0 \leq \text{pos\_in\_block} \leq 2$:  
+  $y = 0$, $x = \text{pos\_in\_block}$
+- If $3 \leq \text{pos\_in\_block} \leq 4$:  
+  $y = 1$, $x = 0$ if $\text{pos\_in\_block} = 3$, $x = 2$ if $\text{pos\_in\_block} = 4$
+- If $5 \leq \text{pos\_in\_block} \leq 7$:  
+  $y = 2$, $x = \text{pos\_in\_block} - 5$
+
+---
+
+### **Example: Compute $(x, y, z)$ for $n = 25$**
+1. $\text{pos\_in\_cycle} = 25 \mod 20 = 5$
+2. $z = 0$ (since $0 \leq 5 \leq 7$)
+3. $\text{pos\_in\_block} = 5$
+4. For $z = 0$ and $\text{pos\_in\_block} = 5$:  
+   $y = 2$, $x = 5 - 5 = 0$
+
+**Result:** $(x, y, z) = (0, 2, 0)$
+
+---
+
+### **Summary**
+By breaking down the problem into cycles and blocks, we can systematically determine the coordinates $(x, y, z)$ for any integer $n$. The key is to identify the cycle, determine the $z$-coordinate, and then compute $x$ and $y$ based on the position within the block. This approach ensures consistency and scalability for any $n$.

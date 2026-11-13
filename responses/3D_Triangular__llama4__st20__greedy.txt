@@ -1,0 +1,29 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer.")
+    x = n // 3
+    y = (n % 3) // 1
+    z = n % 3
+    # Adjust calculation based on pattern observation
+    # The correct approach seems to involve a different strategy
+    # Let's assume a strategy based on consecutive increments and 
+    # distribution across x, y, and z
+    # After reevaluation, consider this strategy:
+    coordinates = []
+    i = 0
+    while n >= 0:
+        coordinates.append(n % 3)
+        n //= 3
+        i += 1
+    # Reverse to match (x, y, z) order and pad with zeros if necessary
+    coordinates = coordinates[::-1]
+    x, y, z = 0, 0, 0
+    if len(coordinates) >= 1:
+        x = coordinates[0]
+    if len(coordinates) >= 2:
+        y = coordinates[1]
+    if len(coordinates) >= 3:
+        z = coordinates[2]
+    return (x, y, z)
+```

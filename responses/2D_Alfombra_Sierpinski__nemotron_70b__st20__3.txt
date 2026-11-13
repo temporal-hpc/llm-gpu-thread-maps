@@ -1,0 +1,21 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer")
+    
+    row = int((3 * (n ** 0.5)) - ((3 * (n ** 0.5)) % 1))
+    col = n - (row * (row + 1)) // 2
+    
+    while col > row:
+        temp = row
+        row += 1
+        col = temp
+    
+    x = col % 3
+    y = row
+    
+    if x == 2 and (col // 3) % 2 != 0:
+        x = 0 if x == 2 else x + 2
+    
+    return (x, y)
+```

@@ -1,0 +1,42 @@
+To solve this problem, we need to determine the coordinates (x, y) on a grid such that each diagonal of the grid corresponds to increasing values of y. The number of elements in each diagonal increases by one as y increases. 
+
+### Approach
+1. **Problem Analysis**: Each diagonal layer `y` starts with an initial index and contains `y + 1` elements. For example, the first few layers are:
+   - Layer 0 (y=0): n=0
+   - Layer 1 (y=1): n=1, 2
+   - Layer 2 (y=2): n=3, 4, 5
+   - Layer 3 (y=3): n=6, 7, 8, 9
+
+2. **Mathematical Insight**: The starting index of each layer `m` can be determined using triangular numbers. The nth triangular number is given by the formula \( T_m = \frac{m(m+1)}{2} \). For a given n, we need to find the largest m such that \( T_m \leq n \).
+
+3. **Algorithm**:
+   - Compute the integer square root of \( 8n + 1 \) to determine the layer `m`.
+   - Calculate x as the difference between n and the triangular number for layer m.
+   - y is simply the value of m.
+
+### Solution Code
+
+```python
+import math
+
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non-negative integer")
+    sqrt_val = math.isqrt(8 * n + 1)
+    m = (sqrt_val - 1) // 2
+    x = n - (m * (m + 1)) // 2
+    y = m
+    return (x, y)
+```
+
+### Explanation
+
+1. **Input Validation**: The function first checks if the input `n` is a non-negative integer and raises an error if not.
+
+2. **Layer Calculation**: Using the formula \( \sqrt{8n + 1} \), we determine the largest layer `m` such that the sum of the first m+1 natural numbers (triangular number) is less than or equal to n.
+
+3. **Coordinate Calculation**:
+   - x is calculated by subtracting the triangular number for layer m from n.
+   - y is simply the value of m, which represents the diagonal layer in the grid.
+
+This approach efficiently maps a given index `n` to its corresponding (x, y) coordinates on the grid using mathematical properties and integer operations.

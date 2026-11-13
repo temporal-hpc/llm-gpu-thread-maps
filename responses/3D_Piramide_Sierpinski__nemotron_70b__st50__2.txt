@@ -1,0 +1,12 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer")
+    
+    dimensions = []
+    while n > 0 or len(dimensions) < 3:
+        n, remainder = divmod(n, len(dimensions) + 1)
+        dimensions.append(remainder)
+    
+    return tuple(reversed(dimensions))
+```

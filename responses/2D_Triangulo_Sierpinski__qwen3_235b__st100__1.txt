@@ -1,0 +1,36 @@
+To solve this problem, we need to find the n-th term of a specific sequence where each term is defined as \(2^k\), and \(k\) is the number of 1s in the binary representation of the index \(n\). The sequence starts with \(a_0, a_1, a_2, \ldots\), where \(a_n = 2^{\text{number of 1s in binary representation of } n}\).
+
+### Approach
+1. **Problem Analysis**: The problem requires us to compute the n-th term of a sequence where each term \(a_n\) is \(2\) raised to the power of the count of 1s in the binary representation of \(n\). For example:
+   - When \(n = 0\), the binary representation is "0", which has 0 ones, so \(a_0 = 2^0 = 1\).
+   - When \(n = 1\), the binary representation is "1", which has 1 one, so \(a_1 = 2^1 = 2\).
+   - When \(n = 2\), the binary representation is "10", which has 1 one, so \(a_2 = 2^1 = 2\).
+   - When \(n = 3\), the binary representation is "11", which has 2 ones, so \(a_3 = 2^2 = 4\).
+
+2. **Intuition**: The key observation here is that the value of each term in the sequence depends solely on the number of 1s in the binary form of its index. This count can be efficiently obtained using Python's built-in functions.
+
+3. **Algorithm Selection**: 
+   - Convert the given integer \(n\) into its binary string representation.
+   - Count the number of '1' characters in this binary string.
+   - Compute \(2^{\text{count}}\) which gives the desired term in the sequence.
+
+4. **Complexity Analysis**: 
+   - Converting an integer \(n\) to its binary string takes \(O(\log n)\) time because the number of bits in \(n\) is proportional to \(\log_2 n\).
+   - Counting the '1's in the binary string also takes \(O(\log n)\) time as it involves scanning each bit.
+   - The overall time complexity is \(O(\log n)\), which is efficient even for large \(n\) (up to \(10^{18}\)).
+
+### Solution Code
+```python
+n = int(input().strip())
+ones_count = bin(n).count('1')
+result = 1 << ones_count
+print(result)
+```
+
+### Explanation
+1. **Reading Input**: The input integer \(n\) is read from standard input.
+2. **Binary Conversion and Counting 1s**: The integer \(n\) is converted to its binary string representation using `bin(n)`. The `count('1')` method is then used to count the number of '1' bits in this string.
+3. **Computing Result**: The result is computed as \(2^{\text{ones\_count}}\) using the bit shift operation `1 << ones_count`, which efficiently calculates the power of two.
+4. **Output**: The computed result is printed, which is the n-th term of the sequence.
+
+This approach efficiently leverages Python's built-in functions to solve the problem with optimal performance, handling even the upper constraint of \(n = 10^{18}\) gracefully. The solution is both concise and optimal for the given problem.

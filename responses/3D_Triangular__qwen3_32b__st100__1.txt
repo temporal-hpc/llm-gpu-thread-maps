@@ -1,0 +1,105 @@
+To solve the problem of finding the nth point in a sequence based on a specific ordering, we need to understand the structure of the sequence. The sequence is defined such that for each non-negative integer $ z $, all points with that $ z $ are ordered by their $ m $ value, which in turn orders the $ (a, b) $ values as per the triangular numbers.
+
+---
+
+### **Understanding the Structure**
+
+Each value of $ z $ corresponds to a "layer" in the sequence. Within each layer, all combinations of $ (a, b) $ are generated such that:
+
+$$
+m = \frac{b(b+1)}{2} + a
+$$
+
+Where:
+- $ a $ is the offset within a triangular number group.
+- $ b $ is the index of the triangular number.
+
+So for a given $ z $, the number of points in that layer is:
+
+$$
+\text{count} = \frac{z(z+1)(z+2)}{6}
+$$
+
+This formula comes from the number of integer solutions to $ a + b \leq z $, where $ a, b \geq 0 $.
+
+---
+
+### **Algorithm Overview**
+
+1. **Find $ z $:**  
+   - Use binary search to find the largest $ z $ such that the cumulative number of points up to that layer is less than or equal to $ n $.
+
+2. **Compute $ m $:**  
+   - $ m $ is the offset within the layer corresponding to $ z $.
+
+3. **Find $ (a, b) $:**  
+   - Given $ m $, compute $ b $ as the largest integer such that the sum of the first $ b $ triangular numbers is less than or equal to $ m $.
+   - $ a $ is the remaining offset after accounting for the triangular sum.
+
+---
+
+### **Python Implementation**
+
+```python
+import math
+
+def nth_point(n):
+    if n == 0:
+        return (0, 0, 0)
+
+    # Step 1: Find z using binary search
+    low, high = 0, 1
+    while (high * (high + 1) * (high + 2)) // 6 <= n:
+        high *= 2
+
+    while low < high:
+        mid = (low + high + 1) // 2
+        s = (mid * (mid + 1) * (mid + 2)) // 6
+        if s <= n:
+            low = mid
+        else:
+            high = mid - 1
+
+    z = low
+
+    # Step 2: Compute m
+    m = n - (z * (z + 1) * (z + 2)) // 6
+
+    # Step 3: Find a and b
+    if m == 0:
+        return (0, 0, z)
+
+    # Compute b
+    b = int((math.sqrt(8 * m + 1) - 1) // 2)
+    a = m - (b * (b + 1)) // 2
+
+    return (a, b, z)
+```
+
+---
+
+### **Example Usage**
+
+```python
+print(nth_point(0))   # Output: (0, 0, 0)
+print(nth_point(1))   # Output: (0, 0, 1)
+print(nth_point(2))   # Output: (0, 1, 1)
+print(nth_point(4))   # Output: (0, 0, 2)
+print(nth_point(5))   # Output: (0, 1, 2)
+print(nth_point(10))  # Output: (0, 0, 3)
+print(nth_point(11))  # Output: (0, 1, 3)
+```
+
+---
+
+### **Complexity Analysis**
+
+- **Time Complexity:**  
+  The binary search for $ z $ takes $ O(\log n) $, and computing $ a $ and $ b $ from $ m $ is $ O(1) $. So the overall complexity is $ O(\log n) $.
+
+- **Space Complexity:**  
+  Constant extra space is used, $ O(1) $.
+
+---
+
+This solution efficiently computes the nth point in the sequence by leveraging the mathematical properties of triangular numbers and binary search.

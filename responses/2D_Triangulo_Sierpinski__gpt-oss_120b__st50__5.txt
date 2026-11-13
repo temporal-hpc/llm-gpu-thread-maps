@@ -1,0 +1,21 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError
+    total = 0
+    y = 0
+    while True:
+        subcnt = 1 << y.bit_count()
+        if n < total + subcnt:
+            offset = n - total
+            x = 0
+            seen = 0
+            while True:
+                if x & ~y == 0:
+                    if seen == offset:
+                        return (x, y)
+                    seen += 1
+                x += 1
+        total += subcnt
+        y += 1
+```

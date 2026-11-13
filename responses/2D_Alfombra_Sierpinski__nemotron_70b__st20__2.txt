@@ -1,0 +1,17 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer")
+
+    x = (n // 3) % 9
+    y = n // (3 * 9)
+    remainder = n % 9
+
+    if remainder >= 3:
+        offset = [0, -2, -1, 1, 2][remainder % 5]
+        if remainder >= 6: 
+            offset *= -1
+        x += offset
+
+    return (x, y)
+```

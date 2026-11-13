@@ -1,0 +1,16 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non-negative integer")
+    pair = n // 12
+    r = n % 12
+    if r < 8:
+        z = 2 * pair
+        coords = [(0, 0), (1, 0), (2, 0), (0, 1), (2, 1), (0, 2), (1, 2), (2, 2)]
+        x, y = coords[r]
+    else:
+        z = 2 * pair + 1
+        coords = [(0, 0), (2, 0), (0, 2), (2, 2)]
+        x, y = coords[r - 8]
+    return (x, y, z)
+```

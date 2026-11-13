@@ -1,0 +1,55 @@
+To determine the value of $ y $ corresponding to a given integer $ n $, we observe a specific pattern in the values of $ y $ based on the value of $ n $. The pattern can be described as follows:
+
+- For $ n = 3 $ and $ n = 4 $, $ y = 2 $
+- For $ n = 5 $ through $ n = 8 $, $ y = 3 $
+- For $ n = 9 $ through $ n = 14 $, $ y = 4 $
+- For $ n = 15 $ through $ n = 20 $, $ y = 5 $
+- And so on...
+
+This suggests a structured mapping where each "block" of $ y $ values spans a range of $ n $ values. We can define this mapping in a general and precise way using the **floor function** and modular arithmetic.
+
+---
+
+### ✅ Final Formula
+
+Let $ k = \left\lfloor \frac{n}{6} \right\rfloor $, and let $ r = n \mod 6 $. Then the value of $ y $ is given by:
+
+$$
+y =
+\begin{cases}
+2k + 1, & \text{if } 0 \leq r \leq 2 \\
+2k + 2, & \text{if } 3 \leq r \leq 4 \\
+2k + 3, & \text{if } r = 5
+\end{cases}
+$$
+
+---
+
+### 🔍 Explanation
+
+- $ k = \left\lfloor \frac{n}{6} \right\rfloor $: This gives the base index of the block to which $ n $ belongs.
+- $ r = n \mod 6 $: This gives the position of $ n $ within its block.
+- Depending on the value of $ r $, we adjust $ y $ as follows:
+  - If $ n $ is in the first third of the block ($ r = 0, 1, 2 $), then $ y = 2k + 1 $.
+  - If $ n $ is in the second third of the block ($ r = 3, 4 $), then $ y = 2k + 2 $.
+  - If $ n $ is at the end of the block ($ r = 5 $), then $ y = 2k + 3 $.
+
+---
+
+### 📌 Example
+
+Let’s compute $ y $ for $ n = 17 $:
+
+- $ k = \left\lfloor \frac{17}{6} \right\rfloor = 2 $
+- $ r = 17 \mod 6 = 5 $
+
+So, since $ r = 5 $, we use the third case:
+$$
+y = 2k + 3 = 2(2) + 3 = 7
+$$
+
+✅ Correct: For $ n = 15 $ to $ n = 20 $, $ y = 5 $ to $ y = 7 $.
+
+---
+
+This piecewise formula provides a clear and precise way to compute $ y $ for any integer $ n \geq 3 $, using only basic arithmetic operations and the floor function.

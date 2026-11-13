@@ -1,0 +1,73 @@
+**Answer – Binary → BCD (0‑39) is a very small combinational map.**
+
+The 6‑bit binary number is first turned into a base‑4 representation (two bits per “nibble”).  
+Then each base‑4 nibble is converted to a decimal digit by a tiny truth table.  
+Finally the three decimal digits are encoded as 4‑bit BCD (0000…1001).  
+
+---
+
+### 1.  Extract the base‑4 digits
+
+```
+   b5 b4 b3 b2 b1 b0   (binary 6‑bit input)
+   | | | | | |          |
+   a  b  c  –  base‑4 digits
+```
+
+```
+a = (n >> 4) & 0x03            // high 2 bits
+b = (n >> 2) & 0x03            // middle 2 bits
+c =  n        & 0x03            // low 2 bits
+```
+
+### 2.  Convert base‑4 digits to decimal digits
+
+| a | b | c |  d_hundreds | d_tens | d_ones |
+|---|---|---|--------------|--------|--------|
+| 0 | 0 | * | 0            | 0      | c      |
+| 0 | 1 | * | 0            | 0      | c + 5  |
+| 0 | 2 | * | 0            | 1      | c      |
+| 0 | 3 | * | 0            | 2      | c      |
+| 1 | 0 | * | 0            | 3      | c      |
+| 1 | 1 | * | 0            | 6      | c      |
+| 1 | 2 | * | 0            | 7      | c      |
+| 1 | 3 | * | 0            | 8      | c      |
+| 2 | 0 | * | 1            | 0      | c      |
+| 2 | 1 | * | 1            | 1      | c      |
+
+(“*” means *c* is the same in all rows of that group.)
+
+So, for example, 39 (=0b100111) gives:
+
+```
+a=1  → d_hundreds=0
+b=1  → d_tens=6
+c=3  → d_ones=3
+```
+
+which is the decimal number 063 → BCD 0001 0001 0011.
+
+### 3.  Encode each decimal digit as 4‑bit BCD
+
+```
+BCD_hundreds = binary‑coded‑decimal(d_hundreds)
+BCD_tens     = binary‑coded‑decimal(d_tens)
+BCD_ones     = binary‑coded‑decimal(d_ones)
+```
+
+(BCD codes: 0=0000, 1=0001, 2=0010, …, 9=1001.)
+
+Concatenate the three 4‑bit codes to get a 12‑bit BCD word.
+
+---
+
+**Resulting 12‑bit BCD codes for 0–39**
+
+| Bin (6‑bit) | BCD (3×4) | Decimal |
+|------------|----------|---------|
+| 000000 | 0000 0000 0000 | 000 |
+| 000001 | 0000 0000 0001 | 001 |
+| … | … | … |
+| 100111 | 0001 0001 0011 | 039 |
+
+For numbers 0–39 this lookup table (or the small truth‑tables above) gives the binary‑to‑BCD conversion.  If you prefer an algorithmic implementation you can use the Double‑Dabble (shift‑add‑5) routine – for this limited range the table‑based combinational logic is the simplest.

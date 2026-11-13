@@ -1,0 +1,36 @@
+def map_to_coordinates(n):
+    """
+    Map a non‑negative integer n to a coordinate (x, y, z) in a 3‑dimensional grid
+    according to the following rule:
+
+        * The grid consists of layers indexed by z.
+        * For even z: 8 points are present in the order
+              (0,0), (1,0), (2,0),
+              (0,1), (2,1),
+              (0,2), (1,2), (2,2)
+        * For odd z: 4 points are present in the order
+              (0,0), (2,0), (0,2), (2,2)
+
+    The function returns the coordinate tuple (x, y, z) for the given n.
+    """
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non‑negative integer")
+
+    # Each two layers contribute 12 points (8 for even z, 4 for odd z)
+    pair_index, rem = divmod(n, 12)
+
+    # Determine the layer (z)
+    if rem < 8:                       # even layer
+        z = pair_index * 2
+        offset = rem
+        xy_even = [(0, 0), (1, 0), (2, 0),
+                   (0, 1), (2, 1), (0, 2),
+                   (1, 2), (2, 2)]
+        x, y = xy_even[offset]
+    else:                             # odd layer
+        z = pair_index * 2 + 1
+        offset = rem - 8
+        xy_odd = [(0, 0), (2, 0), (0, 2), (2, 2)]
+        x, y = xy_odd[offset]
+
+    return (x, y, z)

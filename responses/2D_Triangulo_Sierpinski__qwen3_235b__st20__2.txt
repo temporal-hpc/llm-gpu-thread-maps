@@ -1,0 +1,52 @@
+To solve this problem, we need to compute a specific function \( f(y) \) for a given non-negative integer \( y \). The function \( f(y) \) is defined based on the binary representation of \( y \). For each '1' bit in the binary representation of \( y \) at position \( i \) (0-indexed from the least significant bit), we add \( 3^i \times 2^k \) to the result, where \( k \) is the count of '1' bits encountered so far (starting from the most significant bit).
+
+### Approach
+1. **Problem Analysis**: The problem requires processing each '1' bit in the binary representation of \( y \) from the most significant bit (MSB) to the least significant bit (LSB). For each '1' bit encountered at position \( i \), we contribute \( 3^i \times 2^k \) to the result, where \( k \) is the number of '1' bits processed before the current bit (starting from 0 for the first '1' bit).
+
+2. **Intuition**: By traversing the binary digits of \( y \) from the highest bit to the lowest, we can efficiently compute the result. For each bit:
+   - Multiply the current result by 3 (to account for the next lower bit position).
+   - If the current bit is '1', add \( 2^{\text{count}} \) to the result, where `count` is the number of '1' bits processed so far (before incrementing).
+
+3. **Algorithm Selection**: 
+   - Determine the bit length \( n \) of \( y \) to know the range of bits to process.
+   - Initialize `res` (the result) and `count` (the number of '1' bits encountered) to 0.
+   - Iterate from the highest bit (position \( n-1 \)) down to the lowest bit (position 0):
+     - Multiply `res` by 3.
+     - If the current bit is '1', add \( 2^{\text{count}} \) to `res` and increment `count`.
+   - Output the final `res` after processing all bits.
+
+4. **Complexity Analysis**: 
+   - **Time Complexity**: For each test case, the algorithm processes each bit of \( y \) once. Since \( y \) can be up to \( 10^{18} \) (60 bits), and there are up to 1000 test cases, the total operations are \( 1000 \times 60 = 60,000 \), which is efficient.
+   - **Space Complexity**: The algorithm uses constant space \( O(1) \) per test case, as it only stores a few variables regardless of input size.
+
+### Solution Code
+```python
+t = int(input().strip())
+for _ in range(t):
+    y = int(input().strip())
+    n = y.bit_length()
+    res = 0
+    count = 0
+    for i in range(n-1, -1, -1):
+        res *= 3
+        if (y >> i) & 1:
+            res += (1 << count)
+            count += 1
+    print(res)
+```
+
+### Explanation
+1. **Reading Input**: The number of test cases \( t \) is read first.
+2. **Processing Each Test Case**: For each test case:
+   - Read the integer \( y \).
+   - Determine the bit length \( n \) of \( y \) (number of bits required to represent \( y \) in binary).
+   - Initialize `res` (to accumulate the result) and `count` (to track the number of '1' bits encountered) to 0.
+3. **Bit Processing**:
+   - Iterate from the highest bit (position \( n-1 \)) down to the lowest bit (position 0).
+   - For each bit position \( i \):
+     - Multiply `res` by 3 (to shift the contribution of higher bits to the next lower bit position).
+     - Check if the bit at position \( i \) is '1' using `(y >> i) & 1`.
+     - If it is '1', add \( 2^{\text{count}} \) to `res` and increment `count`.
+4. **Output Result**: After processing all bits, print the accumulated result `res`.
+
+This approach efficiently computes the desired function by leveraging bit manipulation and iterative processing, ensuring optimal performance even for large values of \( y \). The solution handles edge cases like \( y = 0 \) seamlessly by skipping the loop entirely (since bit length is 0).

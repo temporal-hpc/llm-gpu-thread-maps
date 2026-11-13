@@ -1,0 +1,14 @@
+To determine the values of \( x \) and \( y \) for a given \( n \), we can follow these steps:
+
+### For Even \( y \):
+- \( y \) is determined by the number of times you can fit 2 within \( n \).
+- \( x \) increases by 2 starting from 0 up to \( y \).
+
+### For Odd \( y \):
+- When \( y = 1 \) or \( y = 3 \), \( x \) increases sequentially from 0 to \( y \).
+- For higher odd values of \( y \) (e.g., \( y = 5 \)), after reaching a certain point, \( x \) jumps by \( \frac{y + 1}{2} \) and continues up to \( y \).
+
+### Final Answer:
+The function \( f(n) = (x, y) \) is determined based on whether \( y \) is even or odd. For each \( n \), \( y \) increases as \( n \) progresses, with specific rules for how \( x \) behaves within each \( y \).
+
+\boxed{f(n) = (x, y)}

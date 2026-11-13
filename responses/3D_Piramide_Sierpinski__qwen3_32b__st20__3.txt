@@ -1,0 +1,53 @@
+To determine the coordinate corresponding to a given integer $ n $, we explore a mapping that aligns with the initial examples:
+
+- $ n = 0 $: $ (0, 0, 0) $
+- $ n = 1 $: $ (1, 0, 0) $
+- $ n = 2 $: $ (0, 1, 0) $
+- $ n = 3 $: $ (0, 0, 1) $
+
+This suggests that each $ n $ corresponds to a unique coordinate in a 3D grid, where exactly one coordinate is incremented by 1. This pattern resembles the binary representation of $ n $, where each bit corresponds to a coordinate.
+
+However, this simple mapping breaks down for $ n > 3 $, as higher values would require more than one coordinate to be non-zero. A plausible approach is to use a **Morton code** (Z-order curve), where the bits of $ n $ are interleaved to form the coordinates $ (x, y, z) $.
+
+### **Morton Code (Z-order Curve)**
+- The binary representation of $ n $ is split into groups of bits, with each group assigned to a coordinate.
+- For example, if $ n = 4 $ (binary `100`), the bits are interleaved as follows:
+  - $ x $: 1st bit (1)
+  - $ y $: 2nd bit (0)
+  - $ z $: 3rd bit (0)
+  - Resulting in $ (1, 0, 0) $, which matches $ n = 1 $, but not $ n = 4 $.
+
+This indicates that the mapping isn't a direct interleaving. Instead, the correct method involves **interpreting each bit in $ n $ as a coordinate increment**.
+
+### **Binary to Coordinate Mapping**
+- Each bit in $ n $'s binary representation corresponds to a coordinate.
+- The position of the bit (starting from the least significant bit) determines which coordinate is incremented.
+- For example, $ n = 4 $ (binary `100`):
+  - The 1st bit (from the right) is 1 → increment $ x $ by $ 2^0 = 1 $
+  - The 2nd bit is 0 → no change
+  - The 3rd bit is 1 → increment $ x $ by $ 2^1 = 2 $
+  - Resulting in $ x = 1 + 2 = 3 $, but this doesn't align with the expected pattern.
+
+After extensive exploration, the correct approach is to **interpret $ n $ as the sum of powers of 2, where each power corresponds to a coordinate**. The final mapping is:
+
+- $ x = \text{count of set bits in } n \text{ at even positions} $
+- $ y = \text{count of set bits in } n \text{ at odd positions} $
+- $ z = \text{count of set bits in } n \text{ at even positions} $
+
+However, this still doesn't fit the examples. The correct and consistent method is:
+
+### **Final Answer**
+The coordinate corresponding to $ n $ is determined by the **binary representation of $ n $**, where each bit corresponds to a coordinate. The mapping is as follows:
+
+- $ x = $ the value of the least significant bit (1 if set, 0 otherwise)
+- $ y = $ the value of the second least significant bit
+- $ z = $ the value of the third least significant bit
+
+For $ n = 4 $ (binary `100`), the bits are:
+- 1st bit (from right): 0 → $ x = 0 $
+- 2nd bit: 0 → $ y = 0 $
+- 3rd bit: 1 → $ z = 1 $
+
+Thus, $ n = 4 $ corresponds to $ (0, 0, 1) $.
+
+**Answer:** $ \boxed{(0, 0, 1)} $

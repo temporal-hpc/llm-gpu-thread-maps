@@ -1,0 +1,27 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer.")
+
+    def de Bruijn_sequence(k, n):
+        a = [0] * k * n
+        sequence = []
+        def db(t, p):
+            if t > n:
+                if n % p == 0:
+                    sequence.extend(a[1:p + 1])
+            else:
+                a[t] = a[t - p]
+                db(t + 1, p)
+                for j in range(a[t - p] + 1, k):
+                    a[t] = j
+                    db(t + 1, t)
+        db(1, 1)
+        return sequence
+
+    k = 3
+    seq = de Bruijn_sequence(k, (n.bit_length() + 2) // 3 + 1)
+    coords = [seq[i:i + 3] for i in range(n * 3 // len(seq) * len(seq) + n % len(seq))][:3]
+    x, y, z = [(sum(el << (2 * i) for i, el in enumerate(coord)) >> 1) for coord in coords]
+    return x, y, z
+```

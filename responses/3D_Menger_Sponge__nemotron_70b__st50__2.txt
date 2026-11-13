@@ -1,0 +1,19 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer")
+    
+    z = n // 9
+    remainder = n % 9
+    
+    if remainder in [0, 3, 6]:
+        x_values = [0, 3, 6]
+    else:
+        x_values = [1, 2, 4, 5, 7, 8]
+    
+    for offset in range(3):
+        x = x_values[(remainder + offset) % len(x_values)]
+        y = (n - (x + z * 9)) // 3
+        if y >= 0 and x + y * 3 + z * 9 == n:
+            return (x, y, z)
+```

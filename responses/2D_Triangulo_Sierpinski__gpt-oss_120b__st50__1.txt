@@ -1,0 +1,23 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError
+    total = 0
+    y = 0
+    while True:
+        cnt = 1 << bin(y).count("1")
+        if total + cnt > n:
+            break
+        total += cnt
+        y += 1
+    offset = n - total
+    submasks = []
+    sub = y
+    while True:
+        submasks.append(sub)
+        if sub == 0:
+            break
+        sub = (sub - 1) & y
+    submasks.sort()
+    return (submasks[offset], y)
+```

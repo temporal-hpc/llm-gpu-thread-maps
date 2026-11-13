@@ -1,0 +1,75 @@
+To determine the 3D coordinates `(x, y, z)` for a given integer `n` in a structured spiral pattern, we can break down the logic into a few key steps:
+
+---
+
+### **Understanding the Pattern**
+
+The coordinates follow a spiral pattern in 3D space. For each block of 20 numbers (i.e., `n % 20`), the z-coordinate is determined based on the following:
+
+- If `n % 20 < 8`, the point lies in the first section of the block, and `z = 0`.
+- If `n % 20 >= 8`, the point lies in a higher layer, and `z` is calculated as:
+  
+  ```python
+  z = 1 + ((n % 20) - 8) // 4
+  ```
+
+This ensures that each of the 4 positions in the higher layers corresponds to a unique `z` value (1, 2, or 3).
+
+---
+
+### **Coordinate Mapping**
+
+Once `z` is determined, we need to calculate the `(x, y)` coordinates based on the position within the current layer. The `x` and `y` coordinates are derived from the position within the layer using modular and integer division:
+
+- `x = (pos_in_z) % 4`
+- `y = (pos_in_z) // 4`
+
+Where `pos_in_z` is the index of the point within the current layer.
+
+---
+
+### **Code Implementation**
+
+Here is the complete Python function to compute the 3D coordinates for any integer `n`:
+
+```python
+def get_coordinates(n):
+    position_in_block = n % 20
+    z = (position_in_block >= 8) * (1 + (position_in_block - 8) // 4)
+    
+    if z == 0:
+        start = 0
+    else:
+        start = 8 + 4 * (z - 1)
+    
+    pos_in_z = position_in_block - start
+    x = pos_in_z % 4
+    y = pos_in_z // 4
+    
+    return (x, y, z)
+```
+
+---
+
+### **Example Usage**
+
+```python
+print(get_coordinates(0))    # (0, 0, 0)
+print(get_coordinates(4))    # (0, 1, 0)
+print(get_coordinates(7))    # (3, 1, 0)
+print(get_coordinates(8))    # (0, 0, 1)
+print(get_coordinates(12))   # (0, 0, 2)
+print(get_coordinates(16))   # (0, 0, 3)
+print(get_coordinates(19))   # (3, 0, 3)
+print(get_coordinates(20))   # (0, 0, 0)
+```
+
+---
+
+### **Explanation of Logic**
+
+- The modulo operation (`n % 20`) ensures the pattern repeats every 20 numbers.
+- The `z` calculation ensures each of the 4 layers in the higher section is uniquely identified.
+- The `(x, y)` coordinates are determined based on the position within the current layer using modular arithmetic.
+
+This function accurately maps each integer `n` to a 3D coordinate in a spiral-like structure, as described.

@@ -1,0 +1,45 @@
+import sys
+sys.setrecursionlimit(1 << 25)
+
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non‑negative integer")
+
+    def sum_power(limit):
+        bits = limit.bit_length()
+        if bits == 0:
+            return 1  # only number 0
+        from functools import lru_cache
+
+        @lru_cache(maxsize=None)
+        def dfs(pos, ones, tight):
+            if pos < 0:
+                return 1 << ones
+            max_bit = ((limit >> pos) & 1) if tight else 1
+            total = 0
+            for bit in range(max_bit + 1):
+                total += dfs(pos - 1, ones + bit, tight and bit == max_bit)
+            return total
+
+        return dfs(bits - 1, 0, True)
+
+    # Binary search for minimal y such that sum_power(y) > n
+    low = 0
+    high = n
+    while low < high:
+        mid = (low + high) // 2
+        if sum_power(mid) > n:
+            high = mid
+        else:
+            low = mid + 1
+    y = low
+
+    prev_sum = 0 if y == 0 else sum_power(y - 1)
+    offset = n - prev_sum
+
+    positions = [i for i in range(y.bit_length()) if (y >> i) & 1]
+    x = 0
+    for i, pos in enumerate(positions):
+        if (offset >> i) & 1:
+            x |= 1 << pos
+    return (x, y)

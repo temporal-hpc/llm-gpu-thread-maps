@@ -1,0 +1,36 @@
+To determine a formula that maps integers \( n \) to triplets \((x, y, z)\) based on the given sequence, we observe the following pattern:
+
+1. **Cycles and Increments**: The sequence appears to operate in cycles where each cycle increases one of the coordinates by 2 after every set of numbers. For example:
+   - \( n = 0-3 \): \( x=0 \), varying \( y \) and \( z \).
+   - \( n = 4-7 \): \( x=2 \), varying \( y \) and \( z \).
+   - \( n = 8-11 \): \( y=2 \), varying \( x \) and \( z \).
+   - \( n = 12-15 \): \( z=2 \), varying \( x \) and \( y \).
+
+2. **Cycle Detection**: Each cycle starts at \( n = k^3 \) where \( k \) is an integer, but this isn't a perfect fit. Instead, each cycle seems to start after every 4 numbers, with each coordinate taking turns to be incremented by 2.
+
+3. **Coordinate Assignment**: Within each cycle, the coordinates vary while one remains fixed at an increased value. For example:
+   - In \( n = 0-3 \), \( x=0 \).
+   - In \( n = 4-7 \), \( x=2 \).
+   - In \( n = 8-11 \), \( y=2 \).
+   - In \( n = 12-15 \), \( z=2 \).
+
+**Formula Derivation**: Based on the observed pattern, we can derive that each coordinate increments by 2 every time \( n \) crosses a multiple of 4. Thus, for any given \( n \):
+
+\[
+x(n) = \left\lfloor \frac{n + 1}{4} \right\rfloor \times 2
+\]
+\[
+y(n) = \left\lfloor \frac{n + 1}{4} \right\rfloor \times 2 \quad \text{(alternating with } x)
+\]
+\[
+z(n) = \left\lfloor \frac{n + 1}{4} \right\rfloor \times 2 \quad \text{(alternating with } y)
+\]
+
+However, this is a simplified approximation and may not perfectly align with the given sequence for all \( n \). A more precise formula would require deeper pattern analysis or an alternative mathematical approach.
+
+**Final Answer**
+The mapping from \( n \) to triplets follows a cyclical pattern where each coordinate increases by 2 every four steps. The exact formula requires further refinement, but based on observed increments:
+
+\[
+\boxed{(x, y, z) = \left(2 \times \left\lfloor \frac{n}{4} \right\rfloor, \text{varies cyclically}\right)}
+\]

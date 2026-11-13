@@ -1,0 +1,7 @@
+```python
+def map_to_coordinates(n):
+    coordinates = []
+    z, remainder = divmod(n, 9)
+    y, x = divmod(remainder, 3)
+    return (x, y, z)
+```

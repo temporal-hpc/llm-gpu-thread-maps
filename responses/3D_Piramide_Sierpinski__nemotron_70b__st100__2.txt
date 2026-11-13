@@ -1,0 +1,38 @@
+```python
+def map_to_coordinates(n):
+    def cantor_pairing(a, b):
+        return (a + b) * (a + b + 1) // 2 + b
+
+    def inverse_cantor_pairing(z):
+        w = int(((8*z + 1)**0.5 - 1) / 2)
+        t = (w**2 + w) // 2
+        y = z - t
+        x = w - y
+        return x, y
+
+    def cartesian_to_spherical(x, y, z):
+        r = (x**2 + y**2 + z**2)**0.5
+        theta = math.atan2((y**2 + z**2)**0.5, x)
+        phi = math.atan2(z, y) if y != 0 else 0
+        return int(r), int(theta * 128 / math.pi), int(phi * 64 / math.pi)
+
+    import math
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input must be a non-negative integer")
+    
+    x, y = inverse_cantor_pairing(n)
+    z = 0
+    while cantor_pairing(x, y) != n:
+        z += 1
+        temp_y = y
+        y = z
+        z = temp_y - z
+        if y < z:
+            temp_x = x
+            x = y
+            y = temp_x + (z - y)
+        else:
+            x += (y - z)
+    
+    return cartesian_to_spherical(x, y, z)
+```

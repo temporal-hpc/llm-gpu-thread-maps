@@ -1,0 +1,88 @@
+To determine the 3D coordinates $(x, y, z)$ for a given integer $n$ in a generalized 3D Hilbert-like traversal, we can build on the 2D Hilbert curve and extend it to 3D by adding a third coordinate $z$ that reflects the level of recursion or "depth" in the traversal.
+
+---
+
+### **2D Hilbert Curve Mapping**
+
+The 2D Hilbert curve for order 1 maps each integer $n$ from 0 to 3 to a unique coordinate $(x, y)$ as follows:
+
+| $n$ | $x$ | $y$ |
+|------|-----|-----|
+| 0    | 0   | 0   |
+| 1    | 0   | 1   |
+| 2    | 1   | 1   |
+| 3    | 1   | 0   |
+
+This mapping is extended recursively for higher-order curves, where each quadrant is transformed into a Hilbert-like pattern. For the 3D case, we can similarly define a 3D Hilbert curve using a recursive approach.
+
+---
+
+### **3D Extension and $z$-Coordinate**
+
+In 3D, the Hilbert curve traverses a cube recursively, dividing it into 8 subcubes. The traversal order is such that the path remains continuous and space-filling. The $z$-coordinate can be interpreted as the level of recursion or the "depth" at which the current cube is visited.
+
+From the example data provided, we can observe the following pattern for the $z$-coordinate:
+
+- The $z$-value increases by 1 at each recursive level.
+- It is zero at the base level and increments for each deeper level.
+
+Based on the example data and the recursive structure of the 3D Hilbert curve, we can deduce:
+
+- The $z$-coordinate for a point is equal to the **level of recursion** at which the point is visited.
+- The level can be determined by the **position of the most significant 1** in the binary representation of $n$.
+
+---
+
+### **Implementation Strategy**
+
+Given an integer $n$, the 3D Hilbert coordinates $(x, y, z)$ can be computed as follows:
+
+1. **Decompose** $n$ into its base-4 digits to determine the recursive path.
+2. **Compute** $(x, y)$ using a recursive 2D Hilbert mapping.
+3. **Determine** $z$ as the **level of recursion** (i.e., the position of the most significant 1 in the binary representation of $n$).
+
+---
+
+### **Example: Coordinates for $n = 15$**
+
+- Binary of $15$: $1111$
+- Most significant 1 is at position 3 (0-indexed from the right), so $z = 3$
+- Decompose $15$ into base-4 digits: $33$
+- Recursively apply the 2D Hilbert mapping to get $(x, y) = (1, 1)$
+
+So, $(x, y, z) = (1, 1, 3)$
+
+---
+
+### **Summary of Coordinates**
+
+Below are the coordinates for $n = 0$ to $15$:
+
+| $n$ | $x$ | $y$ | $z$ |
+|------|-----|-----|-----|
+| 0    | 0   | 0   | 0   |
+| 1    | 0   | 1   | 0   |
+| 2    | 1   | 1   | 0   |
+| 3    | 1   | 0   | 1   |
+| 4    | 1   | 0   | 0   |
+| 5    | 0   | 0   | 0   |
+| 6    | 0   | 1   | 0   |
+| 7    | 1   | 1   | 1   |
+| 8    | 1   | 1   | 0   |
+| 9    | 1   | 0   | 0   |
+| 10   | 0   | 0   | 0   |
+| 11   | 0   | 1   | 0   |
+| 12   | 0   | 1   | 2   |
+| 13   | 0   | 0   | 2   |
+| 14   | 1   | 0   | 2   |
+| 15   | 1   | 1   | 3   |
+
+---
+
+### **Final Answer**
+
+$$
+\boxed{(x, y, z)}
+$$
+
+The 3D coordinates $(x, y, z)$ for a given integer $n$ can be computed using the recursive 3D Hilbert curve. The $z$-coordinate represents the level of recursion at which the point is visited, determined by the position of the most significant 1 in the binary representation of $n$.

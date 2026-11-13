@@ -1,0 +1,76 @@
+To solve this problem, we need to determine the coordinates (x, y, z) for a given non-negative integer n in a specific 3D grid traversal pattern. The grid is traversed in layers where each layer corresponds to a value of z (starting from 0). For each layer z, the grid points (x, y, z) are traversed such that x + y = z, and within each layer, the points are ordered by increasing y (or equivalently decreasing x).
+
+### Approach
+1. **Problem Analysis**: The traversal pattern is such that:
+   - For each layer `z` (starting from 0), the number of points in the layer is given by the triangular number \( T_z = \frac{(z + 1)(z + 2)}{2} \).
+   - The cumulative number of points up to layer `z` is the tetrahedral number \( F(z) = \frac{z(z + 1)(z + 2)}{6} \).
+   - Given `n`, we first determine the layer `z` such that \( F(z) \leq n < F(z + 1) \). This `z` is the largest integer where \( F(z) \leq n \).
+   - The remaining points within layer `z` is \( m = n - F(z) \).
+   - Within layer `z`, the points are ordered by increasing `y` (from 0 to `z`), so the number of points before the current point in the layer is given by the triangular number \( G(y) = \frac{y(y + 1)}{2} \). We find the largest `y` such that \( G(y) \leq m \).
+   - The coordinate `x` is then \( x = z - y \), but since the problem defines the traversal such that \( x + y = z \), we can compute `x` as \( x = m - G(y) \).
+
+2. **Algorithm Selection**:
+   - **Binary Search for `z`**: Given the tetrahedral number function \( F(z) \), we use binary search to efficiently find the largest `z` such that \( F(z) \leq n \). This avoids linear search, which would be inefficient for large `n`.
+   - **Binary Search for `y`**: Similarly, within the identified layer `z`, we use binary search to find the largest `y` such that the triangular number \( G(y) \leq m \), where \( m = n - F(z) \).
+
+3. **Complexity Analysis**:
+   - **Finding `z`**: The binary search for `z` operates in \( O(\log n) \) time because the value of `z` is \( O(n^{1/3}) \).
+   - **Finding `y`**: The binary search for `y` operates in \( O(\log \sqrt{m}) = O(\log n) \) time since `y` is \( O(\sqrt{m}) \) and \( m \leq n \).
+   - Overall, the solution efficiently computes the coordinates in \( O(\log n) \) time, which is optimal for large values of `n`.
+
+### Solution Code
+```python
+class Solution:
+    def findCoordinates(self, n: int):
+        lo, hi = 0, 1
+        while True:
+            F_hi = hi * (hi + 1) * (hi + 2) // 6
+            if F_hi > n:
+                break
+            lo = hi
+            hi *= 2
+        while lo < hi:
+            mid = (lo + hi + 1) // 2
+            F_mid = mid * (mid + 1) * (mid + 2) // 6
+            if F_mid <= n:
+                lo = mid
+            else:
+                hi = mid - 1
+        z0 = lo
+        m = n - (z0 * (z0 + 1) * (z0 + 2) // 6)
+        
+        lo_j, hi_j = 0, 1
+        while True:
+            G_hi = hi_j * (hi_j + 1) // 2
+            if G_hi > m:
+                break
+            lo_j = hi_j
+            hi_j *= 2
+        while lo_j < hi_j:
+            mid = (lo_j + hi_j + 1) // 2
+            G_mid = mid * (mid + 1) // 2
+            if G_mid <= m:
+                lo_j = mid
+            else:
+                hi_j = mid - 1
+        y0 = lo_j
+        x = m - (y0 * (y0 + 1) // 2)
+        
+        return (x, y0, z0)
+```
+
+### Explanation
+1. **Finding Layer `z`**:
+   - We start with `lo = 0` and `hi = 1`, doubling `hi` until \( F(hi) > n \). This sets an upper bound for `z`.
+   - Using binary search between `lo` and `hi`, we find the largest `z` (denoted as `z0`) such that \( F(z0) \leq n \). The value \( F(z) = \frac{z(z+1)(z+2)}{6} \) is the cumulative number of points up to layer `z`.
+
+2. **Calculating Remaining Points `m`**:
+   - The remaining points within layer `z0` is \( m = n - F(z0) \).
+
+3. **Finding Coordinate `y`**:
+   - Similarly, we determine the largest `y` (denoted as `y0`) such that the triangular number \( G(y0) = \frac{y0(y0 + 1)}{2} \leq m \). This identifies the position within the layer.
+
+4. **Calculating Coordinate `x`**:
+   - The coordinate `x` is derived as \( x = m - G(y0) \), ensuring \( x + y0 = z0 \) as per the traversal pattern.
+
+This approach efficiently narrows down the layer and position within the layer using binary search, making it suitable for very large values of `n` with logarithmic time complexity.

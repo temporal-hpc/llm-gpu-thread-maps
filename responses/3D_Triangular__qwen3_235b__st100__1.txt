@@ -1,0 +1,29 @@
+To determine the n-th term of the sequence for a given nonnegative integer \(n\), follow these steps:
+
+1. **Compute the integer square root**: Calculate \(r = \lfloor \sqrt{8n + 1} \rfloor\), which is the largest integer such that \(r^2 \leq 8n + 1\).
+2. **Determine \(s\)**: Compute \(s = \left\lfloor \frac{r - 1}{2} \right\rfloor\). This \(s\) is the largest integer satisfying \(\frac{s(s+1)}{2} \leq n\).
+3. **Calculate the offset \(d\)**: Find \(d = n - \frac{s(s+1)}{2}\). Since \(s(s+1)\) is always even, this division is exact.
+4. **Derive the coordinates**: The n-th term is the pair \((i, j)\) where \(i = s - d\) and \(j = d\).
+
+### Explanation:
+- The sequence is ordered by the sum \(i + j\) (diagonals), and within each diagonal, by decreasing \(i\) (or increasing \(j\)).
+- The value \(s = i + j\) represents the diagonal index.
+- The triangular number \(\frac{s(s+1)}{2}\) gives the count of terms before diagonal \(s\).
+- The offset \(d\) indicates the position within diagonal \(s\), leading to \(i = s - d\) and \(j = d\).
+
+### Example:
+- For \(n = 5\):
+  - \(8n + 1 = 41\), \(r = \lfloor \sqrt{41} \rfloor = 6\),
+  - \(s = \left\lfloor \frac{6 - 1}{2} \right\rfloor = 2\),
+  - \(d = 5 - \frac{2 \times 3}{2} = 5 - 3 = 2\),
+  - Result: \((i, j) = (2 - 2, 2) = (0, 2)\).
+
+- For \(n = 6\):
+  - \(8n + 1 = 49\), \(r = \lfloor \sqrt{49} \rfloor = 7\),
+  - \(s = \left\lfloor \frac{7 - 1}{2} \right\rfloor = 3\),
+  - \(d = 6 - \frac{3 \times 4}{2} = 6 - 6 = 0\),
+  - Result: \((i, j) = (3 - 0, 0) = (3, 0)\).
+
+This method efficiently computes the pair \((i, j)\) for any \(n \geq 0\) using basic arithmetic operations and integer square root.
+
+\boxed{(s - d,\ d)} \quad \text{where} \quad s = \left\lfloor \dfrac{\lfloor \sqrt{8n + 1} \rfloor - 1}{2} \right\rfloor \quad \text{and} \quad d = n - \dfrac{s(s + 1)}{2}

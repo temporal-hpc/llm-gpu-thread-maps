@@ -1,0 +1,48 @@
+To solve this problem, we need to determine the next cell in a grid that is present according to a specific condition. The grid is ordered by the value of \(x\), then \(y\), then \(z\). A cell \((x, y, z)\) is present if and only if \((x \mod 3, y \mod 3, z \mod 3)\) is not equal to \((1, 1, 1)\). Given a present cell \((x, y, z)\), we need to find the smallest cell \((x', y', z')\) in the grid order that comes after \((x, y, z)\) and is also present.
+
+### Approach
+1. **Problem Analysis**: The key observation is that for any given present cell \((x, y, z)\), the next present cell in the grid order will either be \((x, y, z+1)\) or \((x, y, z+2)\), depending on the modulo 3 values of \(x\), \(y\), and \(z\). Specifically:
+   - If \((x \mod 3, y \mod 3)\) is not \((1, 1)\), then all \(z\) values are present. Hence, the next cell is simply \((x, y, z+1)\).
+   - If \((x \mod 3, y \mod 3)\) is \((1, 1)\), then \(z \mod 3\) must not be 1 (since the given cell is present). Therefore:
+     - If \(z \mod 3 = 0\), the next present cell is \((x, y, z+2)\) because \(z+1\) would make \(z \mod 3 = 1\) (which is absent).
+     - If \(z \mod 3 = 2\), the next present cell is \((x, y, z+1)\) because \(z+1\) would make \(z \mod 3 = 0\) (which is present).
+
+2. **Algorithm Selection**: The solution involves checking the modulo 3 values of \(x\) and \(y\) to determine the category of the current cell. Based on this check and the modulo 3 value of \(z\), we compute the next present cell by adjusting \(z\) accordingly.
+
+3. **Complexity Analysis**: The solution involves constant-time operations (modulo arithmetic and conditional checks) for any given input. Thus, the time complexity is \(O(1)\), and the space complexity is \(O(1)\) since we only store a few variables.
+
+### Solution Code
+```cpp
+#include <iostream>
+using namespace std;
+
+int main() {
+    long long x, y, z;
+    cin >> x >> y >> z;
+    int a = x % 3;
+    int b = y % 3;
+    int c = z % 3;
+    if (a == 1 && b == 1) {
+        if (c == 0) {
+            cout << x << " " << y << " " << z + 2 << endl;
+        } else {
+            cout << x << " " << y << " " << z + 1 << endl;
+        }
+    } else {
+        cout << x << " " << y << " " << z + 1 << endl;
+    }
+    return 0;
+}
+```
+
+### Explanation
+1. **Reading Input**: The code reads three integers \(x\), \(y\), and \(z\) representing the current cell.
+2. **Modulo Calculation**: It calculates \(x \mod 3\), \(y \mod 3\), and \(z \mod 3\) to determine the residues.
+3. **Condition Check**:
+   - If both \(x \mod 3\) and \(y \mod 3\) are 1, the next cell depends on \(z \mod 3\):
+     - If \(z \mod 3\) is 0, the next present cell is \((x, y, z+2)\) (skipping \(z+1\) which would be absent).
+     - Otherwise (i.e., \(z \mod 3\) is 2), the next present cell is \((x, y, z+1)\).
+   - If the residues of \(x\) and \(y\) are not both 1, the next cell is simply \((x, y, z+1)\) since all \(z\) values are present in this case.
+4. **Output**: The result is printed based on the above conditions.
+
+This approach efficiently determines the next present cell by leveraging modular arithmetic and conditional checks, ensuring optimal performance with constant time and space complexity.

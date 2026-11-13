@@ -1,0 +1,57 @@
+To determine the position of the ant after **1000 moves**, we analyze the movement pattern and derive a general formula for the coordinates after an even number of moves, $ n = 2k $.
+
+---
+
+### **Observation and Pattern Recognition**
+
+From the problem and given examples, the ant moves in a spiral pattern, forming a diamond-like structure. Each side of the square increases in length by 1 for each completed loop. The movement alternates between **right**, **up**, **left**, and **down**.
+
+The key insight is that the position of the ant after an even number of moves, $ n = 2k $, lies on the perimeter of a square with side length $ s $, and we can determine the side and the position on that side based on $ k $.
+
+---
+
+### **Step-by-Step Algorithm**
+
+Let $ k = \frac{n}{2} $, and define the side length of the square as:
+
+$$
+s = \left\lfloor \frac{1 + \sqrt{1 + 4k}}{2} \right\rfloor
+$$
+
+This gives the largest square with perimeter $ 4s $ that fits within the first $ 2k $ moves.
+
+We then determine the **side** of the square the point lies on:
+
+- **Side 1**: Bottom → x increases from $ s - 1 $ to $ s $
+- **Side 2**: Left → y increases from $ s $ to $ s $
+- **Side 3**: Top → x decreases from $ s $ to $ s - 1 $
+- **Side 4**: Right → y decreases from $ s $ to $ s - 1 $
+
+The exact side is determined by computing the number of steps into the current side.
+
+Let $ r = k - s(s - 1) $, which gives the remaining steps into the current side.
+
+Then:
+
+- If $ r < s $: on **bottom side**, $ (x, y) = (r, 0) $
+- If $ r < 2s $: on **left side**, $ (x, y) = (s, r - s) $
+- If $ r < 3s $: on **top side**, $ (x, y) = (3s - r, s) $
+- If $ r < 4s $: on **right side**, $ (x, y) = (0, 4s - r) $
+
+---
+
+### **Applying the Algorithm for $ n = 1000 $**
+
+1. $ k = \frac{1000}{2} = 500 $
+2. $ s = \left\lfloor \frac{1 + \sqrt{1 + 4 \cdot 500}}{2} \right\rfloor = \left\lfloor \frac{1 + \sqrt{2001}}{2} \right\rfloor = \left\lfloor \frac{1 + 44.72}{2} \right\rfloor = 22 $
+3. $ r = k - s(s - 1) = 500 - 22 \cdot 21 = 500 - 462 = 38 $
+4. $ 38 < 2s = 44 $, so the point is on the **left side**.
+5. Coordinates: $ (x, y) = (s, r - s) = (22, 38 - 22) = (22, 16) $
+
+---
+
+### ✅ Final Answer:
+
+$$
+\boxed{(22, 16)}
+$$

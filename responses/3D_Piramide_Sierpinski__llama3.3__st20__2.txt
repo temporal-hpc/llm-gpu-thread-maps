@@ -1,0 +1,17 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer")
+    dimensions = 3
+    coordinates = [0] * dimensions
+    index = 0
+    while n >= 0:
+        remainder = n % (index + 1)
+        quotient = n // (index + 1)
+        coordinates[index % dimensions] = remainder
+        n = quotient - 1
+        index += 1
+        if index == dimensions:
+            break
+    return tuple(coordinates)
+```

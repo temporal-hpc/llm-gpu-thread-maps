@@ -1,0 +1,5 @@
+def map_to_coordinates(n):
+    x = n % 4
+    y = (n // 4) % 4
+    z = n // 16
+    return int(x), int(y), int(z)

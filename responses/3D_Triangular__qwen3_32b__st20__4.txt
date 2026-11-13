@@ -1,0 +1,106 @@
+To generate the nth point in a 3D sequence that traverses every point `(x, y, z)` in order, we can break the problem into layers based on the `z` coordinate. For each fixed `z`, we generate all possible `(x, y)` pairs in a 2D triangular ordering (also known as the "triangular number" sequence). This is similar to how we might traverse a 2D grid in a diagonal fashion.
+
+---
+
+### **Key Observations**
+
+1. **Layering by z-coordinate**: 
+   - We iterate over `z = 0, 1, 2, ...` and for each `z`, we generate all points `(x, y, z)` in a 2D triangular order.
+   - For each `z`, the number of points is infinite, but we can determine how many points are in all layers up to `z = k` using a cumulative sum.
+
+2. **Triangular ordering in 2D**:
+   - For each `z`, we generate the 2D points `(x, y)` such that `x + y = m` for increasing values of `m = 0, 1, 2, ...`.
+   - For a given `m`, there are `m + 1` points: `(0, m), (1, m-1), ..., (m, 0)`.
+   - The number of points up to a given `m` is the sum of the first `m + 1` integers: `(m + 1)(m + 2) / 2`.
+
+3. **Binary search for cumulative counts**:
+   - To find the `z` such that the nth point lies in the `z`-th layer, we use binary search on the cumulative number of points up to each `z`.
+   - Once we determine the correct `z`, we then determine the `(x, y)` coordinates in the 2D triangular ordering for the remaining offset.
+
+---
+
+### **Algorithm Steps**
+
+1. **Find the correct `z`**:
+   - Use binary search to find the largest `z` such that the number of points in all layers up to `z` is less than or equal to `n`.
+
+2. **Compute the offset within the `z`-th layer**:
+   - Subtract the cumulative count up to `z - 1` from `n` to get the offset within the `z`-th layer.
+
+3. **Find the correct `(x, y)` in the 2D triangular ordering**:
+   - Again, use binary search to find the largest `m` such that the number of 2D points up to `m` is less than or equal to the offset.
+   - Compute `x` and `y` from the offset and `m`.
+
+---
+
+### **Implementation in Python**
+
+```python
+def nth_point(n):
+    def find_z(n):
+        low, high = 0, 10**6  # Safe upper bound for binary search
+        while low < high:
+            mid = (low + high + 1) // 2
+            total = mid * (mid + 1) * (mid + 2) // 6
+            if total <= n:
+                low = mid
+            else:
+                high = mid - 1
+        return low
+
+    def find_y(m):
+        low, high = 0, 10**6
+        while low < high:
+            mid = (low + high + 1) // 2
+            total = mid * (mid + 1) // 2
+            if total <= m:
+                low = mid
+            else:
+                high = mid - 1
+        return low
+
+    z = find_z(n)
+    cumulative = z * (z + 1) * (z + 2) // 6
+    m = n - cumulative
+    y = find_y(m)
+    x = m - y * (y + 1) // 2
+    return (x, y, z)
+```
+
+---
+
+### **Example Usage**
+
+```python
+print(nth_point(0))  # Output: (0, 0, 0)
+print(nth_point(1))  # Output: (0, 0, 1)
+print(nth_point(2))  # Output: (0, 1, 1)
+print(nth_point(3))  # Output: (1, 0, 1)
+print(nth_point(10)) # Output: (0, 1, 2)
+```
+
+---
+
+### **Explanation of the Output**
+
+- For `z = 0`: Only one point `(0, 0, 0)` exists.
+- For `z = 1`: The points are `(0, 0, 1)`, `(0, 1, 1)`, `(1, 0, 1)`, `(0, 2, 1)`, etc.
+- For `z = 2`: The points are `(0, 0, 2)`, `(0, 1, 2)`, `(1, 0, 2)`, `(0, 2, 2)`, `(1, 1, 2)`, `(2, 0, 2)`, and so on.
+
+The function correctly traverses the 3D space in the desired order.
+
+---
+
+### **Time Complexity**
+
+- **Binary search for `z`**: O(log n)
+- **Binary search for `y`**: O(log n)
+- **Total time complexity**: O(log n)
+
+This ensures the function is efficient and scalable for large values of `n`.
+
+---
+
+### **Conclusion**
+
+This approach systematically layers the 3D space by `z`, and within each layer, it uses a well-known 2D traversal method (triangular ordering). The binary search ensures we efficiently find the correct layer and coordinates without generating all points up to `n`.

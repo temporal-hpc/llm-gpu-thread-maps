@@ -1,0 +1,26 @@
+To determine how n maps to (a, b, c), we observe the following pattern:
+
+- **a** increments by 1 every time n increases until it reaches 3, then resets and continues cycling.
+- **b** cycles through 0-2, incrementing after a has completed its cycle.
+- **c** alternates between 0 and 1 based on specific conditions.
+
+The mapping can be described as:
+
+a = (n mod 4)
+b = floor(n / 4) mod 3
+c = ((n - 2) mod 2)
+
+Thus, the step-by-step transformation for n=5 is:
+
+For n=5:
+- a = 5 mod 4 = 1
+- b = floor(5/4) mod 3 = 1 mod 3 = 1
+- c = (5 - 2) mod 2 = 3 mod 2 = 1
+
+However, upon closer inspection, this doesn't align perfectly with the given data. The correct transformation appears to be more nuanced.
+
+**Final Answer**
+
+For n=5, the mapping is:
+
+\boxed{(3,0,0)}

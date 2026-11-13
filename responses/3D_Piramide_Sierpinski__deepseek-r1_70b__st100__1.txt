@@ -1,0 +1,18 @@
+The sequence provided shows a cyclical increment pattern among three variables (x, y, z). Each variable is incremented in turn, with x starting first. After every four steps, the next variable in the cycle begins its count from zero while the previous one continues. This creates an overlapping increment pattern where each variable gets a chance to accumulate counts before resetting.
+
+**Step-by-Step Explanation:**
+
+1. **Initialization:** All variables start at 0.
+2. **First Cycle (n=1 to n=3):**
+   - x increments from 0 to 1 at n=1.
+   - y increments from 0 to 1 at n=2.
+   - z increments from 0 to 1 at n=3.
+3. **Second Cycle (n=4 onwards):**
+   - At n=4, x resets and starts again but this time increases by 2, reaching 2.
+   - From n=5 onward, each variable continues to increment in the same order (x, y, z) but with an increased count before resetting.
+
+**Answer:**
+
+The sequence follows a cyclical pattern where each of the three variables (x, y, z) takes turns being incremented. After every four steps, the next variable starts its count from zero while the previous one continues to accumulate counts. This results in overlapping increments among the variables as they cycle through their respective counts.
+
+\boxed{x=3, y=1, z=0}

@@ -1,0 +1,37 @@
+To determine the position of a number in a triangular arrangement, follow these steps:
+
+1. **Identify the Row (y):** Calculate the row `y` where the number `n` is located using the formula:
+   \[
+   y = \left\lfloor \frac{\sqrt{8n + 1} - 1}{2} \right\rfloor
+   \]
+   This gives the row in which the number `n` resides.
+
+2. **Calculate the Position within the Row (x):** Once the row is determined, compute the position within that row using:
+   \[
+   x = n - T(y)
+   \]
+   where \( T(y) = y \times (y + 1) / 2 \) is the triangular number indicating the last position of the previous rows.
+
+3. **Return the Position:** The coordinates `(x, y)` give the exact position in the triangular arrangement.
+
+**Solution Code:**
+```python
+import math
+
+def triangular_position(n):
+    if n == 0:
+        return (0, 0)
+    sqrt_val = math.sqrt(8 * n + 1)
+    y = int((sqrt_val - 1) // 2)
+    t_y = y * (y + 1) // 2
+    x = n - t_y
+    return (x, y)
+
+# Example usage:
+n = 6
+position = triangular_position(n)
+print(f"The position of {n} is {position}")
+```
+
+**Output:**
+For `n = 6`, the output will be `(0, 3)`.

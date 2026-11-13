@@ -1,0 +1,61 @@
+To solve this problem, we need to decompose a given nonnegative integer \( n \) into three nonnegative integers \( x \), \( y \), and \( z \) such that:
+\[
+n = \frac{z(z+1)(z+2)}{6} + \frac{y(y+1)}{2} + x
+\]
+with the constraints \( 0 \leq x \leq y \). The solution involves finding the largest possible \( z \) such that the tetrahedral number \( \frac{z(z+1)(z+2)}{6} \) is less than or equal to \( n \). The remaining value \( \text{offset} = n - \frac{z(z+1)(z+2)}{6} \) is then decomposed into a triangular number \( \frac{y(y+1)}{2} \) and \( x \), where \( x \) is the remainder satisfying \( 0 \leq x \leq y \).
+
+### Approach
+1. **Find the largest \( z \)**:
+   - Use exponential search to determine an upper bound for \( z \) such that the tetrahedral number \( \frac{z(z+1)(z+2)}{6} \leq n \).
+   - Perform binary search within the identified range to find the largest \( z \) satisfying the condition.
+
+2. **Decompose the offset**:
+   - Compute the offset \( \text{offset} = n - \frac{z(z+1)(z+2)}{6} \).
+   - Determine the largest \( y \) such that the triangular number \( \frac{y(y+1)}{2} \leq \text{offset} \). This is done using the formula \( y = \left\lfloor \frac{-1 + \sqrt{1 + 8 \cdot \text{offset}}}{2} \right\rfloor \).
+   - Calculate \( x \) as the remainder \( \text{offset} - \frac{y(y+1)}{2} \).
+
+### Solution Code
+```python
+import math
+
+def find_xyz(n):
+    low_z, high_z = 0, 1
+    while True:
+        tetra_high = high_z * (high_z + 1) * (high_z + 2) // 6
+        if tetra_high <= n:
+            low_z = high_z
+            high_z *= 2
+        else:
+            break
+    
+    while low_z < high_z:
+        mid = (low_z + high_z + 1) // 2
+        tetra_mid = mid * (mid + 1) * (mid + 2) // 6
+        if tetra_mid <= n:
+            low_z = mid
+        else:
+            high_z = mid - 1
+    
+    z = low_z
+    tetra_z = z * (z + 1) * (z + 2) // 6
+    offset = n - tetra_z
+    
+    s = math.isqrt(1 + 8 * offset)
+    y = (s - 1) // 2
+    triangular_y = y * (y + 1) // 2
+    x = offset - triangular_y
+    
+    return (x, y, z)
+```
+
+### Explanation
+1. **Finding \( z \)**:
+   - **Exponential Search**: Start with \( \text{high\_z} = 1 \) and double it until the tetrahedral number exceeds \( n \). This quickly establishes an upper bound for \( z \).
+   - **Binary Search**: Narrow down the range between \( \text{low\_z} \) and \( \text{high\_z} \) to find the largest \( z \) where the tetrahedral number is still \( \leq n \).
+
+2. **Decomposing the Offset**:
+   - **Calculate Offset**: Subtract the tetrahedral number of \( z \) from \( n \) to get the remaining value (offset).
+   - **Determine \( y \)**: Solve \( y(y+1)/2 \leq \text{offset} \) using the quadratic formula derived from the triangular number equation. The largest integer \( y \) satisfying this is found using integer square root.
+   - **Compute \( x \)**: The remainder after subtracting the triangular number of \( y \) from the offset gives \( x \), which naturally satisfies \( 0 \leq x \leq y \).
+
+This approach efficiently decomposes \( n \) into \( x \), \( y \), and \( z \) while adhering to the given constraints, leveraging mathematical insights for optimal performance. The complexity is \( O(\log z) \) due to the binary search steps, making it suitable for large values of \( n \).

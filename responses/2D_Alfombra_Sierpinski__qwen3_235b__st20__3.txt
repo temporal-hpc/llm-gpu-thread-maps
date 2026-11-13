@@ -1,0 +1,49 @@
+To solve this problem, we need to determine the coordinates (x, y) of a given non-negative integer `n` on an infinite grid based on a specific repeating pattern. The pattern repeats every 8 numbers, where each block of 8 numbers follows a consistent structure in terms of the x and y coordinates.
+
+### Approach
+1. **Pattern Analysis**: The grid pattern repeats every 8 numbers. For each block of 8 numbers (from `8k` to `8k + 7` where `k` is a non-negative integer), the coordinates are determined as follows:
+   - **Numbers `8k` to `8k + 2` (r = 0, 1, 2)**: These numbers lie on the x-axis (y = 0). The x-coordinate starts at `3k` and increments by 1 for each subsequent number.
+   - **Numbers `8k + 3` and `8k + 4` (r = 3, 4)**: These numbers lie on the line y = 1. The x-coordinate for `8k + 3` is `3k`, and for `8k + 4` it is `3k + 2` (skipping `3k + 1`).
+   - **Numbers `8k + 5` to `8k + 7` (r = 5, 6, 7)**: These numbers lie on the line y = 2. The x-coordinate starts at `3k` and increments by 1 for each subsequent number.
+
+2. **Mathematical Formulation**:
+   - Compute `k = n // 8` (the block index).
+   - Compute `r = n % 8` (the position within the block).
+   - Based on the value of `r`:
+     - If `r` is 0, 1, or 2: `x = 3k + r`, `y = 0`.
+     - If `r` is 3 or 4: `x = 3k + 2*(r - 3)`, `y = 1`.
+     - If `r` is 5, 6, or 7: `x = 3k + (r - 5)`, `y = 2`.
+
+### Solution Code
+```python
+def main():
+    n = int(input().strip())
+    k = n // 8
+    r = n % 8
+    if r < 3:
+        x = 3 * k + r
+        y = 0
+    elif r < 5:
+        x = 3 * k + 2 * (r - 3)
+        y = 1
+    else:
+        x = 3 * k + (r - 5)
+        y = 2
+    print(f"{x} {y}")
+
+if __name__ == "__main__":
+    main()
+```
+
+### Explanation
+1. **Reading Input**: The input is a single non-negative integer `n`.
+2. **Block Calculation**: 
+   - `k` is calculated as the integer division of `n` by 8, representing the block index.
+   - `r` is the remainder when `n` is divided by 8, indicating the position within the current block (0 to 7).
+3. **Coordinate Determination**:
+   - For `r` values 0, 1, or 2 (first three numbers in the block), the coordinates are `(3k + r, 0)`.
+   - For `r` values 3 or 4 (next two numbers), the coordinates are `(3k + 2*(r - 3), 1)`. This skips the middle x-coordinate (`3k + 1`) on the line y = 1.
+   - For `r` values 5, 6, or 7 (last three numbers), the coordinates are `(3k + (r - 5), 2)`.
+4. **Output**: The computed x and y coordinates are printed.
+
+This approach efficiently maps any non-negative integer `n` to its corresponding coordinates on the grid by leveraging the repeating pattern every 8 numbers, ensuring optimal performance with constant time complexity O(1).

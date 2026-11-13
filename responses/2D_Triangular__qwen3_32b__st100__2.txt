@@ -1,0 +1,73 @@
+To determine the coordinates $(x, y)$ of the $n$-th visited point in the described traversal of an infinite 2D grid, we analyze the structure of the traversal.
+
+---
+
+### 🧠 **Traversal Pattern**
+
+Each "layer" corresponds to a fixed value of $y$. For a given $y$, the points visited are:
+
+$$
+(0, y), (1, y), \dots, (y, y)
+$$
+
+This means:
+- Layer $y$ contains $y+1$ points.
+- The total number of points up to and including layer $y$ is the sum of the first $y+1$ natural numbers:
+
+$$
+\text{Total points up to layer } y = \frac{(y+1)(y+2)}{2}
+$$
+
+Thus, the $n$-th point (starting from 0) falls into the largest layer $y$ such that:
+
+$$
+\frac{y(y+1)}{2} \leq n
+$$
+
+---
+
+### 🧮 **Mathematical Derivation**
+
+We want to find the largest integer $y$ such that:
+
+$$
+\frac{y(y+1)}{2} \leq n
+$$
+
+This inequality can be solved using the quadratic formula. Rearranging:
+
+$$
+y^2 + y - 2n \leq 0
+$$
+
+The positive root of the equation $y^2 + y - 2n = 0$ is:
+
+$$
+y = \frac{-1 + \sqrt{1 + 8n}}{2}
+$$
+
+Taking the **floor** of this value gives the correct $y$:
+
+$$
+y = \left\lfloor \frac{\sqrt{8n + 1} - 1}{2} \right\rfloor
+$$
+
+Once $y$ is determined, the corresponding $x$-coordinate is:
+
+$$
+x = n - \frac{y(y+1)}{2}
+$$
+
+---
+
+### ✅ **Final Formula**
+
+Given a non-negative integer $n$, the coordinates of the $n$-th point in the traversal are:
+
+$$
+\boxed{
+\left( n - \frac{y(y+1)}{2}, \left\lfloor \frac{\sqrt{8n + 1} - 1}{2} \right\rfloor \right)
+}
+$$
+
+where $y = \left\lfloor \frac{\sqrt{8n + 1} - 1}{2} \right\rfloor$.

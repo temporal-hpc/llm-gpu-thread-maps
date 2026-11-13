@@ -1,0 +1,59 @@
+To determine the values of $ x $, $ y $, and $ z $ for a given integer $ n $, we analyze the binary representation of $ n $ and decompose it into groups of three bits. Each bit contributes to one of the variables $ x $, $ y $, or $ z $ based on its position modulo 3, and the contribution is scaled by a power of 2 corresponding to the group it belongs to.
+
+---
+
+### **Key Rule:**
+
+For each bit in the binary representation of $ n $, located at position $ k $ (starting from 0 for the least significant bit):
+
+- If $ k \equiv 0 \mod 3 $, the bit contributes to $ x $.
+- If $ k \equiv 1 \mod 3 $, the bit contributes to $ y $.
+- If $ k \equiv 2 \mod 3 $, the bit contributes to $ z $.
+
+The contribution is calculated as:
+
+$$
+\text{contribution} = \text{bit value} \times 2^{\lfloor k / 3 \rfloor}
+$$
+
+This means that each group of 3 bits contributes to one of the variables, and the group index (i.e., $ \lfloor k / 3 \rfloor $) determines the power of 2 by which the bit is scaled.
+
+---
+
+### **Example: $ n = 5 $**
+
+Binary: $ 101 $
+
+- Bit at position 0 (value 1): $ 0 \mod 3 = 0 $ → contributes to $ x $: $ 1 \times 2^0 = 1 $
+- Bit at position 2 (value 0): $ 2 \mod 3 = 2 $ → contributes to $ z $: $ 0 \times 2^0 = 0 $
+- Bit at position 3 (value 1): $ 3 \mod 3 = 0 $ → contributes to $ x $: $ 1 \times 2^1 = 2 $
+
+So:
+
+- $ x = 1 + 2 = 3 $
+- $ y = 0 $
+- $ z = 0 $
+
+---
+
+### **Another Example: $ n = 6 $**
+
+Binary: $ 110 $
+
+- Bit at position 1 (value 1): $ 1 \mod 3 = 1 $ → contributes to $ y $: $ 1 \times 2^0 = 1 $
+- Bit at position 2 (value 1): $ 2 \mod 3 = 2 $ → contributes to $ z $: $ 1 \times 2^0 = 1 $
+- Bit at position 3 (value 1): $ 3 \mod 3 = 0 $ → contributes to $ x $: $ 1 \times 2^1 = 2 $
+
+So:
+
+- $ x = 2 $
+- $ y = 1 $
+- $ z = 1 $
+
+---
+
+### **Final Answer**
+
+$$
+\boxed{x = 3,\ y = 0,\ z = 0}
+$$

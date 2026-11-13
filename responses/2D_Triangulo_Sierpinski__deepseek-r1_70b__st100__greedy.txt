@@ -1,0 +1,18 @@
+To determine the value of \( y \) for a given \( n \), we observe that each \( y \) corresponds to a range of \( n \) values. The starting points for each \( y \) are as follows:
+
+- \( y = 0 \): \( n = 0 \)
+- \( y = 1 \): \( n = 1, 2 \)
+- \( y = 2 \): \( n = 3, 4 \)
+- \( y = 3 \): \( n = 5, 6, 7, 8 \)
+- \( y = 4 \): \( n = 9, 10, 11, 12, 13, 14, 15, 16 \)
+
+From this, we can see that each subsequent \( y \) covers a range of \( n \) values that double in size. Specifically, the number of \( n \) values for each \( y \) follows the pattern \( 2^{y} \).
+
+Thus, to find \( y \) for any given \( n \), we can use the formula:
+
+\[
+y = \lfloor \log_2 (n + 1) \rfloor
+\]
+
+**Answer:**  
+The value of \( y \) is determined by the formula \( y = \lfloor \log_2 (n + 1) \rfloor \).

@@ -1,0 +1,39 @@
+To determine the relationship between \( n \) and the coordinates \( (x, y) \), let's analyze the given sequence:
+
+\[
+\begin{array}{c|c|c}
+n & x & y \\
+\hline
+0 & 0 & 0 \\
+1 & 1 & 0 \\
+2 & 2 & 0 \\
+3 & 0 & 1 \\
+4 & 2 & 1 \\
+5 & 0 & 2 \\
+6 & 1 & 2 \\
+7 & 2 & 2 \\
+8 & 3 & 0 \\
+9 & 4 & 0 \\
+10 & 5 & 0 \\
+11 & 5 & 1 \\
+12 & 5 & 1 \\
+13 & 3 & 1 \\
+14 & 4 & 1 \\
+15 & 5 & 2 \\
+16 & 6 & 0 \\
+17 & 7 & 0 \\
+18 & 8 & 0 \\
+19 & 8 & 1 \\
+20 & 8 & 1 \\
+21 & 6 & 1 \\
+22 & 7 & 2 \\
+23 & 8 & 2 \\
+\end{array}
+\]
+
+Upon examining the sequence, it appears that \( y \) increments after certain intervals of \( n \), and within each \( y \)-level, \( x \) increases up to a specific value before resetting. However, the exact pattern isn't immediately clear due to irregularities in how \( y \) resets and \( x \) progresses.
+
+**Final Answer:**
+The sequence doesn't follow an obvious mathematical formula based on the provided data. Further analysis or additional terms are needed to determine the precise relationship between \( n \), \( x \), and \( y \).
+
+\boxed{(x, y)}

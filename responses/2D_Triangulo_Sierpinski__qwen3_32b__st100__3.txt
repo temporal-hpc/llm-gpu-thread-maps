@@ -1,0 +1,59 @@
+To determine the coordinates $(x, y)$ for a given integer $n$ in the described sequence, we observe a pattern where the sequence traverses a grid of integers $(x, y)$ in a specific order. The traversal involves visiting points row by row (for each fixed $y$), but the order of $x$-coordinates within each row follows a non-sequential, power-of-two-related pattern. Here's a step-by-step approach to find $(x, y)$ for a given $n$:
+
+---
+
+### **Step 1: Identify the $y$-value for $n$**
+1. The sequence starts at $(0, 0)$ for $n = 1$.
+2. For each $y$, the sequence visits certain $x$-coordinates in a specific order. The number of points visited in each $y$-row varies:
+   - For $y = 2^m - 1$ (e.g., $y = 1, 3, 7, 15, \dots$), all $x$ from $0$ to $y$ are visited.
+   - For other $y$, only specific $x$-values (often powers of two and their complements) are visited.
+3. To find the correct $y$, we can use the following approach:
+   - Start with $y = 0$ and increment $y$ until the cumulative count of visited points up to $y$ is just less than $n$.
+   - The cumulative count up to $y$ is the sum of the number of points visited in all rows from $y = 0$ to $y = k$.
+
+---
+
+### **Step 2: Determine the $x$-coordinate for $n$**
+Once the correct $y$-row is identified, determine the position of $n$ within that row. The $x$-coordinates within each $y$-row follow a specific order:
+- For $y = 2^m - 1$, $x$ ranges from $0$ to $y$ in order.
+- For other $y$, $x$-values are visited in an order that includes $0$, $1$, and powers of two (e.g., $2, 4, 8, \dots$) and their complements relative to $y$.
+
+To find $x$:
+1. Count how many points have been visited in all rows up to $y-1$.
+2. Subtract this count from $n$ to find the position within the $y$-row.
+3. Use the specific order of $x$-coordinates for that $y$ to determine the corresponding $x$.
+
+---
+
+### **Example: Find $(x, y)$ for $n = 13$**
+1. **Determine $y$**:
+   - Cumulative counts for rows:
+     - $y = 0$: 1 point (n=1)
+     - $y = 1$: 2 points (n=2,3)
+     - $y = 2$: 2 points (n=4,5)
+     - $y = 3$: 4 points (n=6-9)
+     - $y = 4$: 3 points (n=10-12)
+     - Cumulative up to $y = 4$: $1 + 2 + 2 + 4 + 3 = 12$.
+   - $n = 13$ is the first point in the next row ($y = 5$).
+
+2. **Determine $x$**:
+   - For $y = 5$, the $x$-coordinates are $0, 1, 4$.
+   - $n = 13$ is the first point in this row, so $x = 0$.
+
+**Result**: $(x, y) = (0, 5)$.
+
+---
+
+### **General Algorithm**
+For a given $n$, the coordinates $(x, y)$ can be determined by:
+1. Iteratively calculating the cumulative number of points up to each $y$-row until the cumulative count is less than $n$.
+2. Using the specific order of $x$-coordinates for the identified $y$-row to find the correct $x$.
+
+---
+
+### **Answer**
+For the input $n$, the coordinates $(x, y)$ can be determined by following the described steps. For example, if $n = 13$, the coordinates are:
+
+$$
+\boxed{(0, 5)}
+$$

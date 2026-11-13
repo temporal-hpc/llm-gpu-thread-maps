@@ -1,0 +1,28 @@
+To solve this problem, we need to determine the coordinates (x, y) for a given integer n in a sequence where each subsequent group of numbers increases by one. Each group corresponds to a specific y value and contains as many elements as the y value plus one.
+
+### Approach
+1. **Understanding Grouping**: Each group is identified by a y value starting from 0. The number of elements in each group is equal to y + 1. For example, group y=0 has 1 element, y=1 has 2 elements, y=2 has 3 elements, and so on.
+2. **Finding the Group**: Given an integer n, we need to determine which group it belongs to. This can be done by finding the largest y such that the sum of all previous groups is less than or equal to n. The sum of the first k integers (groups) is given by the formula k*(k+1)/2.
+3. **Quadratic Solution**: To efficiently find the correct group, we solve a quadratic equation derived from the sum formula. This gives us y using integer square root for precision.
+4. **Calculate Position within Group**: Once the group (y) is identified, calculate the position (x) of n within that group.
+
+### Solution Code
+```python
+import math
+
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non-negative integer")
+    y = (math.isqrt(8 * n + 1) - 1) // 2
+    p = n - y * (y + 1) // 2
+    x = p
+    return (x, y)
+```
+
+### Explanation
+1. **Validation**: The function first checks if the input is a non-negative integer.
+2. **Calculate y**: Using the quadratic formula and integer square root, we determine the largest y such that the sum of all previous groups does not exceed n.
+3. **Determine Position (p)**: Calculate how far into the current group n falls by subtracting the sum of all previous groups from n.
+4. **Assign x**: The position within the group gives us the x coordinate.
+
+This approach efficiently maps each integer n to its corresponding coordinates in a structured sequence, ensuring accurate results with optimal performance.

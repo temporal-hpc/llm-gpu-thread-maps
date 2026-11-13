@@ -1,0 +1,81 @@
+To solve this problem, we need to determine the 3D coordinate (x, y, z) of the n-th point in a specific sequence. The sequence is structured such that every 20 points form a repeating pattern where the x-coordinate increases in blocks of 3 for each subsequent set of 20 points. The first 20 points (n = 0 to 19) define the base pattern, and subsequent points follow the same pattern but shifted in the x-direction.
+
+### Approach
+1. **Problem Analysis**: The sequence of points repeats every 20 points. For each block of 20 points, the x-coordinate starts at 3k (where k is the block index starting from 0), and the y and z coordinates follow a specific pattern within the block.
+2. **Key Insight**: 
+   - The block index `k` is determined by `n // 20`.
+   - The position within the block `r` is `n % 20`.
+   - The base x-coordinate for the block is `3 * k`.
+3. **Pattern within Block**:
+   - **First 8 points (r = 0 to 7)**: z = 0. 
+     - For r = 0, 1, 2: y = 0, x = r.
+     - For r = 3, 4: y = 1, x = 2*(r - 3).
+     - For r = 5, 6, 7: y = 2, x = r - 5.
+   - **Next 4 points (r = 8 to 11)**: z = 1.
+     - For each r in this range, compute `r0 = r - 8`.
+     - x = 2 * (r0 % 2), y = 2 * (r0 // 2).
+   - **Last 8 points (r = 12 to 19)**: z = 2.
+     - For r = 12, 13, 14: y = 0, x = r - 12.
+     - For r = 15, 16: y = 1, x = 2*(r - 15).
+     - For r = 17, 18, 19: y = 2, x = r - 17.
+
+### Solution Code
+```python
+def get_coordinate(n):
+    cube_size = 20
+    k = n // cube_size
+    r = n % cube_size
+    base_x = 3 * k
+    
+    if r < 8:
+        z = 0
+        if r < 3:
+            x = r
+            y = 0
+        elif r < 5:
+            x = 2 * (r - 3)
+            y = 1
+        else:
+            x = r - 5
+            y = 2
+    elif r < 12:
+        z = 1
+        r0 = r - 8
+        x = 2 * (r0 % 2)
+        y = 2 * (r0 // 2)
+    else:
+        z = 2
+        r0 = r - 12
+        if r0 < 3:
+            x = r0
+            y = 0
+        elif r0 < 5:
+            x = 2 * (r0 - 3)
+            y = 1
+        else:
+            x = r0 - 5
+            y = 2
+            
+    return (base_x + x, y, z)
+```
+
+### Explanation
+1. **Block Calculation**: The block index `k` is found by integer division of `n` by 20. The base x-coordinate for the block is `3 * k`.
+2. **Position within Block**: The remainder `r` (from `n % 20`) determines the position within the current block of 20 points.
+3. **Coordinate Determination**:
+   - **For r in 0-7 (z=0)**:
+     - The first 3 points (r=0,1,2) have y=0 and x=r.
+     - The next 2 points (r=3,4) have y=1 and x=2*(r-3).
+     - The last 3 points (r=5,6,7) have y=2 and x=r-5.
+   - **For r in 8-11 (z=1)**:
+     - Compute `r0 = r - 8`.
+     - x is `2 * (r0 % 2)` (alternating 0 and 2).
+     - y is `2 * (r0 // 2)` (0 for r0=0,1 and 2 for r0=2,3).
+   - **For r in 12-19 (z=2)**:
+     - Similar to the first 8 points but with z=2.
+     - The first 3 points (r=12,13,14) have y=0 and x=r-12.
+     - The next 2 points (r=15,16) have y=1 and x=2*(r-15).
+     - The last 3 points (r=17,18,19) have y=2 and x=r-17.
+4. **Result Construction**: The final x-coordinate is `base_x + x`, while y and z are derived directly from the block position.
+
+This approach efficiently maps any given index `n` to its corresponding 3D coordinate by leveraging modular arithmetic and predefined patterns within each block of 20 points. The solution handles all non-negative integers `n` correctly and efficiently.

@@ -1,0 +1,21 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non‑negative integer")
+    import math
+    low, high = 0, int((6 * n) ** (1 / 3)) + 3
+    while low <= high:
+        mid = (low + high) // 2
+        c = (mid + 3) * (mid + 2) * (mid + 1) // 6
+        if c <= n:
+            low = mid + 1
+        else:
+            high = mid - 1
+    z = low
+    prev = (z + 2) * (z + 1) * z // 6
+    offset = n - prev
+    y = (math.isqrt(8 * offset + 1) - 1) // 2
+    inner = offset - y * (y + 1) // 2
+    x = inner
+    return (x, y, z)
+```

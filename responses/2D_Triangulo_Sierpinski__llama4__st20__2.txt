@@ -1,0 +1,16 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer.")
+    x = 0
+    y = 0
+    i = 1
+    while i <= n:
+        y += 1
+        for _ in range(min(y, 7 - (x % 2) * (y % 2))):
+            if i > n:
+                return (x, y)
+            i += 1
+        x += 1
+    return (x, y)
+```

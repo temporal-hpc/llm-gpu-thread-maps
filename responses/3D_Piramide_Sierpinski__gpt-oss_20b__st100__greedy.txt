@@ -1,0 +1,42 @@
+Let  
+
+\[
+X_k=\text{the colour of the }k\text{th ball drawn.}
+\]
+
+The process is **exchangeable**: the joint distribution of  
+\((X_1,X_2,\dots ,X_n)\) is invariant under any permutation of the
+indices.  
+Consequently, for any fixed \(n\)
+
+\[
+P(X_1=\text{white})=P(X_2=\text{white})=\dots =P(X_n=\text{white}).
+\]
+
+In particular, for \(n=3\)
+
+\[
+P(X_1=\text{white})=P(X_2=\text{white})=P(X_3=\text{white}).
+\]
+
+Now consider the event that the first three balls are white:
+
+\[
+A=\{X_1=\text{white},\,X_2=\text{white},\,X_3=\text{white}\}.
+\]
+
+Because of exchangeability, the probability of \(A\) is the same as the
+probability that the first ball is white.  Indeed,
+
+\[
+P(A)=P(X_1=\text{white})= \frac13 .
+\]
+
+(One can also verify this directly by conditioning on the colour of
+the first ball and using the Polya‑urn transition probabilities.)
+
+Hence
+
+\[
+\boxed{P(\text{first three balls are white})=\frac13 }.
+\]

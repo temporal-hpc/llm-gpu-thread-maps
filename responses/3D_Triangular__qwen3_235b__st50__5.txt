@@ -1,0 +1,49 @@
+To solve this problem, we need to determine the coordinates of a cell in a specific 3D hexagonal grid based on a given integer `n`. The problem provides examples that reveal a pattern in the coordinates as `n` increases. 
+
+### Approach
+1. **Pattern Recognition**: From the given examples:
+   - For `n = 1`, the coordinates are `(0, 0, 1)`.
+   - For `n = 2`, the coordinates are `(0, -1, 1)`.
+   - For `n = 3`, the coordinates are `(-1, 0, 1)`.
+   - For `n = 4`, the coordinates are `(0, 0, 2)`.
+   
+   We observe that every three consecutive values of `n` form a "ring" where the third coordinate (`z`) increments by 1. Specifically:
+   - The value of `z` is calculated as `(n + 2) // 3` (using integer division).
+   - The remainder when `n` is divided by 3 determines the first two coordinates (`x` and `y`):
+     - If the remainder is `1`, the coordinates are `(0, 0, z)`.
+     - If the remainder is `2`, the coordinates are `(0, -1, z)`.
+     - If the remainder is `0`, the coordinates are `(-1, 0, z)`.
+
+2. **Algorithm Selection**: The solution involves:
+   - Reading the integer `n`.
+   - Calculating `z` as `(n + 2) // 3`.
+   - Determining the remainder `r = n % 3`.
+   - Based on the remainder, outputting the corresponding coordinates.
+
+### Solution Code
+```python
+def main():
+    n = int(input().strip())
+    z = (n + 2) // 3
+    r = n % 3
+    if r == 1:
+        print("0 0", z)
+    elif r == 2:
+        print("0 -1", z)
+    else:
+        print("-1 0", z)
+
+if __name__ == "__main__":
+    main()
+```
+
+### Explanation
+1. **Reading Input**: The program reads a single integer `n` from standard input.
+2. **Calculating `z`**: The value of `z` is derived using integer division `(n + 2) // 3`, which effectively groups every three consecutive integers into the same `z` value (e.g., `n = 1, 2, 3` all have `z = 1`; `n = 4, 5, 6` all have `z = 2`).
+3. **Determining Coordinates**:
+   - If `n % 3` equals `1`, the coordinates are `(0, 0, z)`.
+   - If `n % 3` equals `2`, the coordinates are `(0, -1, z)`.
+   - If `n % 3` equals `0`, the coordinates are `(-1, 0, z)`.
+4. **Output**: The program prints the coordinates in the format `x y z` based on the remainder value.
+
+This approach efficiently maps each integer `n` to its corresponding coordinates in the 3D hexagonal grid by leveraging simple arithmetic operations and conditional checks, adhering to the pattern observed in the provided examples.

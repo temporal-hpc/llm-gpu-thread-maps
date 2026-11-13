@@ -1,0 +1,41 @@
+To determine the values of `x` and `y` for a given `m` within the `z=0` group, observe that:
+
+1. **For `y = 0`:**
+   - `x` increases from 0 to 2 as `m` goes from 0 to 2.
+   
+2. **For `y = 1`:**
+   - `x` takes values 0 and 2 corresponding to `m=3` and `m=4`.
+   
+3. **For `y = 2`:**
+   - `x` increases from 0 to 2 as `m` goes from 5 to 7.
+
+Thus, the mapping can be defined as:
+- When `0 ≤ m ≤ 2`, `y = 0` and `x = m`.
+- When `3 ≤ m ≤ 4`, `y = 1` and `x` alternates between 0 (at `m=3`) and 2 (at `m=4`).
+- When `5 ≤ m ≤ 7`, `y = 2` and `x = m - 5`.
+
+Therefore, for a given `m`:
+- If `m ≤ 2`: 
+  - `x = m`
+  - `y = 0`
+- If `3 ≤ m ≤ 4`:
+  - `x = (m == 3) ? 0 : 2`
+  - `y = 1`
+- If `5 ≤ m ≤ 7`:
+  - `x = m - 5`
+  - `y = 2`
+
+**Answer:**
+For a given `m`, the values of `x` and `y` are determined as follows:
+- When \(0 \leq m \leq 2\):
+  - \(x = m\)
+  - \(y = 0\)
+- When \(3 \leq m \leq 4\):
+  - \(x = \begin{cases} 
+    0 & \text{if } m=3 \\
+    2 & \text{if } m=4 
+   \end{cases}\)
+  - \(y = 1\)
+- When \(5 \leq m \leq 7\):
+  - \(x = m - 5\)
+  - \(y = 2\)

@@ -1,0 +1,35 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input must be a non-negative integer.")
+
+    if n == 0:
+        return (0, 0)
+
+    k = 0
+    while (k + 1) * (k + 2) // 2 <= n:
+        k += 1
+    k -= 1
+
+    row = n - (k * (k + 1) // 2)
+    col = k
+
+    if row == 0:
+        return (0, col)
+    elif row == 1:
+        return (1, col)
+    elif row == 2:
+        return (2, col)
+    elif row == 3:
+        return (3, col)
+    elif row == 4:
+        return (4, col)
+    elif row == 5:
+        return (5, col)
+    elif row == 6:
+        return (6, col)
+    elif row == 7:
+        return (7, col)
+    else:
+        return (row, col)
+```

@@ -1,0 +1,30 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError
+    block_idx, offset = divmod(n, 20)
+    count = -1
+    by = 0
+    while True:
+        bx = 0
+        while True:
+            if not (bx % 3 == 1 and by % 3 == 1):
+                count += 1
+                if count == block_idx:
+                    base_x, base_y = bx * 3, by * 3
+                    break
+            bx += 1
+        else:
+            by += 1
+            continue
+        break
+    offsets = [
+        (0, 0, 0), (1, 0, 0), (2, 0, 0), (0, 1, 0), (2, 1, 0),
+        (0, 2, 0), (1, 2, 0), (2, 2, 0),
+        (0, 0, 1), (2, 0, 1), (0, 2, 1), (2, 2, 1),
+        (0, 0, 2), (1, 0, 2), (2, 0, 2), (0, 1, 2), (2, 1, 2),
+        (0, 2, 2), (1, 2, 2), (2, 2, 2)
+    ]
+    dx, dy, dz = offsets[offset]
+    return (base_x + dx, base_y + dy, dz)
+```

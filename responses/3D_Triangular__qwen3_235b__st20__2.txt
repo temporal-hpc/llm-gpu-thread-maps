@@ -1,0 +1,58 @@
+To solve this problem, we need to find the nth triplet (a, b, c) of non-negative integers such that the sum a + b + c equals some integer s, and the triplets are ordered first by their sum s and then lexicographically. 
+
+### Approach
+1. **Problem Analysis**: The problem involves generating the nth triplet in a sequence where triplets are ordered by their sum s (i.e., s = a + b + c) and then lexicographically. The sequence starts with s=0 (only triplet (0,0,0)), followed by s=1 (triplets (0,0,1), (0,1,0), (1,0,0)), then s=2, and so on.
+
+2. **Key Insight**: The total number of triplets with sum up to m is given by the formula \( T(m) = \frac{(m+1)(m+2)(m+3)}{6} \). This formula represents the cumulative count of all triplets from s=0 to s=m. 
+
+3. **Binary Search**: To efficiently determine the smallest m such that \( T(m) \geq n \), we use binary search over possible values of m. This helps us identify the exact sum s for the nth triplet.
+
+4. **Position Calculation**: Once m (the sum s) is found, we compute the starting position of triplets with sum m. The position within the block of triplets for sum m is given by \( \text{pos} = n - T(m-1) - 1 \), where \( T(m-1) \) is the cumulative count of triplets up to sum m-1.
+
+5. **Triplet Generation**: For the identified sum m, we generate the triplet by iterating over possible values of a (from 0 to m). For each a, the number of valid (b, c) pairs is \( (m - a + 1) \). We adjust the position within the block to find the correct a, then derive b and c as \( b = \text{pos} \) and \( c = m - a - b \).
+
+### Solution Code
+```python
+def main():
+    n = int(input().strip())
+    
+    low, high = 0, 20000000
+    m_val = 0
+    while low <= high:
+        mid = (low + high) // 2
+        total = (mid + 3) * (mid + 2) * (mid + 1) // 6
+        if total >= n:
+            m_val = mid
+            high = mid - 1
+        else:
+            low = mid + 1
+            
+    if m_val == 0:
+        T_prev = 0
+    else:
+        T_prev = m_val * (m_val + 1) * (m_val + 2) // 6
+        
+    pos_in_block = n - T_prev - 1
+    a = 0
+    while pos_in_block >= (m_val - a + 1):
+        pos_in_block -= (m_val - a + 1)
+        a += 1
+        
+    b = pos_in_block
+    c = m_val - a - b
+    print(f"{a} {b} {c}")
+
+if __name__ == '__main__':
+    main()
+```
+
+### Explanation
+1. **Binary Search for m**: The binary search efficiently locates the smallest sum \( m \) such that the cumulative count of triplets up to sum \( m \) is at least \( n \). The cumulative count \( T(m) \) is computed as \( \frac{(m+1)(m+2)(m+3)}{6} \).
+
+2. **Position Calculation**: After determining \( m \), we calculate the starting position of triplets with sum \( m \) by subtracting \( T(m-1) \) (the count of triplets up to sum \( m-1 \)) from \( n \). The result gives the zero-based index within the block of triplets for sum \( m \).
+
+3. **Triplet Generation**: 
+   - **Finding a**: Iterate over possible values of \( a \) (from 0 to \( m \)). For each \( a \), the number of valid triplets is \( (m - a + 1) \). Adjust the position within the block until it falls within the range for the current \( a \).
+   - **Finding b and c**: Once \( a \) is fixed, \( b \) is simply the remaining position within the block, and \( c \) is derived as \( m - a - b \).
+
+This approach efficiently narrows down the search space using binary search and then locates the exact triplet within the identified block, ensuring optimal performance even for large values of \( n \). The solution handles edge cases such as \( n = 1 \) (the triplet (0,0,0)) seamlessly.

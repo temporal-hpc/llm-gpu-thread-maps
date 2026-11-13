@@ -1,0 +1,43 @@
+To solve this problem, we need to determine the seat coordinates [r, c] in a theater where seats are arranged in a specific pattern. The first row has 3 seats, the second row has 2 seats, the third row has 3 seats, and so on, alternating between 3 and 2 seats per row. The seats are numbered consecutively starting from 0, moving row by row. 
+
+### Approach
+1. **Problem Analysis**: The theater seats are arranged such that even-indexed rows (0, 2, 4, etc.) have 3 seats each, while odd-indexed rows (1, 3, 5, etc.) have 2 seats each. The seats are numbered in row-major order. For example:
+   - Row 0: seats 0, 1, 2 → coordinates [0,0], [0,1], [0,2]
+   - Row 1: seats 3, 4 → coordinates [1,0], [1,2] (note the middle seat is skipped)
+   - Row 2: seats 5, 6, 7 → coordinates [2,0], [2,1], [2,2]
+   - Row 3: seats 8, 9 → coordinates [3,0], [3,2]
+
+2. **Key Insight**: The position `n` can be divided into blocks of 5 seats (since 3 seats in even rows + 2 seats in odd rows = 5 seats per two rows). 
+   - The quotient `m = n // 5` gives the number of complete two-row blocks before the current seat.
+   - The remainder `rem = n % 5` indicates the position within the current two-row block.
+
+3. **Determine Row and Column**:
+   - If the remainder `rem` is less than 3, the seat is in an even row (row `2*m`). The column is exactly `rem`.
+   - If the remainder `rem` is 3 or 4, the seat is in the next odd row (row `2*m + 1`). The column is `0` for `rem=3` and `2` for `rem=4` (since the middle seat is skipped in odd rows).
+
+### Solution Code
+```python
+class Solution:
+    def theaterSeat(self, n: int) -> List[int]:
+        m = n // 5
+        rem = n % 5
+        if rem < 3:
+            return [2 * m, rem]
+        else:
+            return [2 * m + 1, 2 * (rem - 3)]
+```
+
+### Explanation
+1. **Calculate Blocks and Remainder**: 
+   - `m = n // 5` determines how many complete two-row blocks (each containing 5 seats) precede the current seat.
+   - `rem = n % 5` finds the position within the current two-row block (0 to 4).
+
+2. **Determine Row**:
+   - For `rem < 3` (0, 1, 2), the seat is in an even row: `2 * m`.
+   - For `rem >= 3` (3, 4), the seat is in the next odd row: `2 * m + 1`.
+
+3. **Determine Column**:
+   - In even rows, columns are 0, 1, 2 corresponding to `rem` values 0, 1, 2.
+   - In odd rows, columns are 0 and 2 (skipping 1), so `rem=3` maps to column 0 and `rem=4` maps to column 2. This is computed as `2 * (rem - 3)`.
+
+This approach efficiently maps any seat position `n` to its corresponding [row, column] coordinates by leveraging integer division and modulus operations to handle the repeating pattern of seat arrangements. The solution is optimal with constant time complexity O(1).

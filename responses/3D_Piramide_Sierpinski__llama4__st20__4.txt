@@ -1,0 +1,16 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer.")
+    x, y, z = 0, 0, 0
+    while n >= 8:
+        n, remainder = divmod(n, 8)
+        x += remainder * (n + 1)
+    if n >= 4:
+        n, remainder = divmod(n, 4)
+        y += remainder * (n + 1)
+    if n >= 2:
+        n, remainder = divmod(n, 2)
+        z += remainder * (n + 1)
+    return (x, y, z)
+```

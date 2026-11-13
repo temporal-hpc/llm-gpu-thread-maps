@@ -1,0 +1,17 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError
+    target = n + 1
+    k = 0
+    while (k + 1) * (k + 2) * (k + 3) // 6 < target:
+        k += 1
+    prev = k * (k + 1) * (k + 2) // 6
+    offset = n - prev
+    y = 0
+    while (y + 1) * (y + 2) // 2 <= offset:
+        y += 1
+    prev_y = y * (y + 1) // 2
+    x = offset - prev_y
+    return (x, y, k)
+```

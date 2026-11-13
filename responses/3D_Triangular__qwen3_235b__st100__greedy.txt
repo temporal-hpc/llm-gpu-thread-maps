@@ -1,0 +1,36 @@
+To solve this problem, we need to compute the n-th term of a specific sequence based on a given non-negative integer \( n \). The sequence is defined such that each term is derived from a mathematical formula involving triangular numbers and their properties.
+
+### Approach
+1. **Problem Analysis**: The sequence is constructed by arranging numbers in a specific pattern where each "block" corresponds to a triangular number. The key insight is recognizing that the sequence can be broken down into segments where each segment \( k \) starts at the triangular number \( T_k = k(k+1)/2 \) and contains \( k+1 \) elements. Within each segment, the terms follow a specific pattern based on their position within the segment.
+
+2. **Key Insight**: For any given \( n \), we first determine which segment \( k \) it belongs to. The segment \( k \) is the largest integer such that \( T_k \leq n \), where \( T_k = k(k+1)/2 \). This can be computed using the formula \( k = \left\lfloor \frac{-1 + \sqrt{1 + 8n}}{2} \right\rfloor \).
+
+3. **Position within Segment**: Once \( k \) is found, the position \( m \) of \( n \) within the segment is \( m = n - T_k \). The term at position \( n \) is then given by \( T_{k - m} + m \), where \( T_{k - m} \) is the triangular number for \( k - m \).
+
+4. **Efficiency**: The approach efficiently computes the required term in constant time \( O(1) \) using basic arithmetic operations and integer square root, making it optimal for large values of \( n \).
+
+### Solution Code
+```python
+import math
+
+def sequence(n):
+    s = math.isqrt(1 + 8 * n)
+    k = (s - 1) // 2
+    m = n - k * (k + 1) // 2
+    t = k - m
+    return t * (t + 1) // 2 + m
+```
+
+### Explanation
+1. **Finding Segment \( k \)**:
+   - Compute \( s = \sqrt{1 + 8n} \) using integer square root to avoid floating-point precision issues.
+   - Derive \( k \) as \( (s - 1) // 2 \), which gives the largest integer such that the triangular number \( T_k \leq n \).
+
+2. **Position within Segment**:
+   - Calculate \( m = n - T_k \), where \( T_k = k(k+1)/2 \). This gives the offset of \( n \) within its segment.
+
+3. **Computing the Term**:
+   - Determine \( t = k - m \), which helps in identifying the specific triangular number segment for the term.
+   - The term is then \( T_t + m = t(t+1)/2 + m \), combining the triangular number for \( t \) with the offset \( m \).
+
+This approach efficiently navigates the sequence structure using mathematical properties of triangular numbers, ensuring optimal performance even for very large \( n \). The solution leverages integer arithmetic to maintain precision and correctness across all valid inputs.

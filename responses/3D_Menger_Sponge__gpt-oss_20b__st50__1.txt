@@ -1,0 +1,62 @@
+```python
+def map_to_coordinates(n):
+    """
+    Return the (x, y, z) coordinates for a thread numbered *n*.
+
+    The numbering scheme is defined by the following pattern:
+
+        • Every 3 units along the x‑axis form a block.
+        • Inside one block the y‑coordinate runs 0 → 1 → 2, and
+          the z‑coordinate follows the 8‑4‑8 sequence:
+          8 points (full 3×3 except the centre of row 1),
+          4 points, and then 8 points again.
+        • The y‑coordinate never exceeds 2, but the x‑coordinate grows
+          unboundedly with the block index.
+    """
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non‑negative integer")
+
+    # Which 3‑cell block on the x‑axis does the thread belong to?
+    block = n // 20           # 20 threads per block (8 + 4 + 8)
+
+    # Position inside the current block (0 … 19)
+    r = n % 20
+
+    # Determine the sub‑z (0, 1, 2) and the index inside that slice.
+    # 8 points (sub_z = 0), 4 points (sub_z = 1), 8 points (sub_z = 2)
+    sub_z = (r // 8) + (1 if r >= 12 else 0)
+    if r < 8:
+        idx = r
+    elif r < 12:
+        idx = r - 8
+    else:
+        idx = r - 12
+
+    # Local coordinates inside the 3‑by‑3 x‑block.
+    if sub_z == 1:                      # the 4‑point slice
+        # Points are (0,0),(2,0),(0,2),(2,2)
+        x_local = (idx & 1) * 2
+        y_local = (idx >> 1) * 2
+    else:                               # the 8‑point slice
+        # Compute the row first; indices 5‑7 need a small adjustment.
+        row = (idx + (idx >= 5)) // 3   # row = 0, 1, 2
+        offset = idx - 3 * row
+        if row == 0:
+            x_local, y_local = offset, 0
+        elif row == 1:
+            x_local = 0 if idx == 3 else 2
+            y_local = 1
+        else:  # row == 2
+            x_local = offset + 1
+            y_local = 2
+
+    # Translate the local coordinates to the global grid.
+    x = 3 * block + x_local
+    y = y_local
+    z = sub_z
+    return (x, y, z)
+```
+
+This function reproduces exactly the thread‑to‑coordinate mapping you described.  
+It works for any non‑negative integer *n* and keeps all logic short and
+independent of the specific thread number.

@@ -1,0 +1,58 @@
+To determine the **nth term** of the given sequence, we begin by analyzing the pattern from the provided examples:
+
+---
+
+### **Given Examples:**
+
+| n  | Term |
+|----|------|
+| 1  | 1    |
+| 2  | 1    |
+| 3  | 2    |
+| 4  | 2    |
+| 5  | 3    |
+| 6  | 3    |
+| 7  | 4    |
+| 8  | 4    |
+
+---
+
+### **Observation:**
+
+- The sequence alternates, repeating each integer **twice** before moving to the next.
+- The pattern is: **1, 1, 2, 2, 3, 3, 4, 4, ...**
+
+This suggests that the value of the term increases by 1 **every two positions**. So, the **nth term** corresponds to the **ceiling of n/2**.
+
+---
+
+### **Deriving the Formula:**
+
+We can express the nth term as:
+
+$$
+a(n) = \left\lceil \frac{n}{2} \right\rceil
+$$
+
+Alternatively, this can also be written using the **floor function**:
+
+$$
+a(n) = \left\lfloor \frac{n + 1}{2} \right\rfloor
+$$
+
+Both expressions yield the same result for all integer values of $ n $. For example:
+
+- $ a(1) = \left\lceil \frac{1}{2} \right\rceil = 1 $
+- $ a(2) = \left\lceil \frac{2}{2} \right\rceil = 1 $
+- $ a(3) = \left\lceil \frac{3}{2} \right\rceil = 2 $
+- $ a(4) = \left\lceil \frac{4}{2} \right\rceil = 2 $
+
+This matches the pattern perfectly.
+
+---
+
+### **Final Answer:**
+
+$$
+\boxed{a(n) = \left\lceil \frac{n}{2} \right\rceil}
+$$

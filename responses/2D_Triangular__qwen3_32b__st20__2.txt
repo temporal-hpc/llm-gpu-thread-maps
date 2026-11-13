@@ -1,0 +1,96 @@
+To determine the coordinates of a node in a breadth-first search (BFS) traversal of a tree where each level `y` contains `y + 1` nodes, we can approach the problem by modeling the traversal as a sequence of triangular numbers.
+
+---
+
+### **Tree Structure and BFS Traversal**
+
+Assuming the tree is structured such that:
+
+- Level `y` contains `y + 1` nodes.
+- The traversal is **level-order**, visiting nodes from left to right.
+
+This gives us the following pattern of node indices in BFS order:
+
+| Level `y` | Number of nodes in level | Total nodes up to level `y` |
+|-----------|---------------------------|------------------------------|
+| 0         | 1                         | 1                            |
+| 1         | 2                         | 3                            |
+| 2         | 3                         | 6                            |
+| 3         | 4                         | 10                           |
+| 4         | 5                         | 15                           |
+| ...       | ...                       | ...                          |
+
+The total number of nodes up to level `y` is the **triangular number**:
+
+$$
+T(y) = \frac{(y + 1)(y + 2)}{2}
+$$
+
+---
+
+### **Approach to Solve the Problem**
+
+Given a **1-based index** `N`, the goal is to find the **0-based index** `n = N - 1`, and determine the coordinates `(x, y)` in the tree, where:
+
+- `y` is the level in the tree.
+- `x` is the position within that level (from left to right).
+
+---
+
+### **Implementation Steps**
+
+1. **Convert N to 0-based index** `n = N - 1`.
+2. **Binary search** to find the smallest `y` such that the cumulative number of nodes up to level `y` is **greater than or equal to** `n + 1`.
+3. Once `y` is found, calculate the offset within the level as `x = n - T(y - 1)`.
+
+---
+
+### **Python Code**
+
+```python
+def find_coordinates(N):
+    n = N - 1  # Convert to 0-based index
+    if n == 0:
+        return (0, 0)
+    
+    # Binary search to find the correct level y
+    low, high = 0, 1
+    while (high + 1) * (high + 2) // 2 < n + 1:
+        high *= 2
+    
+    while low < high:
+        mid = (low + high) // 2
+        if (mid + 1) * (mid + 2) // 2 < n + 1:
+            low = mid + 1
+        else:
+            high = mid
+    
+    y = low
+    x = n - (y * (y + 1)) // 2  # Subtract the cumulative nodes up to previous level
+    return (x, y)
+```
+
+---
+
+### **Example**
+
+| N  | 0-based index `n` | Level `y` | Position `x` | Coordinates `(x, y)` |
+|----|-------------------|-----------|--------------|------------------------|
+| 1  | 0                 | 0         | 0            | (0, 0)                 |
+| 2  | 1                 | 1         | 0            | (0, 1)                 |
+| 3  | 2                 | 1         | 1            | (1, 1)                 |
+| 4  | 3                 | 2         | 0            | (0, 2)                 |
+| 5  | 4                 | 2         | 1            | (1, 2)                 |
+| 6  | 5                 | 2         | 2            | (2, 2)                 |
+| 7  | 6                 | 3         | 0            | (0, 3)                 |
+
+---
+
+### **Time and Space Complexity**
+
+- **Time Complexity:** O(log n), due to binary search.
+- **Space Complexity:** O(1), as no additional data structures are used.
+
+---
+
+This solution efficiently computes the coordinates of any node in the BFS traversal, using mathematical properties of triangular numbers and binary search for fast lookup.

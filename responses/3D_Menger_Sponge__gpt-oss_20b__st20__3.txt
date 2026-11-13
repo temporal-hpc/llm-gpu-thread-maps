@@ -1,0 +1,62 @@
+from typing import Tuple
+
+def map_index_to_coord(n: int) -> Tuple[int, int, int]:
+    """
+    Map a non‑negative integer n to a coordinate (x, y, z) in a 3‑D grid according to the
+    following rules:
+
+    * The grid has integer coordinates with x, y, z ≥ 0.
+    * For each level z the enumeration order is:
+        1. z increases from 0 upward.
+        2. For a fixed z, y runs from 0 to 2.
+        3. For a fixed (z, y), x runs from 0 to 2, respecting the constraints below.
+
+    * Constraints on the points that are yielded:
+        - If z is even: all points with that z value are yielded **except** the point where
+          x = 1 and y = 1.
+        - If z is odd: only points where both x and y are even (i.e. x, y ∈ {0, 2}) are
+          yielded.
+
+    The resulting sequence of coordinates for n = 0, 1, 2, … follows the pattern shown in the
+    problem statement for n ∈ [0, 19].
+
+    Parameters
+    ----------
+    n : int
+        Non‑negative integer index.
+
+    Returns
+    -------
+    tuple[int, int, int]
+        The corresponding (x, y, z) coordinate.
+    """
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non‑negative integer")
+
+    # A pair of consecutive z levels contains 12 points: 8 from the even level,
+    # 4 from the odd level.
+    pair_index = n // 12          # number of complete (even, odd) pairs
+    offset = n % 12               # remaining offset within the next pair
+
+    if offset < 8:
+        # Even z level
+        z = pair_index * 2
+        idx = offset  # 0 … 7
+
+        if idx < 3:                    # y = 0
+            y, x = 0, idx
+        elif idx < 5:                  # y = 1 (skip x = 1)
+            y, x = 1, 0 if idx == 3 else 2
+        else:                          # y = 2
+            y, x = 2, idx - 5
+    else:
+        # Odd z level
+        z = pair_index * 2 + 1
+        idx = offset - 8              # 0 … 3
+
+        if idx < 2:                    # y = 0
+            y, x = 0, 0 if idx == 0 else 2
+        else:                          # y = 2
+            y, x = 2, 0 if idx == 2 else 2
+
+    return (x, y, z)

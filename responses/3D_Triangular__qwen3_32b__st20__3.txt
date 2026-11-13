@@ -1,0 +1,80 @@
+To determine the 3D coordinates $(x, y, z)$ given an integer $n$, we follow a structured approach based on triangular number enumeration in 2D and 3D. Here's the step-by-step explanation:
+
+---
+
+### **Step 1: Determine the $z$-coordinate**
+The $z$-coordinate corresponds to the "layer" in a 3D triangular arrangement. For each layer $z$, the number of points in that layer is given by the triangular number:
+$$
+T_{z+1} = \frac{(z+1)(z+2)}{2}
+$$
+The total number of points up to layer $z$ is the sum of triangular numbers up to $T_{z+1}$, which simplifies to:
+$$
+S(z) = \frac{z(z+1)(z+2)}{6}
+$$
+We need to find the largest $z$ such that $S(z) \leq n$. This can be efficiently done using **binary search**.
+
+---
+
+### **Step 2: Compute the Index Within the Layer ($m$)**
+Once $z$ is determined, calculate the offset $m$ within the current layer:
+$$
+m = n - S(z)
+$$
+This $m$ represents the position of the point within the 2D triangular grid of the layer.
+
+---
+
+### **Step 3: Determine the 2D Coordinates ($x, y$)**
+Within the 2D triangular grid for layer $z$, the points are ordered such that $x + y \leq z$. To find $x$ and $y$ from $m$:
+
+1. **Find the row $s$** such that the sum of points in all rows from $0$ to $s-1$ is less than or equal to $m$. The sum of points in rows $0$ to $s-1$ is:
+   $$
+   \sum_{i=0}^{s-1} (i+1) = \frac{s(s+1)}{2}
+   $$
+   Solve for the largest $s$ where $\frac{s(s+1)}{2} \leq m$.
+
+2. **Compute $x$ and $y$**:
+   - $x = m - \frac{s(s+1)}{2}$
+   - $y = s - x$
+
+---
+
+### **Example: $n = 3$**
+1. **Find $z$**:
+   - $S(1) = \frac{1 \cdot 2 \cdot 3}{6} = 1 \leq 3$
+   - $S(2) = \frac{2 \cdot 3 \cdot 4}{6} = 4 > 3$
+   - So, $z = 1$
+
+2. **Compute $m$**:
+   - $m = 3 - 1 = 2$
+
+3. **Find $s$**:
+   - $\frac{s(s+1)}{2} \leq 2 \Rightarrow s = 1$
+
+4. **Compute $x$ and $y$**:
+   - $x = 2 - \frac{1 \cdot 2}{2} = 1$
+   - $y = 1 - 1 = 0$
+
+**Result**: $(x, y, z) = (1, 0, 1)$
+
+---
+
+### **Edge Cases**
+- **$n = 0$**:
+  - $z = 0$, $m = 0$, $s = 0$, $x = 0$, $y = 0$
+  - Result: $(0, 0, 0)$
+
+- **$n = 1$**:
+  - $z = 1$, $m = 0$, $s = 0$, $x = 0$, $y = 0$
+  - Result: $(0, 0, 1)$
+
+---
+
+### **Final Answer**
+The coordinates $(x, y, z)$ for a given $n$ are determined by:
+1. Finding $z$ such that $\frac{z(z+1)(z+2)}{6} \leq n$.
+2. Calculating $m = n - \frac{z(z+1)(z+2)}{6}$.
+3. Determining $s$ such that $\frac{s(s+1)}{2} \leq m$.
+4. Computing $x = m - \frac{s(s+1)}{2}$ and $y = s - x$.
+
+This method ensures accurate and efficient mapping of $n$ to 3D coordinates in a triangular grid.

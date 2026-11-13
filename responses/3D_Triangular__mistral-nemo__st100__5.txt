@@ -1,0 +1,4 @@
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input must be a non-negative integer.")
+    return (n % 7, n // 7, n // 49)

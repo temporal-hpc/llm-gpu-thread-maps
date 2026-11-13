@@ -1,0 +1,17 @@
+To determine the position (x, y) for a given n based on the observed grouping by y and bit manipulation within each group:
+
+1. **Identify the Group:**
+   - Determine which cumulative count range n falls into using the table below. This will give you the value of y.
+
+2. **Calculate m:**
+   - Once y is determined, compute m as n minus the starting number of that group (start_n).
+
+3. **Determine x:**
+   - Within each group, split m's bits to determine x. For example, in groups where count=4, use higher and lower bits to calculate x.
+
+Here's an example for y=5:
+- If n is between 11 and 14 (inclusive), then y=5.
+- Compute m =n -11.
+- Use bit manipulation: x = (m >>1) *4 + (m &1).
+
+Thus, the position (x, y) can be found using this method.

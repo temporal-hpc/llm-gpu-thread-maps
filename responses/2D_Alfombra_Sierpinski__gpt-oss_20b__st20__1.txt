@@ -1,0 +1,12 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non-negative integer")
+    k = n // 8
+    r = n % 8
+    if r < 3:
+        return (k * 3 + r, 0)
+    if r < 5:
+        return (k * 3 + (r - 3) * 2, 1)
+    return (k * 3 + (r - 5), 2)
+```

@@ -1,0 +1,15 @@
+To determine the position \((x, y)\) of a given number \(n\) in the grid, follow these steps:
+
+1. **Calculate \(y\)**:
+   - Compute \(y\) using the formula:  
+     \[
+     y = \left\lfloor \frac{\sqrt{8n + 1} - 1}{2} \right\rfloor
+     \]
+   
+2. **Determine \(x\)**:
+   - Calculate \(x\) by finding the position within the row \(y\):  
+     \[
+     x = n - \frac{y(y + 1)}{2}
+     \]
+
+**Final Answer**: The coordinates of number \(n\) in the grid are \(\boxed{(x, y)}\) where \(x\) and \(y\) are calculated as above.

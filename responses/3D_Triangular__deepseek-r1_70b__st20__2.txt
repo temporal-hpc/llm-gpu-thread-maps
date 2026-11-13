@@ -1,0 +1,78 @@
+To solve this problem, we need to determine the pair of integers (x, y) such that x + y = s for a given integer n. The approach involves finding the appropriate values of k and s using properties of tetrahedral numbers.
+
+### Approach
+1. **Identify Group k**: Determine the group `k` where the given number `n` falls. This is done by finding the largest integer `k` such that the tetrahedral number T(k) ≤ n.
+2. **Calculate Offset**: Compute the offset within this group as `offset = n - T(k)`.
+3. **Determine Sum s**: Within the identified group, find the maximum sum `s` such that the cumulative count of pairs up to `s` is less than or equal to the offset.
+4. **Find Position pos**: Calculate the position `pos` within the determined sum `s`.
+5. **Compute Pair (x, y)**: Based on the values of `s` and `pos`, compute the pair (x, y) such that x + y = s.
+
+### Solution Code
+```python
+def find_pair(n):
+    if n < 0:
+        return (-1, -1)
+    
+    # Function to calculate tetrahedral number T(k)
+    def tetra(k):
+        return k * (k + 1) * (k + 2) // 6
+    
+    # Find the appropriate group k using binary search
+    low = 0
+    high = 1
+    while tetra(high) <= n:
+        high *= 2
+    
+    while low < high:
+        mid = (low + high) // 2
+        t_mid = tetra(mid)
+        if t_mid > n:
+            high = mid
+        else:
+            low = mid + 1
+    
+    k = low - 1
+    T_k = tetra(k)
+    offset = n - T_k
+    
+    # Function to calculate cumulative sum up to s (tetrahedral sum for pairs)
+    def tetra_sum(s):
+        return (s + 1) * (s + 2) // 2
+    
+    low_s = 0
+    high_s = k  # Maximum possible s is k
+    
+    while low_s <= high_s:
+        mid_s = (low_s + high_s) // 2
+        ts_mid = tetra_sum(mid_s)
+        if ts_mid > offset:
+            high_s = mid_s - 1
+        else:
+            low_s = mid_s + 1
+    
+    s = high_s
+    
+    # Determine x and y based on the calculated s and offset
+    T_s_minus_1 = tetra_sum(s - 1) if s >= 0 else 0
+    pos = offset - T_s_minus_1
+    
+    if s < 0:
+        return (0, k)
+    else:
+        x = pos
+        y = s - pos
+        return (x, y)
+
+# Example usage:
+n = int(input("Enter a number: "))
+print(find_pair(n))
+```
+
+### Explanation
+1. **Identify Group k**: The tetrahedral number T(k) is calculated to determine the group where `n` lies. This uses a binary search approach to efficiently find the correct group.
+2. **Calculate Offset**: Once the group is identified, the offset within this group helps narrow down the specific pair of integers.
+3. **Determine Sum s**: Using another binary search within the group, we find the maximum sum `s` such that the cumulative count up to `s` does not exceed the offset.
+4. **Find Position pos**: The position within the determined sum `s` helps in identifying the exact pair (x, y).
+5. **Compute Pair (x, y)**: Finally, using `s` and `pos`, the integers x and y are computed such that their sum equals `s`.
+
+This approach efficiently narrows down the possible pairs by leveraging properties of tetrahedral numbers, ensuring an optimal solution.

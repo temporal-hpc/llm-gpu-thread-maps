@@ -1,0 +1,9 @@
+It is just the Cantor‐pairing function (up to a swap of the two coordinates).  In fact one has  
+
+\[
+f(x,y)=\frac{(x+y)(x+y+1)}2+x ,
+\] 
+
+so that for a given ternary number \(n\) one recovers the pair by letting  
+\(s\) be the unique integer with \(s(s+1)/2\le n< (s+1)(s+2)/2\), then  
+\(x=n-s(s+1)/2,\; y=s-x\).  This yields the listed pairs.

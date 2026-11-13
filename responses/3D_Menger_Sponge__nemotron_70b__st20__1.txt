@@ -1,0 +1,21 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer")
+
+    dimensions = []
+    base = 3
+    while n >= base:
+        remainder = n % base
+        n = n // base - 1
+        dimensions.append(remainder)
+    
+    dimensions.append(n)
+    dimensions.reverse()
+
+    coordinates = [(dim * 2) if idx % 2 == 0 else (dim * 2 - (idx // 2) * 2) for idx, dim in enumerate(dimensions)]
+    while len(coordinates) < 3:
+        coordinates.append(0)
+
+    return tuple(coordinates[:3])
+```

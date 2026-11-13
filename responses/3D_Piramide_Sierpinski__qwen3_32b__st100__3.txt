@@ -1,0 +1,94 @@
+To solve the problem of finding the coordinates of the **n-th node** in a specific traversal order of a 3D grid, we follow a structured approach based on the pattern of traversal and the mathematical properties of the sequence.
+
+---
+
+### 🧠 **Understanding the Problem**
+
+We are traversing a 3D grid in a specific order such that the nodes are ordered in non-decreasing values of the sum $ x + y + z $. The traversal is lexicographical in the sense that for a given sum $ s = x + y + z $, we visit all nodes with that sum in a specific order.
+
+Each such sum group corresponds to a **"level"** in the traversal. The number of nodes at each level $ s $ is given by the number of integer solutions to $ x + y + z = s $, which is $ \frac{(s + 2)(s + 1)}{2} $, i.e., the $ (s+2) $-th triangular number.
+
+However, we can compute the **cumulative** number of nodes up to and including level $ s $ using the formula:
+
+$$
+\text{cumulative}(s) = \frac{(s + 1)(s + 2)(s + 3)}{6}
+$$
+
+This gives us the total number of nodes in the grid up to and including level $ s $.
+
+---
+
+### 🧮 **Algorithm Overview**
+
+1. **Find the level $ k $** such that the cumulative number of nodes up to level $ k $ is just greater than or equal to $ n $, and up to $ k-1 $ is less than $ n $.
+2. **Compute the position within that level** by subtracting the cumulative count up to level $ k-1 $ from $ n $.
+3. **Determine the coordinates** $ (x, y, z) $ within that level, based on the position.
+
+---
+
+### 🧪 **Code Implementation**
+
+Here is the Python function implementing the above logic:
+
+```python
+def find_coordinates(n):
+    def cumulative(m):
+        return (m + 1) * (m + 2) * (m + 3) // 6
+
+    # Binary search to find the correct level k
+    low, high = 0, 1
+    while cumulative(high) < n:
+        high *= 2
+
+    while low < high:
+        mid = (low + high) // 2
+        if cumulative(mid) >= n:
+            high = mid
+        else:
+            low = mid + 1
+    k = low
+
+    # Determine position within the level
+    prev_cum = cumulative(k - 1) if k > 0 else 0
+    pos = n - prev_cum
+
+    # Determine x in the level
+    x = k
+    while pos > (k - x + 1):
+        pos -= (k - x + 1)
+        x -= 1
+
+    y_max = k - x
+    y = y_max - (pos - 1)
+    z = k - x - y
+
+    return (x, y, z)
+```
+
+---
+
+### 🧾 **Example Usage**
+
+```python
+print(find_coordinates(1))   # Output: (0, 0, 0)
+print(find_coordinates(4))   # Output: (0, 0, 1)
+print(find_coordinates(10))  # Output: (0, 0, 2)
+print(find_coordinates(6))   # Output: (1, 1, 0)
+```
+
+---
+
+### ✅ **Conclusion**
+
+This solution efficiently determines the coordinates of the $ n $-th node in the traversal order by leveraging the properties of the cumulative sum of nodes per level. The binary search ensures logarithmic performance in finding the correct level, and the rest of the steps are linear in the size of the level.
+
+$$
+\boxed{
+\text{def find_coordinates(n):} \\
+\quad \text{def cumulative(m): return (m+1)*(m+2)*(m+3)//6} \\
+\quad \text{# Binary search for k} \\
+\quad \text{...} \\
+\quad \text{# Compute x, y, z} \\
+\quad \text{return (x, y, z)}
+}
+$$

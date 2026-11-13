@@ -1,0 +1,12 @@
+To determine the role (y) for a given integer (n), observe the following pattern:
+
+- **Group 0**: n = 0 → y = 0
+- **Group 1**: n = 1, 2 → y = 1
+- **Group 2**: n = 3, 4 → y = 2
+- **Group 3**: n = 5, 6, 7, 8 → y = 3
+- **Group 4**: n = 9, 10 → y = 4
+- **Group 5**: n = 11, 12, 13, 14 → y = 5
+- **Group 6**: n = 15, 16, 17, 18 → y = 6
+- **Group 7**: n = 19 to 26 → y = 7
+
+**Answer:** For a given integer \( n \), the role \( y \) is determined by the group it belongs to as outlined above.

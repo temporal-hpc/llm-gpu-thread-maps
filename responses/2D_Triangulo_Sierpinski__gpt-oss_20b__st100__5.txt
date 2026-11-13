@@ -1,0 +1,45 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non‑negative integer")
+    def sum_submask_counts(x):
+        if x < 0:
+            return 0
+        if x == 0:
+            return 1
+        msb = x.bit_length() - 1
+        power = 1 << msb
+        if x == power - 1:
+            return 3 ** msb
+        r = x - power
+        return 3 ** msb + 2 * sum_submask_counts(r)
+    # find an upper bound for y
+    high = 1
+    while sum_submask_counts(high) <= n:
+        high <<= 1
+    # binary search for minimal y with sum_submask_counts(y) > n
+    low = 0
+    while low < high:
+        mid = (low + high) // 2
+        if sum_submask_counts(mid) > n:
+            high = mid
+        else:
+            low = mid + 1
+    y = low
+    prev_sum = sum_submask_counts(y - 1)
+    offset = n - prev_sum
+    # compute offset-th submask of y
+    bits = []
+    temp = y
+    pos = 0
+    while temp:
+        if temp & 1:
+            bits.append(pos)
+        temp >>= 1
+        pos += 1
+    x = 0
+    for i, b in enumerate(bits):
+        if (offset >> i) & 1:
+            x |= 1 << b
+    return (x, y)
+```

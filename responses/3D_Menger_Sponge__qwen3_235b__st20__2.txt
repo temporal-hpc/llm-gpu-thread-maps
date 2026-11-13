@@ -1,0 +1,28 @@
+To solve this problem, we need to determine the index of a given cube in a 3x3x3 structure where one specific cube (at coordinates (1, 1, 1)) is missing. The cubes are ordered such that we traverse the structure layer by layer (z-coordinate from 0 to 2), then row by row within each layer (y-coordinate from 0 to 2), and finally column by column within each row (x-coordinate from 0 to 2). 
+
+### Approach
+1. **Natural Index Calculation**: In a full 3x3x3 cube (without any missing cubes), the index of any cube (x, y, z) can be calculated as `9 * z + 3 * y + x`. This formula accounts for:
+   - Each layer (z) containing 9 cubes (3 rows * 3 columns).
+   - Each row (y) within a layer containing 3 cubes.
+   
+2. **Adjustment for Missing Cube**: The cube at (1, 1, 1) is missing. Its natural index in the full cube structure is `9*1 + 3*1 + 1 = 13`. Therefore, any cube with a natural index greater than 13 will have its actual index reduced by 1 because the missing cube shifts all subsequent cubes down by one position.
+
+### Solution Code
+```python
+def get_index(x, y, z):
+    natural_index = 9 * z + 3 * y + x
+    if natural_index > 13:
+        return natural_index - 1
+    else:
+        return natural_index
+```
+
+### Explanation
+1. **Natural Index Calculation**: The expression `9 * z + 3 * y + x` computes the position of the cube in a hypothetical full 3x3x3 structure. Here:
+   - `9 * z` accounts for the 9 cubes in each complete layer (z-level).
+   - `3 * y` accounts for the 3 cubes in each row (y-level) within the current layer.
+   - `x` gives the specific column (x-level) within the current row.
+   
+2. **Adjustment for Missing Cube**: The cube at (1, 1, 1) has a natural index of 13. Since this cube is missing, all cubes that would have appeared after it (i.e., with natural indices greater than 13) are shifted down by one position. Thus, if the computed natural index exceeds 13, we subtract 1 from it to get the correct index in the actual structure with the missing cube.
+
+This approach efficiently computes the index by leveraging simple arithmetic and a conditional check, ensuring optimal performance with constant time complexity O(1). The solution handles all valid input coordinates (x, y, z) within the 3x3x3 structure, excluding the missing cube at (1, 1, 1).

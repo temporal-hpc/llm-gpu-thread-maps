@@ -1,0 +1,58 @@
+To resolve the inconsistency in the original logic, we need to correct the value calculation for cells in the traversal pattern. The problem arises when evaluating the cell `(0,0)` using the original formula, which incorrectly returns `-1 % 2 == 0` (i.e., `False`), suggesting it is **odd**, which is incorrect.
+
+---
+
+### ✅ **Corrected Understanding**
+
+Given the traversal pattern:
+- For each diagonal defined by `y - x = k`, cells are visited in order of increasing `x`.
+- For any cell `(x, y)`:
+  - If `y > x`: The cell is part of a diagonal where the number of cells visited before it is `x`.
+  - If `y == x`: The cell lies on the diagonal `y = x`, and the number of cells visited before it is `x`.
+  - If `y < x`: The cell lies **below** the diagonal `y = x`, and the number of cells visited before it is `0`.
+
+Thus, the **value** for the cell `(x, y)` is:
+```python
+value = x if y >= x else 0
+```
+
+---
+
+### ✅ **Corrected Function to Check Parity**
+
+We now define a function to check whether the computed value is even:
+
+```python
+def is_even(x, y):
+    if y >= x:
+        return x % 2 == 0
+    else:
+        return True  # because value is 0, which is even
+```
+
+This ensures:
+- For all `(x, y)` where `y >= x`, we return whether `x` is even.
+- For all `(x, y)` where `y < x`, we return `True` because the value is `0`, which is even.
+
+---
+
+### ✅ **Examples**
+
+| Cell (x, y) | Value | Even? |
+|-------------|-------|-------|
+| (0, 0)      | 0     | ✅     |
+| (0, 1)      | 0     | ✅     |
+| (1, 1)      | 1     | ❌     |
+| (1, 2)      | 1     | ❌     |
+| (2, 2)      | 2     | ✅     |
+| (2, 1)      | 0     | ✅     |
+
+---
+
+### ✅ **Conclusion**
+
+The original formula for the value of the cell `(x, y)` was flawed for the case `y == x`. The corrected logic ensures that:
+- The value is `x` for all cells where `y >= x`.
+- The value is `0` for all cells where `y < x`.
+
+This leads to consistent and accurate parity checks for each cell in the traversal pattern.

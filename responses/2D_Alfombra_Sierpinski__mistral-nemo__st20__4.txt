@@ -1,0 +1,2 @@
+def map_to_coordinates(n):
+    return tuple((n % i) for i in range(1, 3))

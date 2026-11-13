@@ -1,0 +1,91 @@
+To determine the coordinates $(x, y)$ corresponding to a given integer $n$, we observe a pattern in the sequence of coordinates:
+
+$$
+\begin{array}{c|c|c|c}
+n & x & y & \text{Sum } x + y \\
+\hline
+0 & 0 & 0 & 0 \\
+1 & 0 & 1 & 1 \\
+2 & 1 & 1 & 2 \\
+3 & 0 & 2 & 2 \\
+4 & 1 & 2 & 3 \\
+5 & 2 & 2 & 4 \\
+6 & 0 & 3 & 3 \\
+7 & 1 & 3 & 4 \\
+8 & 2 & 3 & 5 \\
+9 & 3 & 3 & 6 \\
+10 & 0 & 4 & 4 \\
+\end{array}
+$$
+
+From this, we notice that the coordinates form layers where each layer $k$ (starting from 0) contains exactly $k+1$ elements. The starting index of each layer is the $k$-th triangular number:
+
+$$
+T(k) = \frac{k(k+1)}{2}
+$$
+
+Given an integer $n$, the process to find $(x, y)$ is as follows:
+
+---
+
+### **Step 1: Determine the Layer $k$**
+
+The layer $k$ is the largest integer such that the triangular number $T(k) = \frac{k(k+1)}{2} \leq n$.
+
+This can be computed as:
+
+$$
+k = \left\lfloor \frac{\sqrt{8n + 1} - 1}{2} \right\rfloor
+$$
+
+---
+
+### **Step 2: Compute the Offset Within the Layer**
+
+Once $k$ is known, the offset $m$ within the layer is:
+
+$$
+m = n - T(k) = n - \frac{k(k+1)}{2}
+$$
+
+---
+
+### **Step 3: Determine the Coordinates**
+
+In layer $k$, the $m$-th element has:
+
+$$
+x = m, \quad y = k
+$$
+
+---
+
+### **Final Formula**
+
+For a given $n \geq 0$, the coordinates $(x, y)$ are:
+
+$$
+k = \left\lfloor \frac{\sqrt{8n + 1} - 1}{2} \right\rfloor, \quad
+x = n - \frac{k(k+1)}{2}, \quad
+y = k
+$$
+
+---
+
+### **Example Calculation**
+
+Let $n = 7$:
+
+1. Compute $k = \left\lfloor \frac{\sqrt{8 \cdot 7 + 1} - 1}{2} \right\rfloor = \left\lfloor \frac{\sqrt{57} - 1}{2} \right\rfloor = \left\lfloor \frac{7.55 - 1}{2} \right\rfloor = \left\lfloor 3.27 \right\rfloor = 3$
+
+2. Compute $T(k) = \frac{3 \cdot 4}{2} = 6$
+
+3. Compute $m = 7 - 6 = 1$
+
+4. Coordinates: $x = 1$, $y = 3$ → $(1, 3)$
+
+---
+
+### **Summary**
+
+This method allows you to compute the coordinates $(x, y)$ for any non-negative integer $n$ by determining the appropriate triangular layer and offset within that layer. The result is a unique mapping from $n$ to a 2D grid point.

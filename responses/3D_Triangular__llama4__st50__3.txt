@@ -1,0 +1,19 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer.")
+    x = n // 5
+    y = (n % 5) // 1
+    z = n % 5
+    # Adjust calculation based on pattern observation
+    # The correct approach seems to involve a different strategy
+    # Let's assume a strategy based on consecutive increments and divisions
+    # It seems like x, y, z could be derived from n in a simpler mathematical way
+    # After reevaluation, consider this strategy:
+    # z = n % 5, then y and x based on division and remainder
+    z = n % 5
+    remainder = n // 5
+    y = remainder % 5
+    x = remainder // 5
+    return (x, y, z)
+```

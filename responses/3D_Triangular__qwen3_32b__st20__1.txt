@@ -1,0 +1,112 @@
+To generate the coordinates $(x, y, z)$ for the $n$-th term in the traversal of 3D space in the described order, we follow a structured approach based on the mathematical structure of the sequence. The traversal is such that for each fixed $z$, all pairs $(x, y)$ with $0 \le x \le y \le z$ are listed in order of increasing $y$, and for each $y$, all $x$ from $0$ to $y$ are listed in increasing order.
+
+---
+
+### **Step-by-Step Explanation**
+
+#### **Step 1: Find the Layer $z$**
+Each layer $z$ contains a certain number of points. The total number of points up to and including layer $z$ is given by the sum of triangular numbers up to $z$:
+$$
+S(z) = \frac{(z+3)(z+2)(z+1)}{6}
+$$
+This formula counts all points $(x, y, z)$ for $0 \le x \le y \le z$ from $z = 0$ to $z$.
+
+We find the smallest $z$ such that $S(z) > n$. This $z$ is the layer containing the $n$-th point.
+
+---
+
+#### **Step 2: Compute the Index $m$ Within the Layer**
+Once we know the layer $z$, we subtract the total number of points in all previous layers ($S(z-1)$) from $n$ to get the index $m$ within the current layer:
+$$
+m = n - S(z-1)
+$$
+
+---
+
+#### **Step 3: Determine $y$ and $x$ Within the Layer**
+Within layer $z$, the points are ordered by increasing $y$, and for each $y$, $x$ increases from $0$ to $y$. The number of points up to a certain $y$ in the layer is:
+$$
+\text{points up to } y = \frac{y(y+1)}{2}
+$$
+
+To find $y$, we solve for the largest integer $y$ such that:
+$$
+\frac{y(y+1)}{2} \le m
+$$
+This can be computed using:
+$$
+y = \left\lfloor \frac{\sqrt{8m + 1} - 1}{2} \right\rfloor
+$$
+
+Finally, compute $x$ as the remainder:
+$$
+x = m - \frac{y(y+1)}{2}
+$$
+
+---
+
+### **Final Formula for Coordinates**
+Given $n$, the coordinates $(x, y, z)$ are:
+$$
+z = \text{smallest integer such that } S(z) > n
+$$
+$$
+m = n - S(z-1)
+$$
+$$
+y = \left\lfloor \frac{\sqrt{8m + 1} - 1}{2} \right\rfloor
+$$
+$$
+x = m - \frac{y(y+1)}{2}
+$$
+
+---
+
+### **Example: Find Coordinates for $n = 10$**
+
+1. **Find $z$:**
+   $$
+   S(2) = \frac{(2+3)(2+2)(2+1)}{6} = \frac{5 \cdot 4 \cdot 3}{6} = 10
+   $$
+   $$
+   S(3) = \frac{(3+3)(3+2)(3+1)}{6} = \frac{6 \cdot 5 \cdot 4}{6} = 20
+   $$
+   Since $S(2) = 10 \le 10$ and $S(3) = 20 > 10$, the smallest $z$ is $3$.
+
+2. **Compute $m$:**
+   $$
+   m = n - S(2) = 10 - 10 = 0
+   $$
+
+3. **Find $y$:**
+   $$
+   y = \left\lfloor \frac{\sqrt{8 \cdot 0 + 1} - 1}{2} \right\rfloor = \left\lfloor \frac{1 - 1}{2} \right\rfloor = 0
+   $$
+
+4. **Find $x$:**
+   $$
+   x = 0 - \frac{0 \cdot (0 + 1)}{2} = 0
+   $$
+
+**Result:** $(x, y, z) = (0, 0, 3)$
+
+---
+
+### **Conclusion**
+
+The coordinates $(x, y, z)$ for the $n$-th term in the traversal of 3D space are determined by:
+
+$$
+z = \text{smallest integer such that } \frac{(z+3)(z+2)(z+1)}{6} > n
+$$
+$$
+m = n - \frac{(z-1+3)(z-1+2)(z-1+1)}{6}
+$$
+$$
+y = \left\lfloor \frac{\sqrt{8m + 1} - 1}{2} \right\rfloor
+$$
+$$
+x = m - \frac{y(y+1)}{2}
+$$
+
+This method ensures an efficient and systematic way to compute the coordinates for any $n$ in the sequence.

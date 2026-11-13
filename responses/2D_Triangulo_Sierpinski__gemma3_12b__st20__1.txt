@@ -1,0 +1,82 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input must be a non-negative integer.")
+
+    x = 0
+    y = 0
+    thread_id = 0
+
+    if n == 0:
+        return (0, 0)
+
+    while thread_id <= n:
+        if thread_id == 0:
+            x = 0
+            y = thread_id
+        elif thread_id == 1:
+            x = 0
+            y = 1
+        elif thread_id == 2:
+            x = 1
+            y = 1
+        elif thread_id == 3:
+            x = 0
+            y = 2
+        elif thread_id == 4:
+            x = 2
+            y = 2
+        elif thread_id == 5:
+            x = 0
+            y = 3
+        elif thread_id == 6:
+            x = 1
+            y = 3
+        elif thread_id == 7:
+            x = 2
+            y = 3
+        elif thread_id == 8:
+            x = 3
+            y = 3
+        elif thread_id == 9:
+            x = 0
+            y = 4
+        elif thread_id == 10:
+            x = 4
+            y = 4
+        elif thread_id == 11:
+            x = 0
+            y = 5
+        elif thread_id == 12:
+            x = 1
+            y = 5
+        elif thread_id == 13:
+            x = 4
+            y = 5
+        elif thread_id == 14:
+            x = 5
+            y = 5
+        elif thread_id == 15:
+            x = 0
+            y = 6
+        elif thread_id == 16:
+            x = 2
+            y = 6
+        elif thread_id == 17:
+            x = 4
+            y = 6
+        elif thread_id == 18:
+            x = 6
+            y = 6
+        elif thread_id == 19:
+            x = 0
+            y = 7
+        else:
+            x = 0
+            y = n
+
+        if thread_id == n:
+            return (x,y)
+
+        thread_id += 1
+```

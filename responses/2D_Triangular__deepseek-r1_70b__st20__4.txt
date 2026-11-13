@@ -1,0 +1,12 @@
+```python
+import math
+
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non-negative integer")
+    sqrt_val = math.sqrt(1 + 8 * n)
+    y = (sqrt_val - 1) // 2
+    y_int = int(y)
+    pos = n - y_int * (y_int + 1) // 2
+    return (pos, y_int)
+```

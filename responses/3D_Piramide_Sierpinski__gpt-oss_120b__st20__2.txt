@@ -1,0 +1,185 @@
+**Solution Explanation**
+
+For a 3‑dimensional regular grid we can store the coordinates of a point
+`(x , y , z)` as a single integer by *interleaving* the binary bits of the
+three coordinates:
+
+```
+bit 0 of the integer ← bit 0 of x
+bit 1 of the integer ← bit 0 of y
+bit 2 of the integer ← bit 0 of z
+bit 3 of the integer ← bit 1 of x
+bit 4 of the integer ← bit 1 of y
+bit 5 of the integer ← bit 1 of z
+...
+```
+
+The resulting integer is called a **Morton code** (or Z‑order code).  
+The reverse operation – extracting the three coordinates from a Morton code –
+is called *de‑interleaving*.
+
+The problem asks for a function `decode_thread(n)` that, for any non‑negative
+integer `n`, returns the 3‑D coordinates that correspond to the Morton code
+`n`.  The function must also check that the argument really is a non‑negative
+integer.
+
+--------------------------------------------------------------------
+
+#### Algorithm
+```
+deinterleave(n):
+    x = y = z = 0          # resulting coordinates
+    shift = 0              # which bit position we are writing to
+
+    while n > 0:
+        # take the next three bits of n (least‑significant first)
+        x |= (n & 1) << shift
+        n >>= 1
+        y |= (n & 1) << shift
+        n >>= 1
+        z |= (n & 1) << shift
+        n >>= 1
+        shift += 1
+
+    return (x, y, z)
+```
+
+* In each loop iteration we read three successive bits of `n`.
+* The first bit belongs to `x`, the second to `y`, the third to `z`.
+* The bits are placed into the corresponding coordinate at the current
+  `shift` position, i.e. they become the `shift`‑th binary digit of that
+  coordinate.
+* After the three bits have been consumed we increase `shift` and continue
+  until no bits are left.
+
+The algorithm works for arbitrarily large integers because it processes the
+bits one by one; its running time is `O(number of bits in n)` and it uses only
+`O(1)` additional memory.
+
+--------------------------------------------------------------------
+
+#### Correctness Proof  
+
+We prove that the algorithm returns exactly the three coordinates whose
+Morton code equals the input `n`.
+
+---
+
+**Lemma 1**  
+After the `i`‑th loop iteration (`i ≥ 0`) the variables hold
+
+```
+x = Σ_{k=0}^{i-1}  (bit_{3k}   of original n) << k
+y = Σ_{k=0}^{i-1}  (bit_{3k+1} of original n) << k
+z = Σ_{k=0}^{i-1}  (bit_{3k+2} of original n) << k
+```
+
+*Proof.*  
+The loop extracts the three least‑significant bits of the current `n`
+(which are, because of the previous right shifts, the bits `3i`,
+`3i+1`, `3i+2` of the original number).  
+Each extracted bit is shifted left by `i` and OR‑ed into the corresponding
+coordinate, exactly building the sums shown. ∎
+
+
+
+**Lemma 2**  
+When the loop terminates (`n == 0`) the three sums of Lemma&nbsp;1 contain
+*all* bits of the original input number.
+
+*Proof.*  
+Each iteration removes three bits from `n` by three right‑shift operations.
+The loop stops only when no bits remain, i.e. after `⌈b/3⌉` iterations where
+`b` is the length of the binary representation of the original `n`.  
+Consequently every bit has been processed exactly once. ∎
+
+
+
+**Theorem**  
+`decode_thread(n)` (the function implemented below) returns the unique
+triple `(x, y, z)` whose Morton code equals the given non‑negative integer
+`n`.
+
+*Proof.*  
+By Lemma&nbsp;1, after processing the first `i` groups of three bits the
+variables `x, y, z` contain precisely the bits of the original number that
+belong to the `i`‑th binary digit of each coordinate (the digit with weight
+`2^i`).  
+Lemma&nbsp;2 guarantees that after the final iteration every bit of `n` has
+been assigned to exactly one of the three coordinates, and no other bits are
+added.  
+
+Interleaving the bits of `x, y, z` in the order `x‑bit, y‑bit, z‑bit`
+reproduces the original binary representation of `n`; therefore the triple
+produced by the algorithm is exactly the inverse of the Morton encoding.
+Since the Morton encoding is bijective on non‑negative integers, the
+coordinates returned by the algorithm are unique. ∎
+
+
+
+--------------------------------------------------------------------
+
+#### Complexity Analysis  
+
+Let `b = ⌊log₂ n⌋ + 1` be the number of bits of `n` ( `b = 0` for `n = 0` ).
+The loop runs `⌈b/3⌉` times and each iteration performs a constant amount of
+work.  
+
+*Time*: `O(b) = O(log n)`  
+*Memory*: `O(1)` (only a few integer variables)
+
+--------------------------------------------------------------------
+
+#### Reference Implementation (Python 3)
+
+```python
+def decode_thread(n: int) -> tuple[int, int, int]:
+    """
+    Convert a linear thread index ``n`` into its 3‑D coordinates
+    (x, y, z) using the Z‑order (Morton) layout.
+
+    Parameters
+    ----------
+    n : int
+        Non‑negative integer thread identifier.
+
+    Returns
+    -------
+    tuple[int, int, int]
+        The coordinates (x, y, z) corresponding to ``n``.
+
+    Raises
+    ------
+    TypeError
+        If ``n`` is not an integer.
+    ValueError
+        If ``n`` is negative.
+    """
+    if not isinstance(n, int):
+        raise TypeError("n must be an integer")
+    if n < 0:
+        raise ValueError("n must be non‑negative")
+
+    x = y = z = 0          # resulting coordinates
+    shift = 0              # current bit position inside each coordinate
+
+    while n:
+        # bit for x
+        x |= (n & 1) << shift
+        n >>= 1
+
+        # bit for y
+        y |= (n & 1) << shift
+        n >>= 1
+
+        # bit for z
+        z |= (n & 1) << shift
+        n >>= 1
+
+        shift += 1
+
+    return (x, y, z)
+```
+
+The function follows exactly the algorithm proven correct above, satisfies
+the required input validation, and works for any non‑negative integer `n`.

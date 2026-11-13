@@ -1,0 +1,34 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer")
+
+    dim = 0
+    while (dim ** 3) / 6 + (dim ** 2) / 2 + dim / 3 <= n:
+        dim += 1
+
+    coord_sum = (dim * (dim - 1)) // 2
+    if n < coord_sum:
+        z, y, x = 0, 0, n
+        while x >= y:
+            y += 1
+            x -= 1
+        while y >= z:
+            z += 1
+            y -= 1
+        return (x, y, z)
+
+    n -= coord_sum
+    layer_size = dim * (dim + 1) // 2
+
+    z = n // layer_size
+    yx_index = n % layer_size
+    cum_sum = 0
+
+    for y in range(dim):
+        row_len = dim - y
+        if cum_sum + row_len >= yx_index:
+            x = yx_index - cum_sum
+            return (x, y, z + dim)
+        cum_sum += row_len
+```

@@ -1,0 +1,18 @@
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non‑negative integer")
+    x = y = z = 0
+    pos = 0
+    while n:
+        d = n % 4
+        if d:
+            w = 1 << pos
+            if d == 1:
+                x += w
+            elif d == 2:
+                y += w
+            else:  # d == 3
+                z += w
+        n //= 4
+        pos += 1
+    return (x, y, z)

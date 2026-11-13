@@ -1,0 +1,73 @@
+To determine the coordinates $(x, y)$ of a point at position $ n $, we begin by analyzing the pattern from the given examples:
+
+| $ n $ | $ x $ | $ y $ |
+|--------|--------|--------|
+| 0      | 0      | 0      |
+| 1      | 1      | 0      |
+| 2      | 2      | 0      |
+| 3      | 0      | 1      |
+| 4      | 2      | 1      |
+| 5      | 0      | 1      |
+| 6      | 1      | 2      |
+| 7      | 2      | 2      |
+| 8      | 3      | 0      |
+| 9      | 4      | 0      |
+| 10     | 5      | 0      |
+| 11     | 3      | 1      |
+
+---
+
+### Observations:
+
+1. **Y-Coordinate Pattern**:
+   - The y-value increments every 3 steps, suggesting $ y = \left\lfloor \frac{n}{3} \right\rfloor $ **modulo 3**.
+   - However, at $ n = 3, 6, 9 $, the pattern resets in the x-direction while y continues to increase.
+   - Therefore, we can define $ y = \left\lfloor \frac{n}{3} \right\rfloor $.
+
+2. **X-Coordinate Pattern**:
+   - The x-value generally increases by 1, but at certain points (like $ n = 3, 6, 9 $), it resets.
+   - The x-values at these reset points are:
+     - $ n = 3 $: $ x = 0 $
+     - $ n = 6 $: $ x = 1 $
+     - $ n = 9 $: $ x = 3 $
+   - These suggest that the x-value resets to a new base every 3 steps, but the base itself increases.
+
+3. **Grouping Strategy**:
+   - Divide the sequence into groups of 3.
+   - Each group corresponds to a new base value for x, starting from 0.
+   - Within each group, x alternates between the base and base + 2 (e.g., 0, 2, 0 for group 1; 1, 3, 1 for group 2; etc.)
+
+---
+
+### Final Formula:
+
+Given the observed behavior, the coordinates can be defined as:
+
+Let:
+- $ k = \left\lfloor \frac{n}{3} \right\rfloor $ — the group index.
+- $ r = n \mod 3 $ — the position within the group.
+
+Then:
+
+- **$ y = k $**
+- **$ x = \begin{cases} 
+k & \text{if } r = 0 \\
+k + 2 & \text{if } r = 1 \\
+k & \text{if } r = 2 
+\end{cases} $**
+
+---
+
+### Final Answer:
+
+$$
+\boxed{
+(x, y) = 
+\begin{cases} 
+\left(k, k\right) & \text{if } r = 0 \\
+\left(k + 2, k\right) & \text{if } r = 1 \\
+\left(k, k\right) & \text{if } r = 2 
+\end{cases}
+}
+\quad \text{where } k = \left\lfloor \frac{n}{3} \right\rfloor, \ r = n \mod 3
+$$

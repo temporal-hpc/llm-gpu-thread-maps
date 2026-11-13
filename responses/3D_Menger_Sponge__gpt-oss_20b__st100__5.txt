@@ -1,0 +1,57 @@
+**Python implementation**
+
+```python
+from typing import Tuple
+
+def subcube_coords(index: int) -> Tuple[int, int, int]:
+    """
+    Return the (x, y, z) coordinates of a sub‑cube in a 3×3×3 grid.
+
+    The index is interpreted as a base‑3 number
+
+          index = x + 3·y + 9·z          (0 ≤ x, y, z ≤ 2)
+
+    so that the least–significant trit of the index gives the x–coordinate,
+    the next trit gives the y–coordinate, and the most–significant trit gives
+    the z–coordinate.  The three lines in the example above are obtained by
+    simply converting the integer index to base‑3 and using the three digits
+    as coordinates.
+
+    Parameters
+    ----------
+    index : int
+        The linear index of the sub‑cube (must be 0 ≤ index < 27).
+
+    Returns
+    -------
+    tuple[int, int, int]
+        The (x, y, z) coordinate of the requested sub‑cube.
+    """
+    if not 0 <= index < 27:
+        raise ValueError("Index must be in the range 0..26 (inclusive).")
+
+    # base‑3 conversion
+    x = index % 3                  # least‑significant digit
+    y = (index // 3) % 3           # middle digit
+    z = index // 9                 # most‑significant digit
+
+    return (x, y, z)
+```
+
+**How the mapping works**
+
+* A 3×3×3 grid contains 27 sub‑cubes, each with integer coordinates
+  `(x, y, z)` where `x, y, z ∈ {0, 1, 2}`.
+* If you write the index as a base‑3 (trinary) number
+  `index = x + 3·y + 9·z`, the three digits of that trinary number
+  are exactly the three coordinates of the sub‑cube.
+* Therefore, the conversion is just a matter of extracting the
+  trits (trinary digits) of the index:
+  * `x` is the remainder when dividing by 3 (`index % 3`),
+  * `y` is the remainder after removing the x‑digit (`(index // 3) % 3`),
+  * `z` is the number of full 9‑cubes (`index // 9`).
+
+Running the function for each value in the range 0–26 reproduces the
+coordinate list shown in the table above.  (If a different ordering or
+skipping of a particular sub‑cube is required, the same idea—extracting
+the appropriate trits—can be adapted.)

@@ -1,0 +1,22 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError
+    z = 0
+    while True:
+        block = (z + 1) * (z + 2) // 2
+        if n < block:
+            break
+        n -= block
+        z += 1
+    m = n
+    y = 0
+    while True:
+        cnt = y + 1
+        if m < cnt:
+            break
+        m -= cnt
+        y += 1
+    x = m
+    return (x, y, z)
+```

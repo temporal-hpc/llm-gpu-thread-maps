@@ -1,0 +1,7 @@
+def map_to_coordinates(n):
+    if n < 0:
+        raise ValueError("Input must be a non-negative integer")
+    x = n // (n + 1)
+    y = n % (n + 1)
+    z = n % (n + 2)
+    return (x, y, z)

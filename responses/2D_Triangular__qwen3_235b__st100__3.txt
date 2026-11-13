@@ -1,0 +1,41 @@
+To solve this problem, we need to determine the coordinates (x, y) of a given nonnegative integer `n` in a specific grid arrangement. The grid is structured such that the first row (row 0) contains only the number 0, the second row (row 1) contains numbers 1 and 2, the third row (row 2) contains numbers 3, 4, and 5, and so on. Each subsequent row `k` contains `k + 1` numbers, starting from the number that follows the last number of the previous row.
+
+### Approach
+1. **Problem Analysis**: The key observation is that the numbers are arranged in rows where the `k-th` row (0-indexed) starts at the number `S(k) = k*(k + 1)/2` and contains `k + 1` consecutive numbers. For example:
+   - Row 0: starts at `S(0) = 0`, contains 1 number (0).
+   - Row 1: starts at `S(1) = 1`, contains 2 numbers (1, 2).
+   - Row 2: starts at `S(2) = 3`, contains 3 numbers (3, 4, 5).
+   
+2. **Finding the Row (y-coordinate)**: For a given `n`, we need to find the largest integer `k` such that `S(k) <= n`. This `k` will be the row index (y-coordinate). The formula to compute `k` is derived from solving the quadratic inequality `k*(k + 1)/2 <= n`. The solution involves:
+   - Calculating the discriminant `disc = 1 + 8*n`.
+   - Taking the integer square root of `disc` to get `x = isqrt(disc)`.
+   - Computing `k = (x - 1) // 2`.
+
+3. **Finding the Column (x-coordinate)**: Once the row `k` is determined, the starting number of the row is `S(k) = k*(k + 1)/2`. The column index (x-coordinate) is simply `n - S(k)`.
+
+### Solution Code
+```python
+import math
+
+def main():
+    n = int(input().strip())
+    disc = 1 + 8 * n
+    x = math.isqrt(disc)
+    k = (x - 1) // 2
+    start = k * (k + 1) // 2
+    col = n - start
+    print(f"({col}, {k})")
+
+if __name__ == "__main__":
+    main()
+```
+
+### Explanation
+1. **Reading Input**: The input is a single nonnegative integer `n`.
+2. **Discriminant Calculation**: The discriminant `disc = 1 + 8*n` is derived from rearranging the quadratic equation `k^2 + k - 2n <= 0`.
+3. **Integer Square Root**: The integer square root of `disc` gives `x`, which helps in determining the largest integer `k` such that `k*(k + 1)/2 <= n`.
+4. **Row Calculation**: The row index `k` is computed as `(x - 1) // 2`. This formula ensures `k` is the largest integer satisfying the condition `k*(k + 1)/2 <= n`.
+5. **Column Calculation**: The starting number of row `k` is `start = k*(k + 1)/2`. The column index is then `n - start`, representing the position within the row.
+6. **Output**: The coordinates `(col, k)` are printed, where `col` is the x-coordinate (column index) and `k` is the y-coordinate (row index).
+
+This approach efficiently locates the position of `n` in the grid by leveraging mathematical insights to avoid brute-force search, ensuring optimal performance even for large values of `n`.

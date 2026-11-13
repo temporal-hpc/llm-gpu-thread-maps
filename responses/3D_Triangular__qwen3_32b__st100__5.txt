@@ -1,0 +1,91 @@
+To solve the problem of converting between 2D coordinates and 1D indices in a triangular grid of size `z`, we can define two functions:
+
+---
+
+### 🔁 **Function 1: `get_index(x, y, z)`**
+
+This function calculates the 1D index of the point `(x, y)` in a triangular grid of size `z`.
+
+**Explanation**:
+- A triangular grid of size `z` has a total of `(z + 1) * (z + 2) // 2` points.
+- The index is determined by summing all previous rows and then adding the offset within the current row.
+
+**Formula**:
+```python
+index = x * (z + 1) - x * (x - 1) // 2 + (y - x)
+```
+
+---
+
+### 🔁 **Function 2: `get_coordinates(index, z)`**
+
+This function performs the reverse operation — given a 1D index and the size `z`, it returns the corresponding 2D coordinates `(x, y)`.
+
+**Approach**:
+- We use **binary search** to find the correct row `x` such that the cumulative number of points up to row `x` is less than or equal to the given index.
+- Once `x` is determined, we compute the offset within the row to find `y`.
+
+**Binary Search**:
+- The cumulative number of points up to row `x` is:
+  ```python
+  x * (z + 1) - x * (x - 1) // 2
+  ```
+
+---
+
+### ✅ **Implementation in Python**
+
+```python
+def get_index(x, y, z):
+    """
+    Converts 2D coordinates (x, y) to a 1D index in a triangular grid of size z.
+    """
+    return x * (z + 1) - x * (x - 1) // 2 + (y - x)
+
+def get_coordinates(index, z):
+    """
+    Converts a 1D index to 2D coordinates (x, y) in a triangular grid of size z.
+    """
+    def cumulative(x):
+        return x * (z + 1) - x * (x - 1) // 2
+
+    low, high = 0, z
+    while low < high:
+        mid = (low + high + 1) // 2
+        if cumulative(mid) <= index:
+            low = mid
+        else:
+            high = mid - 1
+
+    x = low
+    offset = index - cumulative(x)
+    y = x + offset
+    return (x, y, z)
+```
+
+---
+
+### 🔍 **Example Usage**
+
+```python
+# Example 1
+print(get_index(1, 2, 2))  # Output: 4
+
+# Example 2
+print(get_coordinates(4, 2))  # Output: (1, 2, 2)
+
+# Example 3
+print(get_index(0, 1, 1))  # Output: 1
+
+# Example 4
+print(get_coordinates(1, 1))  # Output: (0, 1, 1)
+```
+
+---
+
+### 🧠 **Time Complexity**
+
+- `get_index`: O(1)
+- `get_coordinates`: O(log z) due to binary search
+
+These functions are efficient and well-suited for applications involving triangular grids, such as in game board representations, combinatorics, or data compression.

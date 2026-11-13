@@ -1,0 +1,39 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer")
+
+    def cantor_pairing(x, y):
+        return ((x + y) * (x + y + 1)) // 2 + y
+
+    z = 0
+    while True:
+        max_n_for_z = (z * (z + 1)) * (z + 2) // 6 - 1
+        if n <= max_n_for_z:
+            break
+        z += 1
+
+    remaining_n = n - ((z * (z - 1)) * (z - 2)) // 6 if z > 2 else n
+    y, x = 0, z
+    while True:
+        cantor_value = cantor_pairing(x, y)
+        if remaining_n < cantor_value:
+            break
+        remaining_n -= cantor_value
+        if x > 0:
+            x -= 1
+        elif y < z:
+            y += 1
+        else:
+            raise AssertionError("Logic error in coordinate calculation")
+
+    while remaining_n > 0:
+        if x > 0 and cantor_pairing(x-1, y) <= remaining_n:
+            remaining_n -= cantor_pairing(x-1, y)
+            x -= 1
+        elif y < z and cantor_pairing(x, y+1) <= remaining_n:
+            remaining_n -= cantor_pairing(x, y+1)
+            y += 1
+
+    return (x, y, z)
+```

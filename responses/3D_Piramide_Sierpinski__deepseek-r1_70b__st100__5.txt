@@ -1,0 +1,12 @@
+To determine how many times a number can be divided by 2 before becoming odd:
+
+1. **Divide by 2**: Continuously divide the number by 2 until it becomes odd.
+2. **Count the divisions**: The count of successful even divisions is your answer.
+
+For example, for the number 4:
+- 4 ÷ 2 = 2 (even)
+- 2 ÷ 2 = 1 (odd)
+
+**Total divisions: 2 times**
+
+Answer: You can divide by 2 **two times** before it becomes odd.

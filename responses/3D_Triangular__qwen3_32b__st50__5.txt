@@ -1,0 +1,73 @@
+To determine the coordinates $(x, y, z)$ corresponding to a given integer $n$ in the 3D sequence, we follow a structured approach based on cumulative sums and the structure of the sequence:
+
+---
+
+### **Step 1: Determine $k$**
+The sequence is grouped by the sum $x + y + z = k$. For each $k$, the number of points in the group is:
+$$
+T(k) = \frac{(k+1)(k+2)(k+3)}{6}
+$$
+Find the smallest $k$ such that:
+$$
+T(k-1) < n \leq T(k)
+$$
+This $k$ identifies the group (sum level) where $n$ lies.
+
+---
+
+### **Step 2: Compute Offset $m$**
+Calculate the offset within the group:
+$$
+m = n - T(k-1)
+$$
+This tells us the position of $n$ within the group for sum $k$.
+
+---
+
+### **Step 3: Determine $z$**
+For each possible $z$ from 0 to $k$, the number of points with a fixed $z$ is:
+$$
+s_z = k - z + 1
+$$
+We accumulate $s_z$ values until the cumulative sum reaches or exceeds $m$. The value of $z$ where this happens is the third coordinate.
+
+---
+
+### **Step 4: Determine $x$ and $y$**
+Let $s = k - z$. The remaining offset $m'$ within the $z$-group is:
+$$
+m' = m - \text{cumulative sum up to } z-1
+$$
+The coordinates $(x, y)$ are determined from the $m'$-th point in the 2D sequence where $x + y = s$:
+$$
+x = s - m' + 1 \\
+y = m' - 1
+$$
+
+---
+
+### **Example: $n = 9$**
+1. **Find $k$:**  
+   $T(2) = 10$, $T(1) = 4$, so $k = 2$.
+
+2. **Compute $m$:**  
+   $m = 9 - 4 = 5$.
+
+3. **Determine $z$:**  
+   - For $z = 0$: $s_z = 3$, cumulative sum = 3.  
+   - For $z = 1$: $s_z = 2$, cumulative sum = 3 + 2 = 5.  
+   Since cumulative sum = 5 ≥ $m = 5$, $z = 1$.
+
+4. **Determine $x$ and $y$:**  
+   - $s = 2 - 1 = 1$.  
+   - $m' = 5 - 3 = 2$.  
+   - $x = 1 - 2 + 1 = 0$, $y = 2 - 1 = 1$.  
+
+**Result:** $(x, y, z) = (0, 1, 1)$.
+
+---
+
+### **Final Answer**
+$$
+\boxed{(x, y, z) = (0, 1, 1)}
+$$

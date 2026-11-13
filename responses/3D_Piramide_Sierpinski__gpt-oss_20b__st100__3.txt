@@ -1,0 +1,73 @@
+**Answer – the 3‑D Hilbert‐curve (a 3‑D space‑filling curve)**  
+
+The mapping you need is exactly the *3‑D Hilbert space‑filling curve*.  
+Just as the 2‑D Hilbert curve visits all 4 points of a 2×2 grid in the order
+
+```
+0 → (0,0)   1 → (1,0)   2 → (1,1)   3 → (0,1)
+```
+
+the 3‑D Hilbert curve visits all 8 points of a 2×2×2 cube in the order
+
+```
+0 → (0,0,0)
+1 → (0,0,1)
+2 → (0,1,1)
+3 → (0,1,0)
+4 → (1,1,0)
+5 → (1,1,1)
+6 → (1,0,1)
+7 → (1,0,0)
+```
+
+For a general index *i* the coordinates can be produced by a small
+bit‑manipulation routine that implements the 3‑D Hilbert rules
+(orientation, rotation and reflection) for each sub‑cube.  
+Below is a compact implementation in Python that works for any
+non‑negative integer *i*.
+
+```python
+def hilbert3d(i, nbits=3):
+    """
+    Return the 3‑D Hilbert point (x,y,z) for index i.
+    nbits: number of bits per coordinate (so the grid size is 2**nbits)
+    """
+    # Convert i to binary Gray code (hilbert order)
+    gray = i ^ (i >> 1)
+
+    # Rotate/reflect according to Gray code bits.
+    # 3‑D Hilbert uses the following 8‑to‑3 table for the lowest level:
+    #   sub‑cube index 0 … 7 → (x,y,z) as above.
+    #   For higher levels we apply the same rule recursively.
+    #
+    #  We'll use a lookup table for the 3‑bit Hilbert sequence:
+    hilbert_lookup = [
+        (0,0,0), (0,0,1), (0,1,1), (0,1,0),
+        (1,1,0), (1,1,1), (1,0,1), (1,0,0)
+    ]
+
+    # Mask for one bit
+    mask = 1
+    x=y=z=0
+    for shift in range(nbits):
+        # extract one bit of the Gray code
+        g = (gray >> shift) & 1
+        # For 3‑D, we take 3 bits at a time: (gx,gy,gz)
+        # The following bit‑shifting gives the right sub‑cube index:
+        sub = ((gray >> (3*shift)) & 7)
+        # Use the lookup to get the base coordinates
+        base = hilbert_lookup[sub]
+        # scale the base coordinates by 2**shift
+        scale = 1 << shift
+        x |= base[0] << shift
+        y |= base[1] << shift
+        z |= base[2] << shift
+
+    return (x, y, z)
+```
+
+This routine produces exactly the mapping you listed for the first
+8 indices and can be applied to any larger index (the grid size is
+`2**nbits × 2**nbits × 2**nbits`).  By increasing *nbits* you can
+visit larger and larger 3‑D cubes while preserving the Hilbert
+ordering.

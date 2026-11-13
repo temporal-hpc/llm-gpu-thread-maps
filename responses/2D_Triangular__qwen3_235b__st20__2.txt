@@ -1,0 +1,31 @@
+To solve this problem, we need to determine the pair of non-negative integers (x, y) corresponding to a given non-negative integer `n` based on a specific sequence. The sequence is structured such that for each integer `y`, the pairs (0, y), (1, y), ..., (y, y) appear in order. The task is to map `n` to the correct pair (x, y) in this sequence.
+
+### Approach
+1. **Problem Analysis**: The sequence of pairs starts with (0,0) for `n=0`. For `y=1`, the pairs are (0,1) and (1,1) corresponding to `n=1` and `n=2`. For `y=2`, the pairs are (0,2), (1,2), and (2,2) for `n=3`, `n=4`, and `n=5`, respectively. This pattern shows that the starting index for each `y` is the triangular number \( T_y = \frac{y(y+1)}{2} \). The value of `y` for a given `n` is the largest integer such that \( T_y \leq n \).
+
+2. **Key Insight**: The value of `y` can be derived by solving the quadratic equation \( y^2 + y - 2n \leq 0 \). The solution involves computing \( y = \left\lfloor \frac{-1 + \sqrt{1 + 8n}}{2} \right\rfloor \). This is efficiently calculated using integer square root operations to avoid floating-point inaccuracies.
+
+3. **Algorithm Selection**:
+   - **Check for Valid Input**: If `n` is negative, raise a `ValueError`.
+   - **Compute `y` (denoted as `k` in code)**: Use the integer square root of \( 1 + 8n \) to compute `k` as \( \left\lfloor \frac{\sqrt{1 + 8n} - 1}{2} \right\rfloor \).
+   - **Compute `x`**: The value `x` is derived as \( n - T_k \), where \( T_k = \frac{k(k+1)}{2} \) is the triangular number for `k`.
+
+### Solution Code
+```python
+import math
+
+def f(n):
+    if n < 0:
+        raise ValueError
+    s = math.isqrt(1 + 8 * n)
+    k = (s - 1) // 2
+    return (n - k * (k + 1) // 2, k)
+```
+
+### Explanation
+1. **Input Validation**: The function first checks if `n` is negative. If so, it raises a `ValueError` since the problem specifies that `n` must be non-negative.
+2. **Integer Square Root Calculation**: The expression \( 1 + 8n \) is computed, and its integer square root `s` is found using `math.isqrt`, which efficiently handles large integers without floating-point errors.
+3. **Determine `k` (y-value)**: The value `k` is calculated as \( (s - 1) // 2 \). This formula derives from solving the quadratic equation associated with triangular numbers, ensuring `k` is the largest integer such that the triangular number \( T_k \leq n \).
+4. **Compute `x` (x-value)**: The x-value is obtained by subtracting the triangular number \( T_k \) from `n`, i.e., \( x = n - \frac{k(k+1)}{2} \). The result is returned as the pair `(x, k)`.
+
+This approach efficiently maps any non-negative integer `n` to its corresponding pair (x, y) in the sequence by leveraging mathematical insights and integer arithmetic to avoid inaccuracies. The solution handles edge cases and large values robustly.

@@ -1,0 +1,74 @@
+To solve this problem, we need to determine the coordinates (x, y, z) for a given non-negative integer `n` based on a specific pattern. The pattern involves grouping numbers into blocks of 20, where each block corresponds to a "cube" in the x-dimension. Within each cube, the coordinates follow a predefined sequence.
+
+### Approach
+1. **Problem Analysis**: The problem requires mapping each integer `n` to a 3D coordinate (x, y, z). The sequence of coordinates repeats every 20 numbers, forming distinct "cubes" along the x-axis. Each cube spans 3 units in the x-direction (from `3 * cube_index` to `3 * cube_index + 2`), while the y and z coordinates cycle through specific values within each cube.
+2. **Key Insight**: 
+   - **Cube Index**: The cube index is determined by `n // 20`, which tells us which segment of 20 numbers `n` falls into.
+   - **Remainder Handling**: The remainder `r = n % 20` dictates the position within the current cube. Based on `r`, we can determine the exact (x, y, z) coordinates within the cube.
+3. **Coordinate Mapping**:
+   - For `r` in 0-7: These correspond to the z=0 plane. The x and y values cycle through specific patterns.
+   - For `r` in 8-11: These correspond to the z=1 plane, with specific (x, y) pairs.
+   - For `r` in 12-19: These correspond to the z=2 plane, mirroring the pattern of the z=0 plane but with z=2.
+
+### Solution Code
+```python
+def get_coordinates(n):
+    cube_index = n // 20
+    r = n % 20
+    
+    if r < 8:
+        if r < 3:
+            x0 = r
+            y0 = 0
+        elif r < 5:
+            x0 = 0 if r == 3 else 2
+            y0 = 1
+        else:
+            x0 = r - 5
+            y0 = 2
+        z0 = 0
+    elif r < 12:
+        if r == 8:
+            x0, y0 = 0, 0
+        elif r == 9:
+            x0, y0 = 2, 0
+        elif r == 10:
+            x0, y0 = 0, 2
+        else:
+            x0, y0 = 2, 2
+        z0 = 1
+    else:
+        if r < 15:
+            x0 = r - 12
+            y0 = 0
+        elif r < 17:
+            x0 = 0 if r == 15 else 2
+            y0 = 1
+        else:
+            x0 = r - 17
+            y0 = 2
+        z0 = 2
+    
+    x = 3 * cube_index + x0
+    y = y0
+    z = z0
+    return (x, y, z)
+```
+
+### Explanation
+1. **Cube Index Calculation**: The cube index (`cube_index`) is derived by integer division of `n` by 20. This index determines the starting x-coordinate of the current cube (each cube spans 3 units in x: `3 * cube_index` to `3 * cube_index + 2`).
+2. **Remainder Handling**: The remainder `r = n % 20` identifies the position within the current cube (0 to 19).
+3. **Coordinate Determination**:
+   - **z=0 Plane (r=0 to 7)**:
+     - `r=0,1,2`: (x, y) = (0,0), (1,0), (2,0)
+     - `r=3,4`: (x, y) = (0,1), (2,1)
+     - `r=5,6,7`: (x, y) = (0,2), (1,2), (2,2)
+   - **z=1 Plane (r=8 to 11)**:
+     - `r=8,9,10,11`: (x, y) = (0,0), (2,0), (0,2), (2,2)
+   - **z=2 Plane (r=12 to 19)**:
+     - `r=12,13,14`: (x, y) = (0,0), (1,0), (2,0)
+     - `r=15,16`: (x, y) = (0,1), (2,1)
+     - `r=17,18,19`: (x, y) = (0,2), (1,2), (2,2)
+4. **Final Coordinates**: The x-coordinate is adjusted by `3 * cube_index` to position it within the correct cube, while y and z remain as determined by the remainder `r`.
+
+This approach efficiently maps each integer `n` to its corresponding 3D coordinate by leveraging modular arithmetic and predefined patterns within each cube segment. The solution handles all non-negative integers `n` correctly and scales naturally for larger values.

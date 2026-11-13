@@ -1,0 +1,71 @@
+To determine the **coordinates** of a number `N` in a **triangular grid** where:
+
+- Row 0 has 1 element,
+- Row 1 has 2 elements,
+- Row 2 has 3 elements,
+- ...
+- Row `i` has `i + 1` elements,
+- The elements are filled row-wise starting from 0,
+
+We can follow a structured approach using the properties of triangular numbers.
+
+---
+
+### ✅ **Step-by-Step Explanation**
+
+1. **Determine the Row (x)**:
+   - Each row `x` contains `x + 1` elements.
+   - The total number of elements in rows 0 through `x` is:
+     $$
+     T(x) = \frac{x(x+1)}{2}
+     $$
+   - To find the row `x` in which the number `N` lies, solve for `x` in:
+     $$
+     \frac{x(x+1)}{2} \leq N < \frac{(x+1)(x+2)}{2}
+     $$
+   - This can be efficiently done using the quadratic formula:
+     $$
+     x = \left\lfloor \frac{\sqrt{8N + 1} - 1}{2} \right\rfloor
+     $$
+
+2. **Calculate the Offset (Column Number)**:
+   - Once we know the row `x`, the offset (column) within that row is:
+     $$
+     \text{offset} = N - \frac{x(x+1)}{2}
+     $$
+
+3. **Final Coordinates**:
+   - The coordinates are simply `(x, offset)`.
+
+---
+
+### 📌 **Example: Find Coordinates of N = 5**
+
+1. Compute `x`:
+   $$
+   x = \left\lfloor \frac{\sqrt{8 \cdot 5 + 1} - 1}{2} \right\rfloor = \left\lfloor \frac{\sqrt{41} - 1}{2} \right\rfloor = \left\lfloor \frac{6.403 - 1}{2} \right\rfloor = \left\lfloor 2.701 \right\rfloor = 2
+   $$
+
+2. Compute offset:
+   $$
+   \text{offset} = 5 - \frac{2(2+1)}{2} = 5 - 3 = 2
+   $$
+
+3. Final coordinates:
+   $$
+   (2, 2)
+   $$
+
+---
+
+### ✅ **Final Answer**
+
+Given a number `N`, its coordinates in the triangular grid are:
+
+$$
+\boxed{
+\left( \left\lfloor \frac{\sqrt{8N + 1} - 1}{2} \right\rfloor, \ N - \frac{x(x+1)}{2} \right)
+}
+$$
+
+Where `x` is the row number computed as above.

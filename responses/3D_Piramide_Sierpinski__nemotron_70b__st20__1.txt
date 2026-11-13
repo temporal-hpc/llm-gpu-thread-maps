@@ -1,0 +1,21 @@
+```python
+def map_to_coordinates(n):
+    coordinates = [0, 0, 0]
+    axis = 0
+    sign = 1
+    layer = 0
+    while n >= 0:
+        increment = (layer // 3) + 1
+        for _ in range(increment if layer % 3 != 2 else 1):
+            if n == 0:
+                break
+            coordinates[axis] += sign
+            n -= 1
+        if n < 0:
+            coordinates[axis] -= sign
+            break
+        axis = (axis + 1) % 3
+        sign *= -1 if layer % 3 == 2 else 1
+        layer += 1
+    return tuple(coordinates)
+```

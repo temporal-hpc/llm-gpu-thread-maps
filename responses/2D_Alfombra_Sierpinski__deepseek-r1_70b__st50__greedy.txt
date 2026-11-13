@@ -1,0 +1,38 @@
+To determine the coordinates \((x, y)\) corresponding to a given integer \(n\), we can observe a specific pattern in how numbers are arranged on a grid. The sequence progresses by filling rows at \(y = 0\) with increasing \(x\), then moving up to higher \(y\) values while adjusting \(x\) accordingly before resetting back to \(y = 0\) with an incremented starting \(x\).
+
+### Pattern Observation:
+1. **Row Filling at \(y = 0\):** Start by filling the row where \(y = 0\) from \(x = 0\) upwards.
+2. **Moving Up in \(y\):** After every three numbers, move up to the next higher \(y\) value and fill some positions before returning to \(y = 0\) with an increased starting \(x\).
+
+### Steps to Find \((x, y)\) for a Given \(n\):
+1. **Identify the Base Row:** Determine how many complete sets of three numbers fit into \(n\). This helps in identifying the base \(x\) value.
+2. **Calculate Adjustments:** Based on the remainder when dividing by 3, adjust \(x\) and determine \(y\).
+
+### Formula Derivation:
+- Let \(k = \left\lfloor \frac{n}{3} \right\rfloor\), which gives the number of complete triplets before \(n\).
+- The remainder \(r = n \mod 3\) determines the position within the triplet.
+- Depending on whether \(k\) is even or odd, adjust \(x\) and set \(y\) accordingly.
+
+### Final Formula:
+\[
+x = k + r
+\]
+\[
+y =
+\begin{cases}
+0 & \text{if } k \text{ is even} \\
+1 & \text{if } k \text{ is odd}
+\end{cases}
+\]
+
+### Example Calculation:
+For \(n = 5\):
+- \(k = \left\lfloor \frac{5}{3} \right\rfloor = 1\)
+- \(r = 5 \mod 3 = 2\)
+- Since \(k\) is odd, \(y = 1\).
+- \(x = 1 + 2 = 3\)
+
+Thus, the coordinates are \((3, 1)\).
+
+### Conclusion:
+Using this approach, any integer \(n\) can be mapped to its corresponding grid coordinates \((x, y)\) by following the derived formula.

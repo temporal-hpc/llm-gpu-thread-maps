@@ -1,0 +1,46 @@
+To determine the values of $ x $ and $ y $ for a given integer $ n $, we consider the structure of a number grid where numbers are arranged diagonally. Each diagonal $ d $ contains $ d $ elements, and the total number of elements in the first $ d $ diagonals is given by the triangular number formula:
+
+$$
+T(d) = \frac{d(d+1)}{2}
+$$
+
+Given $ n $, we aim to find the diagonal $ d $ such that:
+
+$$
+T(d-1) \leq n < T(d)
+$$
+
+From this, the diagonal index $ d $ corresponds to the row $ y $, and the position within the diagonal corresponds to the column $ x $.
+
+---
+
+### Step-by-step Solution:
+
+1. **Find the diagonal index $ d $:**
+
+$$
+d = \left\lfloor \frac{\sqrt{8n + 1} - 3}{2} \right\rfloor + 1
+$$
+
+2. **Compute $ x $:**
+
+$$
+x = n - \frac{d(d+1)}{2}
+$$
+
+---
+
+### Final Answer:
+
+For a given integer $ n $, the coordinates $ (x, y) $ are given by:
+
+$$
+\boxed{
+y = \left\lfloor \frac{\sqrt{8n + 1} - 3}{2} \right\rfloor + 1
+}
+$$
+$$
+\boxed{
+x = n - \frac{y(y + 1)}{2}
+}
+$$

@@ -1,0 +1,90 @@
+**Answer – 359 251 200**  
+
+---
+
+### 1.  What is being counted?
+
+We have the multiset of letters  
+
+\[
+\{A,B,\,C,C,\,D,E,F,G,H,I,J,K,L,M,\,N,N,N,\,R,R\}
+\]
+
+(12 different singletons and the three repeated letters C, R and N).  
+We are asked to form a **10‑letter string** that
+
+* contains **both** Cs,
+* contains **both** Rs,
+* contains **at least two** Ns (so we may use either 2 or all 3 Ns).
+
+All other letters may appear or not, but a 10‑letter word has to be chosen.
+
+---
+
+### 2.  Choose the letters that will appear
+
+A 10‑letter word must use
+
+* both Cs (2 letters),
+* both Rs (2 letters),
+* exactly two Ns (otherwise we would have 11 letters),  
+  so the third N is left out.
+
+That leaves \(10-2-2-2=4\) positions to be filled with distinct letters from the 12 singletons  
+\( \{A,B,D,E,F,G,H,I,J,K,L,M\}\).
+
+The number of ways to pick the 4 distinct singletons is
+
+\[
+\binom{12}{4}=495 .
+\]
+
+---
+
+### 3.  Arrange the chosen letters
+
+We now have the multiset  
+
+\[
+\{C,C,\,R,R,\,N,N,\,\text{4 distinct letters}\}
+\]
+
+for a total of 10 letters.  
+The number of distinct permutations of a multiset is
+
+\[
+\frac{10!}{2!\,2!\,2!}= \frac{3\,628\,800}{8}=453\,600 .
+\]
+
+---
+
+### 4.  Multiply the choices
+
+For each of the 495 choices of the 4 distinct singletons we have 453 600 different
+arrangements, so
+
+\[
+495 \times 453\,600 = 359\,251\,200 .
+\]
+
+---
+
+### 5.  Why the answer is not 1 (or 2)
+
+The reasoning above shows that the constraints are **not** restrictive – any
+10‑letter word that uses both Cs and both Rs automatically has at least two Ns.
+Hence there are **hundreds of millions** of possible strings, not a single one.
+
+(If instead the word had to use all 19 letters, the number of distinct
+permutations would be  
+\( \displaystyle \frac{19!}{2!\,3!\,2!}=5\,068\,541\,275\,368\,000\),  
+which also satisfies the same conditions.)
+
+---
+
+**Therefore, the number of different 10‑letter strings that contain both Cs, both Rs
+and at least two Ns is**
+
+\[
+\boxed{359\,251\,200}
+\]

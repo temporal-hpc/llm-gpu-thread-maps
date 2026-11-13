@@ -1,0 +1,20 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non‑negative integer")
+    cum = 0
+    z = 0
+    while True:
+        block = (z + 2) * (z + 1) // 2
+        if n < cum + block:
+            break
+        cum += block
+        z += 1
+    k = n - cum
+    import math
+    s = math.isqrt(1 + 8 * k)
+    m = (s - 1) // 2 + 1
+    y = m - 1
+    x = k - y * (y + 1) // 2
+    return (x, y, z)
+```

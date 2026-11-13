@@ -1,0 +1,58 @@
+To determine the value of $ z $ based on the value of $ n $, we are given the condition that $ z = 1 $ when $ n \mod 20 \in [8, 19] $, and $ z = 0 $ otherwise.
+
+---
+
+### Step 1: Understanding the Condition
+
+Let $ m = n \mod 20 $, which gives the remainder when $ n $ is divided by 20. We are interested in the cases where $ m \in [8, 19] $. This corresponds to the second and third octants of the 20-unit range.
+
+We want to construct a formula using the **floor function** to express this condition.
+
+---
+
+### Step 2: Constructing the Formula
+
+We can use the floor function to detect when $ m $ is in the desired range:
+
+- $ \left\lfloor \frac{m}{8} \right\rfloor $ gives:
+  - 0 for $ m = 0 $ to $ 7 $,
+  - 1 for $ m = 8 $ to $ 15 $,
+  - 2 for $ m = 16 $ to $ 19 $.
+
+- $ \left\lfloor \frac{m}{16} \right\rfloor $ gives:
+  - 0 for $ m = 0 $ to $ 15 $,
+  - 1 for $ m = 16 $ to $ 19 $.
+
+Thus, the difference:
+
+$$
+\left\lfloor \frac{m}{8} \right\rfloor - \left\lfloor \frac{m}{16} \right\rfloor
+$$
+
+will be:
+
+- 0 for $ m = 0 $ to $ 7 $,
+- 1 for $ m = 8 $ to $ 15 $,
+- 1 for $ m = 16 $ to $ 19 $.
+
+This matches the desired condition where $ z = 1 $ for $ m \in [8, 19] $, and $ z = 0 $ otherwise.
+
+---
+
+### Step 3: Final Formula
+
+Since $ m = n \mod 20 $, the final expression for $ z $ is:
+
+$$
+z = \left\lfloor \frac{n \bmod 20}{8} \right\rfloor - \left\lfloor \frac{n \bmod 20}{16} \right\rfloor
+$$
+
+This is a compact and accurate representation using only floor functions and modular arithmetic.
+
+---
+
+### Final Answer
+
+$$
+\boxed{\left\lfloor \frac{n \bmod 20}{8} \right\rfloor - \left\lfloor \frac{n \bmod 20}{16} \right\rfloor}
+$$

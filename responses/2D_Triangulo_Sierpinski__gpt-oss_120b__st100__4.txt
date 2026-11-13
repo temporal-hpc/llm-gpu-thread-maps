@@ -1,0 +1,23 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError
+    total = 0
+    y = 0
+    while True:
+        cnt = 1 << bin(y).count('1')
+        if total + cnt > n:
+            offset = n - total
+            x = 0
+            bit_index = 0
+            temp = y
+            while temp:
+                lowbit = temp & -temp
+                if (offset >> bit_index) & 1:
+                    x |= lowbit
+                bit_index += 1
+                temp -= lowbit
+            return (x, y)
+        total += cnt
+        y += 1
+```

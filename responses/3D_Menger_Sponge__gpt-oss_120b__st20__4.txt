@@ -1,0 +1,15 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non‑negative integer")
+    idx = -1
+    for z in range(3):
+        for y in range(3):
+            for x in range(3):
+                if sum(c == 1 for c in (x, y, z)) >= 2:
+                    continue
+                idx += 1
+                if idx == n:
+                    return (x, y, z)
+    raise ValueError("n is out of the valid range")
+```

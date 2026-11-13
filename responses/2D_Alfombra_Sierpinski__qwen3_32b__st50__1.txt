@@ -1,0 +1,65 @@
+To determine the coordinates `(x, y, z)` for a given index `n` (starting from 0), we observe a structured pattern in the data. The key insight is that each block of 8 indices corresponds to a specific `z` value and contains all the positions for `y = 0`, `y = 1`, and `y = 2` in a fixed order.
+
+### Key Observations:
+1. **Each block** (of 8 indices) corresponds to a unique `z` value.
+2. **Within each block**, the indices are distributed as:
+   - `y = 0`: 3 positions → `x = 0, 1, 2`
+   - `y = 1`: 2 positions → `x = 0, 1`
+   - `y = 2`: 3 positions → `x = 0, 1, 2`
+3. This results in a fixed structure for each block: 8 positions total.
+
+---
+
+### Algorithm:
+Given an index `n`:
+1. **Determine the block `k`**: `k = n // 8`
+2. **Find the position within the block**: `pos_in_block = n % 8`
+3. **Map the position to `(x, y)`** based on the structure:
+   - If `pos_in_block <= 2`: `y = 0`, `x = pos_in_block`
+   - If `3 <= pos_in_block <= 4`: `y = 1`, `x = pos_in_block - 3`
+   - If `5 <= pos_in_block <= 7`: `y = 2`, `x = pos_in_block - 5`
+4. **Set `z = k`**
+
+---
+
+### Python Implementation:
+
+```python
+def get_coordinates(n):
+    k = n // 8
+    pos_in_block = n % 8
+
+    if pos_in_block <= 2:
+        y = 0
+        x = pos_in_block
+    elif pos_in_block <= 4:
+        y = 1
+        x = pos_in_block - 3
+    else:
+        y = 2
+        x = pos_in_block - 5
+
+    z = k
+    return (x, y, z)
+```
+
+---
+
+### Example Usage:
+
+```python
+print(get_coordinates(0))   # Output: (0, 0, 0)
+print(get_coordinates(5))   # Output: (0, 2, 0)
+print(get_coordinates(10))  # Output: (2, 0, 1)
+print(get_coordinates(26))  # Output: (2, 0, 3)
+```
+
+---
+
+### Explanation of the Mapping:
+- For `n = 0`: Block 0, position 0 → `(0, 0, 0)`
+- For `n = 5`: Block 0, position 5 → `(0, 2, 0)`
+- For `n = 10`: Block 1, position 2 → `(2, 0, 1)`
+- For `n = 26`: Block 3, position 2 → `(2, 0, 3)`
+
+This function provides a direct and efficient way to convert an index into its corresponding 3D coordinates based on the structured block pattern.

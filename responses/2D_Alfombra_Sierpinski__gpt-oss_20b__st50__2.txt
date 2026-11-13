@@ -1,0 +1,322 @@
+**Solution Explanation**
+
+For every vertex `v` we need the number of unordered pairs of different vertices  
+`(u , w)` such that the lowest common ancestor of `u` and `w` is exactly `v`.
+
+--------------------------------------------------------------------
+
+#### 1.   Observations
+
+* The tree is rooted at vertex `1`.  
+  The parent of a vertex is uniquely defined.
+
+* All vertices that lie in the subtree of `v` have `v` as an ancestor.  
+  For a pair `(u , w)` with `LCA(u,w)=v` both vertices must lie in the subtree
+  of `v` (otherwise one of them would be outside of `v`’s subtree and the
+  LCA would be an ancestor of `v`).
+
+* If we delete `v` from its subtree, the remaining vertices are split into
+  disjoint connected components – exactly the subtrees of the children of `v`.  
+  For two vertices belonging to two **different** child subtrees the LCA
+  is `v`.  
+  For a vertex inside the same child subtree the LCA is that child.
+
+* For a vertex `v` let
+
+```
+childSize[1] , childSize[2] , … , childSize[k]
+```
+
+be the sizes of the subtrees of all children of `v`.  
+All vertices of `v`’s subtree are
+
+```
+size(v) = 1 + Σ childSize[i]          (the +1 counts v itself)
+```
+
+The number of pairs of vertices inside the subtree of `v`
+with LCA exactly `v` is
+
+```
+#(pairs (v , x))      = size(v) – 1
+#(pairs from different children)
+        = sum over all unordered pairs of children:
+          childSize[i] * childSize[j]
+```
+
+The second sum can be obtained from the classic identity
+
+```
+( Σ childSize )²  =  Σ childSize[i]²  +  2 * Σ_{i<j} childSize[i]*childSize[j]
+```
+
+so
+
+```
+Σ_{i<j} childSize[i]*childSize[j] =
+      ( (Σ childSize)² – Σ childSize[i]² ) / 2
+```
+
+--------------------------------------------------------------------
+
+#### 2.   Algorithm
+```
+read n, q
+build adjacency list of the tree
+read all q query vertices
+
+// 1.  compute parent[v] and subtreeSize[v] for all vertices
+DFS from root 1 (iteratively to avoid recursion depth problems)
+
+    for each vertex in post‑order
+        size = 1                           // count itself
+        for every child c of v
+            size += subtreeSize[c]
+        subtreeSize[v] = size
+
+// 2.  answer all queries
+for each queried vertex v
+    childSizes = [ subtreeSize[child] for child of v  (child != parent[v]) ]
+
+    if childSizes is empty
+         answer = 0
+    else
+         total   = Σ childSizes
+         sumSq   = Σ childSizes[i]²
+         pairsFromDifferentChildren = (total*total - sumSq) // 2
+         pairsWithV                 = subtreeSize[v] - 1
+         answer = pairsWithV + pairsFromDifferentChildren
+
+    output answer
+```
+
+--------------------------------------------------------------------
+
+#### 3.   Correctness Proof  
+
+We prove that the algorithm outputs the correct number of vertex pairs
+for every queried vertex `v`.
+
+---
+
+##### Lemma 1  
+For every vertex `v` the set of vertices that lie in `v`’s subtree
+(consisting of `v` itself) is exactly
+`{v} ∪ ⋃_{c child of v} (subtree of c)`.
+
+**Proof.**
+
+By definition a vertex `x` is in the subtree of `v`
+iff the unique simple path from `x` to the root contains `v`.
+This path first reaches `v` and then continues into exactly one
+child subtree of `v`.  
+Hence `x` belongs either to `v` itself or to the subtree of one child
+of `v`.  
+Conversely every vertex of a child subtree has a path to the root that
+passes through `v`. ∎
+
+
+
+##### Lemma 2  
+Let `c` be a child of `v`.  
+For every vertex `x` in the subtree of `c` (including `c` itself)
+the lowest common ancestor of `v` and `x` is `v`.
+
+**Proof.**
+
+All vertices of the subtree of `c` are descendants of `c`,
+and all such paths from them to the root pass through `c` and then
+through `v`.  
+`v` is an ancestor of both `v` and `x`.  
+No vertex deeper than `v` is an ancestor of `v`;  
+any vertex strictly below `v` cannot be an ancestor of `v`.  
+Thus the lowest common ancestor of `v` and `x` is `v`. ∎
+
+
+
+##### Lemma 3  
+Let `c₁` and `c₂` be two distinct children of `v`.  
+For every pair `(x , y)` with `x` in the subtree of `c₁`
+and `y` in the subtree of `c₂`,
+the lowest common ancestor of `x` and `y` is exactly `v`.
+
+**Proof.**
+
+The path from `x` to the root goes up to `c₁`, then to `v`.  
+The path from `y` to the root goes up to `c₂`, then to `v`.  
+These two paths meet first at `v`, because the subtrees of `c₁` and `c₂`
+are disjoint except for their common ancestor `v`.  
+Hence the lowest common ancestor of `x` and `y` is `v`. ∎
+
+
+
+##### Lemma 4  
+For a vertex `v` the number of unordered pairs of vertices `(u , w)`
+with lowest common ancestor equal to `v` is
+
+```
+(subtreeSize[v] – 1)            // pairs involving v itself
++ Σ_{i<j} childSize[i] * childSize[j]   // pairs from two different children
+```
+
+**Proof.**
+
+*Pairs involving `v`*  
+All vertices of `v`’s subtree except `v` itself form a pair with `v`,
+and by Lemma&nbsp;2 each such pair has LCA equal to `v`.  
+There are exactly `subtreeSize[v] – 1` such pairs.
+
+*Pairs not involving `v`*  
+Any vertex outside the subtree of `v` can never have LCA `v` with
+another vertex (the LCA would lie above `v`).  
+Thus all remaining pairs must be taken completely inside the subtree of
+`v` and must not involve `v`.  
+By Lemma&nbsp;3 a pair of vertices from two different child subtrees
+has LCA `v`.  
+The number of such pairs is exactly  
+`Σ_{i<j} childSize[i] * childSize[j]`.  
+No other pair inside the subtree of `v` can have LCA `v`
+(because pairs inside the same child subtree have LCA equal to that
+child). ∎
+
+
+
+##### Lemma 5  
+The algorithm outputs the value stated in Lemma&nbsp;4 for every
+queried vertex `v`.
+
+**Proof.**
+
+During preprocessing the DFS computes `subtreeSize[v]` correctly for
+every vertex.  
+For a queried vertex `v` the algorithm collects all child subtrees
+(`childSize[i]`).  
+The expression
+
+```
+total = Σ childSize[i]
+sumSq = Σ childSize[i]²
+pairsFromDifferentChildren = (total² – sumSq) / 2
+```
+
+is exactly `Σ_{i<j} childSize[i] * childSize[j]`
+by the algebraic identity used in Lemma&nbsp;3.  
+`pairsWithV = subtreeSize[v] – 1` counts the pairs involving `v`
+from Lemma&nbsp;4.  
+Their sum is precisely the value required by Lemma&nbsp;4, which the
+algorithm outputs. ∎
+
+
+
+##### Theorem  
+For every query vertex `v` the algorithm prints the exact number of
+unordered pairs of distinct vertices in the tree whose lowest common
+ancestor equals `v`.
+
+**Proof.**
+
+By Lemma&nbsp;5 the algorithm outputs for each `v` the value described
+in Lemma&nbsp;4.  
+By Lemma&nbsp;4 that value equals the desired number of pairs.
+Therefore all printed answers are correct. ∎
+
+
+
+--------------------------------------------------------------------
+
+#### 4.   Complexity Analysis
+
+```
+Building adjacency list :  O(n)
+DFS (subtree sizes)      :  O(n)
+Answering all queries    :  O(q)        (each query needs O(deg(v)) time,
+                                         summed over all queries this is O(n+q))
+Memory usage             :  O(n)         (adjacency list, two arrays)
+```
+
+With `n ≤ 2·10⁵` and `q` of the same order the program easily fits
+into the limits.
+
+--------------------------------------------------------------------
+
+#### 5.   Reference Implementation  (Python 3)
+
+```python
+import sys
+
+# -------------------------------------------------------------
+
+def solve() -> None:
+    data = sys.stdin.buffer.read().split()
+    if not data:
+        return
+
+    it = iter(data)
+
+    # First line: n q   (according to the examples)
+    n = int(next(it))
+    q = int(next(it))
+
+    # Build adjacency list
+    g = [[] for _ in range(n + 1)]
+    for _ in range(n - 1):
+        a = int(next(it))
+        b = int(next(it))
+        g[a].append(b)
+        g[b].append(a)
+
+    queries = [int(next(it)) for _ in range(q)]
+
+    # ---------------------------------------------------------
+    # DFS to compute parent and subtree sizes (iterative)
+    parent = [0] * (n + 1)
+    subtree = [0] * (n + 1)
+
+    stack = [(1, 0, 0)]          # (node, parent, state)  state 0=pre, 1=post
+    while stack:
+        v, p, st = stack.pop()
+        if st == 0:              # pre‑order
+            parent[v] = p
+            stack.append((v, p, 1))
+            for to in g[v]:
+                if to != p:
+                    stack.append((to, v, 0))
+        else:                    # post‑order
+            sz = 1
+            for to in g[v]:
+                if to != p:
+                    sz += subtree[to]
+            subtree[v] = sz
+
+    # ---------------------------------------------------------
+    out_lines = []
+    for v in queries:
+        child_sizes = []
+        pv = parent[v]
+        for to in g[v]:
+            if to != pv:
+                child_sizes.append(subtree[to])
+
+        if not child_sizes:                # leaf
+            out_lines.append("0")
+            continue
+
+        total = sum(child_sizes)
+        sum_sq = sum(x * x for x in child_sizes)
+        # number of pairs taken from two different children
+        pairs_from_children = (total * total - sum_sq) // 2
+
+        # pairs involving v itself
+        pairs_with_v = subtree[v] - 1
+
+        out_lines.append(str(pairs_with_v + pairs_from_children))
+
+    sys.stdout.write("\n".join(out_lines))
+
+# -------------------------------------------------------------
+if __name__ == "__main__":
+    solve()
+```
+
+The program follows exactly the algorithm proven correct above
+and conforms to the required input and output format.

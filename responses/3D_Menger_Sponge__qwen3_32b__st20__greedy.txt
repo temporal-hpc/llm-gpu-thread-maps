@@ -1,0 +1,117 @@
+To determine the coordinates `(x, y)` for a given integer `n`, we can model the problem as a **grid traversal** where each level (or "ring") around the origin adds a fixed number of positions. Based on the structure described in the question, we can derive a pattern where:
+
+- **Even levels** (e.g., `z = 0, 2, 4, ...`) contain **8 positions**.
+- **Odd levels** (e.g., `z = 1, 3, 5, ...`) contain **4 positions**.
+
+We can compute the **level `z`** and the **position within that level** using integer division and modulo operations.
+
+---
+
+### ✅ Step-by-Step Breakdown
+
+1. **Determine the level `z` and position `pos`**:
+   - `k = n // 12`: This gives the number of full 12-position blocks.
+   - `m = n % 12`: This gives the position within the current block.
+   - If `m <= 7`, then `z = 2 * k` (even level), and `pos = m`.
+   - Else, `z = 2 * k + 1` (odd level), and `pos = m - 8`.
+
+2. **Map the position to coordinates**:
+   - For **even levels**, the 8 positions form a square around the origin.
+   - For **odd levels**, the 4 positions are at the corners of a square.
+
+---
+
+### ✅ Python Implementation
+
+```python
+def get_coordinates(n):
+    k = n // 12
+    m = n % 12
+
+    if m <= 7:
+        z = 2 * k
+        pos = m
+    else:
+        z = 2 * k + 1
+        pos = m - 8
+
+    scale = z // 2 + 1  # Determine the size of the square
+
+    if z % 2 == 0:  # Even level: 8 positions
+        if pos == 0:
+            return (scale, scale)
+        elif pos == 1:
+            return (scale, -scale)
+        elif pos == 2:
+            return (-scale, -scale)
+        elif pos == 3:
+            return (-scale, scale)
+        elif pos == 4:
+            return (scale, scale - 1)
+        elif pos == 5:
+            return (scale - 1, -scale)
+        elif pos == 6:
+            return (-scale, -scale + 1)
+        elif pos == 7:
+            return (-scale + 1, scale)
+    else:  # Odd level: 4 positions
+        if pos == 0:
+            return (scale, scale)
+        elif pos == 1:
+            return (scale, -scale)
+        elif pos == 2:
+            return (-scale, -scale)
+        elif pos == 3:
+            return (-scale, scale)
+```
+
+---
+
+### ✅ Example Usage
+
+```python
+for n in range(20):
+    print(f"n = {n} -> {get_coordinates(n)}")
+```
+
+**Output:**
+
+```
+n = 0 -> (1, 1)
+n = 1 -> (1, -1)
+n = 2 -> (-1, -1)
+n = 3 -> (-1, 1)
+n = 4 -> (1, 0)
+n = 5 -> (0, -1)
+n = 6 -> (-1, 0)
+n = 7 -> (0, 1)
+n = 8 -> (1, 1)
+n = 9 -> (1, -1)
+n = 10 -> (-1, -1)
+n = 11 -> (-1, 1)
+n = 12 -> (2, 2)
+n = 13 -> (2, -2)
+n = 14 -> (-2, -2)
+n = 15 -> (-2, 2)
+n = 16 -> (2, 1)
+n = 17 -> (1, -2)
+n = 18 -> (-2, -1)
+n = 19 -> (-1, 2)
+```
+
+---
+
+### ✅ Notes
+
+- This mapping is **valid for small values of `n`** and follows the pattern described in the question.
+- For **larger values**, the pattern may need to be extended or adjusted depending on the actual grid structure.
+- The `scale` variable ensures that the coordinates grow outward as `z` increases.
+
+---
+
+### ✅ Summary
+
+This solution maps each integer `n` to a coordinate `(x, y)` in a grid where:
+- Even levels (`z = 0, 2, 4, ...`) have 8 positions.
+- Odd levels (`z = 1, 3, 5, ...`) have 4 positions.
+- The coordinates are determined based on the position within the level and the scale of the square.

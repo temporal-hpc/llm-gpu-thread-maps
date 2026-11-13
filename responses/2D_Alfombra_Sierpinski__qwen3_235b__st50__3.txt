@@ -1,0 +1,52 @@
+To solve this problem, we need to determine the coordinates (x, y) of the nth point in a specific sequence where points are ordered by the sum of their coordinates (x + y) in ascending order. For points with the same sum, they are ordered by increasing x-coordinate. 
+
+### Approach
+1. **Problem Analysis**: The sequence starts at (0, 0). The next points are ordered such that all points with a sum of coordinates equal to 1 come before those with a sum of 2, and so on. Within each sum group, points are ordered by increasing x-coordinate (which implies decreasing y-coordinate since x + y is constant).
+2. **Key Insight**: For a given sum `s = x + y`, the number of points preceding this group is the sum of the first `s` natural numbers, i.e., `s*(s + 1)/2`. The nth point will lie in the smallest group where the cumulative count of points up to sum `s` is at least `n`.
+3. **Finding the Group**: 
+   - Compute `k = n - 1` (to convert to zero-based indexing).
+   - The sum `s` of the group containing the nth point is derived from the equation `s*(s + 1)/2 <= k < (s + 1)*(s + 2)/2`. Solving for `s` involves finding the integer square root of `8*k + 1` and adjusting.
+4. **Position within Group**: Once `s` is found, the starting index of the group is `start = s*(s + 1)/2`. The position within the group is `pos = k - start`. The coordinates are then `(pos, s - pos)`.
+
+### Solution Code
+```python
+def main():
+    n = int(input().strip())
+    k = n - 1
+    if k < 0:
+        print("0 0")
+        return
+    m = 8 * k + 1
+    lo, hi = 1, m
+    t = 1
+    while lo <= hi:
+        mid = (lo + hi) // 2
+        sq = mid * mid
+        if sq <= m:
+            t = mid
+            lo = mid + 1
+        else:
+            hi = mid - 1
+    s_val = (t - 1) // 2
+    x = k - s_val * (s_val + 1) // 2
+    y = s_val - x
+    print(f"{x} {y}")
+
+if __name__ == "__main__":
+    main()
+```
+
+### Explanation
+1. **Reading Input**: The input is read as an integer `n`, representing the position in the sequence.
+2. **Zero-Based Index**: Convert `n` to zero-based index by setting `k = n - 1`.
+3. **Special Case Handling**: If `k` is negative (though constraints ensure `n >= 1`), handle it by printing `(0, 0)`.
+4. **Finding Group Sum `s`**:
+   - Compute `m = 8*k + 1` to facilitate solving the quadratic equation for `s`.
+   - Use binary search to find the largest integer `t` such that `t^2 <= m`. This helps in deriving `s` as `(t - 1) // 2`.
+5. **Calculating Coordinates**:
+   - The starting index of the group for sum `s` is `s*(s + 1)/2`.
+   - The position within the group is `k - start_index`, which gives `x`.
+   - The y-coordinate is derived as `s - x`.
+6. **Output**: Print the coordinates `(x, y)`.
+
+This approach efficiently locates the nth point in the sequence by leveraging mathematical insights and binary search, ensuring optimal performance even for large values of `n`.

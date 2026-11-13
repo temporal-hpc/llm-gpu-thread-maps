@@ -1,0 +1,93 @@
+To solve the problem of mapping a non-negative integer `n` to a coordinate `(x, y)` based on the triangular number pattern, we can use a mathematical approach derived from the properties of triangular numbers.
+
+---
+
+### 🧠 **Understanding the Pattern**
+
+The triangular number sequence is defined as:
+
+$$
+T_y = \frac{y(y+1)}{2}
+$$
+
+Each triangular number corresponds to the sum of the first `y` natural numbers. The sequence looks like:
+
+$$
+T_0 = 0,\quad T_1 = 1,\quad T_2 = 3,\quad T_3 = 6,\quad T_4 = 10,\quad \dots
+$$
+
+Given an integer `n`, we want to find the largest `y` such that:
+
+$$
+T_y \leq n
+$$
+
+Once we find such a `y`, the corresponding `x` is simply:
+
+$$
+x = n - T_y
+$$
+
+This gives us the coordinate `(x, y)`.
+
+---
+
+### ✅ **Implementation in Python**
+
+We can implement this using the `math` module to compute the square root and find the floor of the expression:
+
+$$
+y = \left\lfloor \frac{\sqrt{8n + 1} - 1}{2} \right\rfloor
+$$
+
+This formula is derived from solving the quadratic inequality:
+
+$$
+\frac{y(y+1)}{2} \leq n
+$$
+
+---
+
+### 🧪 **Code**
+
+```python
+import math
+
+def map_to_coordinates(n):
+    if n < 0:
+        raise ValueError("n must be a non-negative integer")
+    
+    # Compute the largest y such that T_y <= n
+    sqrt_val = math.sqrt(8 * n + 1)
+    y = (sqrt_val - 1) / 2
+    y_floor = math.floor(y)
+    
+    # Compute the triangular number at y_floor
+    triangular_number = y_floor * (y_floor + 1) // 2
+    
+    # Compute x
+    x = n - triangular_number
+    
+    return (x, y_floor)
+```
+
+---
+
+### 🧾 **Example Usage**
+
+```python
+print(map_to_coordinates(0))   # (0, 0)
+print(map_to_coordinates(1))   # (0, 1)
+print(map_to_coordinates(3))   # (0, 2)
+print(map_to_coordinates(6))   # (0, 3)
+print(map_to_coordinates(10))  # (0, 4)
+print(map_to_coordinates(11))  # (1, 4)
+```
+
+---
+
+### ⚠️ **Robustness Consideration**
+
+While the above implementation is efficient and accurate for most practical values of `n`, it relies on floating-point arithmetic. For very large values of `n`, floating-point precision might introduce errors. In such cases, a **binary search** approach to find the correct `y` can be used for better numerical stability.
+
+However, for the scope of this problem and typical use cases, the current implementation is both **correct** and **efficient**.

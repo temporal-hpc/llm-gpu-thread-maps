@@ -1,0 +1,10 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer.")
+    x = n // 5
+    y = (n % 5) // 1
+    z = n % 5 % 1 + (n // 5 // 5)
+    z = min(z, 4)
+    return (x, y, z)
+```

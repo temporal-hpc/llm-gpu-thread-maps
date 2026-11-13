@@ -1,0 +1,34 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError
+    B = 3
+    R = 3
+    P = 20
+    b = n // P
+    o = n % P
+    by = (b // R) * B
+    bx = (b % R) * B
+    if o < 8:
+        iz = 0
+        lo = o
+    elif o < 12:
+        iz = 1
+        lo = o - 8
+    else:
+        iz = 2
+        lo = o - 12
+    c = 0
+    for iy in range(B):
+        for ix in range(B):
+            if iz % 2 == 0:
+                if ix == 1 and iy == 1:
+                    continue
+            else:
+                if not (ix in (0, 2) and iy in (0, 2)):
+                    continue
+            if c == lo:
+                return (bx + ix, by + iy, iz)
+            c += 1
+    raise RuntimeError
+```

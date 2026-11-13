@@ -1,0 +1,26 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError
+    block_idx, offset = divmod(n, 20)
+    block_x, block_y = divmod(block_idx, 3)
+    if offset < 8:
+        layer = 0
+        idx = offset
+        even = [(0,0),(1,0),(2,0),(0,1),(2,1),(0,2),(1,2),(2,2)]
+        dx, dy = even[idx]
+    elif offset < 12:
+        layer = 1
+        idx = offset - 8
+        odd = [(0,0),(2,0),(0,2),(2,2)]
+        dx, dy = odd[idx]
+    else:
+        layer = 2
+        idx = offset - 12
+        even = [(0,0),(1,0),(2,0),(0,1),(2,1),(0,2),(1,2),(2,2)]
+        dx, dy = even[idx]
+    x = block_x * 3 + dx
+    y = block_y * 3 + dy
+    z = layer
+    return (x, y, z)
+```

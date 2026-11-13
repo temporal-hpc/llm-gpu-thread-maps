@@ -1,0 +1,29 @@
+To solve this problem, we need to determine the coordinates (x, y) of a given non-negative integer `n` in a triangular arrangement of numbers. The arrangement starts with 0 at the top (row 0), followed by 1 and 2 in row 1, then 3, 4, 5 in row 2, and so on. Each subsequent row contains one more number than the previous row. 
+
+### Approach
+1. **Problem Analysis**: The key observation is that the first element of row `k` is the sum of the first `k` natural numbers, which is `k*(k+1)/2`. For any given `n`, we need to find the largest row `k` such that the first element of row `k` (i.e., `k*(k+1)/2`) is less than or equal to `n`. The column index `x` within the row is then `n - k*(k+1)/2`.
+
+2. **Mathematical Insight**: The row index `k` can be derived by solving the quadratic equation `k*(k+1)/2 <= n`. Rearranging this, we get `k^2 + k - 2n <= 0`. The solution involves finding the integer part of the positive root of this quadratic equation, which is `k = floor((-1 + sqrt(1 + 8n))/2)`.
+
+3. **Algorithm Selection**: 
+   - Compute `s = sqrt(8n + 1)` using integer square root to avoid floating-point precision issues.
+   - Derive `k` as `(s - 1) // 2`.
+   - Calculate `x` as `n - k*(k + 1)//2`.
+
+### Solution Code
+```python
+import math
+
+def solution(n):
+    s = math.isqrt(8 * n + 1)
+    k = (s - 1) // 2
+    x = n - (k * (k + 1)) // 2
+    return [x, k]
+```
+
+### Explanation
+1. **Integer Square Root Calculation**: The expression `8 * n + 1` is computed to form the discriminant of the quadratic equation `k^2 + k - 2n = 0`. The integer square root of this value (`s`) is found using `math.isqrt`, which efficiently handles large integers without precision loss.
+2. **Row Index Calculation**: The row index `k` is derived from `s` using the formula `(s - 1) // 2`. This formula comes from solving the quadratic equation for `k`, ensuring `k` is the largest integer such that the sum of the first `k` natural numbers (i.e., `k*(k+1)/2`) is less than or equal to `n`.
+3. **Column Index Calculation**: The column index `x` within row `k` is simply the offset of `n` from the first element of the row, calculated as `n - k*(k + 1)//2`.
+
+This approach efficiently locates the coordinates of `n` in the triangular arrangement by leveraging mathematical insights and integer arithmetic to avoid precision errors, ensuring correctness for all valid non-negative integers `n`.

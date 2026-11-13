@@ -1,0 +1,82 @@
+To determine the 3D coordinates $(x, y, z)$ for a given integer $n$, we observe a specific pattern in how the coordinates are generated. The sequence is structured such that for each fixed $z$, the coordinates $(x, y)$ follow a specific interleaving order, and the pattern repeats every 8 values of $n$.
+
+---
+
+### **Key Observations**
+
+- The pattern of $(x, y)$ coordinates for each $z$ is consistent and cycles every 8 values.
+- The sequence of $(x, y)$ for each $z$ is:
+  $$
+  \begin{aligned}
+  (0,0), (1,0), (2,0), \\
+  (0,1), (2,1), \\
+  (0,2), (1,2), (2,2)
+  \end{aligned}
+  $$
+- This corresponds to the following mapping of $k = n \mod 8$ to $(x, y)$:
+  - $k = 0$: $(0, 0)$
+  - $k = 1$: $(1, 0)$
+  - $k = 2$: $(2, 0)$
+  - $k = 3$: $(0, 1)$
+  - $k = 4$: $(2, 1)$
+  - $k = 5$: $(0, 2)$
+  - $k = 6$: $(1, 2)$
+  - $k = 7$: $(2, 2)$
+
+---
+
+### **General Formula**
+
+Given an integer $n \geq 0$, the 3D coordinates $(x, y, z)$ are determined as follows:
+
+1. **Compute $z$:**
+   $$
+   z = \left\lfloor \frac{n}{8} \right\rfloor
+   $$
+
+2. **Compute $k$:**
+   $$
+   k = n \mod 8
+   $$
+
+3. **Determine $(x, y)$ based on $k$:**
+   - If $k < 3$:
+     $$
+     y = 0,\quad x = k
+     $$
+   - If $3 \leq k < 5$:
+     $$
+     y = 1,\quad x = 2 \cdot (k - 3)
+     $$
+   - If $k \geq 5$:
+     $$
+     y = 2,\quad x = k - 5
+     $$
+
+---
+
+### **Example**
+
+Let’s compute the coordinates for $n = 11$:
+
+- $z = \left\lfloor \frac{11}{8} \right\rfloor = 1$
+- $k = 11 \mod 8 = 3$
+- Since $3 \leq k < 5$, then $y = 1$, and $x = 2 \cdot (3 - 3) = 0$
+
+So, $(x, y, z) = (0, 1, 1)$
+
+---
+
+### **Final Answer**
+
+$$
+\boxed{
+\begin{aligned}
+&z = \left\lfloor \frac{n}{8} \right\rfloor \\
+&k = n \mod 8 \\
+&\text{if } k < 3: \quad y = 0,\ x = k \\
+&\text{elif } 3 \leq k < 5: \quad y = 1,\ x = 2(k - 3) \\
+&\text{else: } y = 2,\ x = k - 5
+\end{aligned}
+}
+$$

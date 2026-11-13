@@ -1,0 +1,9 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer")
+    row = int((2 * (n ** 0.5)) - 1) // 2 if n > 0 else 0
+    diagonal = (row * (row + 1)) // 2
+    col = n - diagonal
+    return (col, row)
+```

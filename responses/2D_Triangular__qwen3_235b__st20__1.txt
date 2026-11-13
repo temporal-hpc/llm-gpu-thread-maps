@@ -1,0 +1,31 @@
+To solve this problem, we need to compute the factorial of a given non-negative integer \( n \). The factorial of \( n \) (denoted as \( n! \)) is the product of all positive integers less than or equal to \( n \). The factorial of 0 is defined as 1.
+
+### Approach
+1. **Input Validation**: 
+   - Check if the input \( n \) is of type `int` and non-negative. If not, raise a `ValueError`.
+2. **Factorial Calculation**:
+   - Initialize the result to 1 (since \( 0! = 1 \)).
+   - Iterate from 1 to \( n \) (inclusive), multiplying each integer with the running product to compute the factorial.
+
+### Solution Code
+```python
+def factorial(n):
+    if type(n) is not int or n < 0:
+        raise ValueError("Input must be a non-negative integer")
+    result = 1
+    for i in range(1, n + 1):
+        result *= i
+    return result
+```
+
+### Explanation
+1. **Input Validation**:
+   - The condition `type(n) is not int` ensures that the input is strictly an integer (rejecting booleans and other types).
+   - The condition `n < 0` checks for negative values, which are invalid for factorial computation.
+   - If either condition is true, a `ValueError` is raised with an appropriate message.
+2. **Factorial Calculation**:
+   - The loop starts from 1 and goes up to \( n \), multiplying each integer with the accumulated product (`result`).
+   - For \( n = 0 \), the loop does not execute, and the result remains 1, which is correct.
+   - This approach efficiently computes the factorial in \( O(n) \) time with constant space complexity.
+
+This solution ensures correctness for all valid inputs and handles invalid inputs gracefully by raising appropriate errors. The iterative method is chosen for its simplicity and efficiency, avoiding potential recursion depth issues for larger values of \( n \).

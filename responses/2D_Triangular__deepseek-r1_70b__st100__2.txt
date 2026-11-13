@@ -1,0 +1,46 @@
+To determine the coordinates (x, y) for a given integer n ≥ 0 using a mathematical approach:
+
+1. **Calculate s**:
+   \[
+   s = 1 + 8n
+   \]
+
+2. **Compute the integer square root of s**:
+   \[
+   \text{sqrt\_s} = \left\lfloor \sqrt{s} \right\rfloor
+   \]
+   This can be done using `math.isqrt` in Python.
+
+3. **Determine k**:
+   \[
+   k = \frac{\text{sqrt\_s} - 1}{2}
+   \]
+
+4. **Calculate x**:
+   \[
+   x = n - \left( \frac{k(k + 1)}{2} \right)
+   \]
+   This computes the position within the group defined by k.
+
+5. **Set y to k**:
+   \[
+   y = k
+   \]
+
+This method efficiently maps the integer n to its corresponding (x, y) coordinates using mathematical properties and avoids iterative approaches.
+
+```python
+import math
+
+def get_coords(n):
+    s = 1 + 8 * n
+    sqrt_s = math.isqrt(s)
+    k = (sqrt_s - 1) // 2
+    x = n - (k * (k + 1) // 2)
+    y = k
+    return (x, y)
+
+# Example usage:
+n = 0
+print(get_coords(n))  # Output: (0, 0)
+```

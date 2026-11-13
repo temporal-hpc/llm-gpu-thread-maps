@@ -1,0 +1,175 @@
+**Solution Explanation**
+
+For every test case we are given
+
+* two vertex indices `a` and `b`
+* a list of all vertices of the graph – each vertex is an integer 3‑tuple  
+  `(x , y , z)` and vertices are listed in the order of their indices  
+  (`index 0` → first tuple, `index 1` → second tuple, …).
+
+Two vertices are connected by an edge iff they differ by exactly **1** in
+exactly one coordinate.  
+That means the graph is a subgraph of the infinite 3‑dimensional
+integer grid and the shortest path between two vertices is simply the
+Manhattan distance
+
+```
+|x_a – x_b| + |y_a – y_b| + |z_a – z_b|
+```
+
+because we can move along the three coordinate axes one unit at a time
+and such a path always exists in the subgraph (the input guarantees that
+the graph contains all vertices mentioned in the queries).
+
+So the task reduces to:
+
+1. read the two indices `a` and `b`;
+2. read all vertex coordinates, store them in a list `verts`;
+3. look up `verts[a]` and `verts[b]`;
+4. output the Manhattan distance.
+
+The input can contain the vertex list on one line or on several
+lines.  The safest way is to read tokens until we have collected at
+least `max(a,b)+1` vertex tuples.
+
+
+
+--------------------------------------------------------------------
+
+#### Correctness Proof  
+
+We prove that the algorithm outputs the length of the shortest path
+between the two queried vertices for every test case.
+
+---
+
+##### Lemma 1  
+In the graph every pair of vertices `u` and `v` that differ by exactly
+`1` in one coordinate are connected by an edge, and no other pairs are
+connected.
+
+**Proof.**  
+By definition of the graph (problem statement) an edge is created
+exactly when two vertices differ by one in one coordinate and equal in
+the other two.  Therefore the lemma follows directly. ∎
+
+
+
+##### Lemma 2  
+For any two vertices `u` and `v` of the graph, there exists a walk
+whose length equals their Manhattan distance  
+`dist(u,v) = |x_u-x_v| + |y_u-y_v| + |z_u-z_v|`.
+
+**Proof.**  
+Assume `x_u <= x_v`.  
+Starting from `u`, repeatedly increase the `x`–coordinate by `1` until
+`x` becomes `x_v`.  After `|x_u-x_v|` steps we reach a vertex with the
+same `y` and `z` coordinates as `v`.  
+Next increase the `y`–coordinate until it equals `y_v` – this needs
+`|y_u-y_v|` steps.  
+Finally increase the `z`–coordinate until it equals `z_v`; this needs
+`|z_u-z_v|` steps.  
+All intermediate vertices differ by one in a single coordinate, so by
+Lemma&nbsp;1 they are connected by edges.  
+The total number of steps is exactly the Manhattan distance. ∎
+
+
+
+##### Lemma 3  
+No walk between `u` and `v` can have length smaller than the Manhattan
+distance `dist(u,v)`.
+
+**Proof.**  
+Each edge changes exactly one coordinate by ±1, so a walk of length
+`ℓ` can change each coordinate by at most `ℓ` units.  Therefore any
+walk of length `< dist(u,v)` cannot alter all three coordinates enough
+to transform `u` into `v`.  Hence a shorter walk does not exist. ∎
+
+
+
+##### Theorem  
+For every test case the algorithm outputs the length of the shortest
+path between the two queried vertices.
+
+**Proof.**  
+By Lemma&nbsp;2 a walk of length `dist(u,v)` exists.  
+By Lemma&nbsp;3 no walk can be shorter.  
+Therefore `dist(u,v)` is exactly the length of the shortest path.
+The algorithm computes this value and outputs it, so the produced
+output is correct. ∎
+
+
+
+--------------------------------------------------------------------
+
+#### Complexity Analysis  
+
+Let `n` be the number of vertices given for a test case.  
+Reading the vertices and storing them takes `O(n)` time and `O(n)` space.  
+Computing the Manhattan distance is `O(1)`.  
+Hence the total complexity per test case is `O(n)` time and `O(n)`
+memory.  The algorithm is easily fast enough for the limits of the
+original problem.
+
+
+
+--------------------------------------------------------------------
+
+#### Reference Implementation (Python 3)
+
+```python
+import sys
+import math
+
+def solve() -> None:
+    data = sys.stdin.read().strip().split()
+    if not data:
+        return
+    it = iter(data)
+    t = int(next(it))
+    out_lines = []
+    for _ in range(t):
+        # read the two vertex indices
+        a = int(next(it))
+        b = int(next(it))
+        # read the rest of the line(s) containing all vertices
+        # we do not know how many vertices are present; we read until
+        # we have at least max(a,b)+1 triples.
+        verts = []
+        # The vertices may be given on one or several lines.
+        # We read tokens until we have enough for the queried indices.
+        needed = max(a, b) + 1
+        # collect tokens until we have enough vertices
+        tokens = []
+        while len(verts) < needed:
+            # If we already consumed all tokens, break
+            try:
+                token = next(it)
+            except StopIteration:
+                break
+            tokens.append(token)
+            # Every three tokens form a vertex
+            if len(tokens) == 3:
+                x = int(tokens[0])
+                y = int(tokens[1])
+                z = int(tokens[2])
+                verts.append((x, y, z))
+                tokens = []
+        # After the loop, we should have at least `needed` vertices.
+        if len(verts) <= max(a, b):
+            # If the input format is different, we cannot proceed.
+            # For safety, we stop here.
+            sys.stderr.write("Warning: not enough vertices read.\n")
+            break
+        xa, ya, za = verts[a]
+        xb, yb, zb = verts[b]
+        dist = abs(xa - xb) + abs(ya - yb) + abs(za - zb)
+        out_lines.append(str(dist))
+    sys.stdout.write("\n".join(out_lines))
+
+if __name__ == "__main__":
+    solve()
+```
+
+The program follows exactly the algorithm proven correct above
+and conforms to the required function signature `solve()`.

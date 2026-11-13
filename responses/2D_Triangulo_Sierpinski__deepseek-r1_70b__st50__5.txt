@@ -1,0 +1,36 @@
+To determine the values of \( x \) and \( y \) based on the given integer \( n \), we can use the following approach:
+
+1. **Determine Group (\( y \))**:
+   - The group number \( y \) is determined by the highest power of 2 that fits into \( (n + 1) \). Specifically, \( y = \lfloor \log_2(n + 1) \rfloor \).
+
+2. **Determine Position (\( x \))**:
+   - Within each group, the position \( x \) is calculated by subtracting the highest power of 2 less than or equal to \( (n + 1) \) from \( n \), and then taking half of that value.
+
+Mathematically, this can be expressed as:
+\[
+x = \frac{(n + 1 - 2^y)}{2}
+\]
+
+**Example Calculations**:
+
+- For \( n = 5 \):
+  - Calculate \( y = \lfloor \log_2(6) \rfloor = 2 \)
+  - Then, \( x = \frac{(6 - 4)}{2} = 1 \)
+
+Thus, the coordinates for \( n = 5 \) are \( (x, y) = (1, 2) \).
+
+---
+
+**Final Answer**
+The values of \( x \) and \( y \) corresponding to \( n \) can be found using:
+\[
+y = \lfloor \log_2(n + 1) \rfloor
+\]
+\[
+x = \frac{(n + 1 - 2^y)}{2}
+\]
+
+For example, when \( n = 5 \):
+\[
+(x, y) = \boxed{(1, 2)}
+\]

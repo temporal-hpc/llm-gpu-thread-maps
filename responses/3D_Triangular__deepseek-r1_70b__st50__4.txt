@@ -1,0 +1,65 @@
+To map an integer \( n \) to a triplet of non-negative integers \( (x, y, z) \), we can use a systematic approach based on combinatorial groupings and triangular arrangements. Here's how you can do it step-by-step:
+
+### Step 1: Determine the Group \( z \)
+First, identify the group \( z \) such that the sum of the first \( z+1 \) triangular numbers is just less than or equal to \( n \). This involves solving for \( z \) in the equation involving tetrahedral numbers.
+
+The formula for the sum of the first \( m \) triangular numbers (which gives us the group) is:
+\[
+S(m) = \frac{m(m+1)(m+2)}{6}
+\]
+Find the largest integer \( z \) such that:
+\[
+\frac{z(z+1)(z+2)}{6} \leq n < \frac{(z+1)(z+2)(z+3)}{6}
+\]
+
+### Step 2: Calculate Position Within Group
+Once \( z \) is determined, compute the position within this group:
+\[
+\text{pos} = n - \frac{z(z+1)(z+2)}{6}
+\]
+This gives the index within the current group, which has \( (z+1)(z+2)/2 \) elements.
+
+### Step 3: Determine Row \( i \) and Column \( j \)
+Within this group, determine which row \( i \) the position falls into. Each row \( i \) contains \( i+1 \) elements, forming a triangular arrangement.
+
+Solve for the largest \( i \) such that:
+\[
+\frac{i(i+1)}{2} \leq \text{pos} < \frac{(i+1)(i+2)}{2}
+\]
+Once \( i \) is found, compute the column index within this row:
+\[
+j = \text{pos} - \frac{i(i+1)}{2}
+\]
+
+### Step 4: Map to Coordinates \( (x, y, z) \)
+Finally, map the row and column indices to the coordinates. Since each group corresponds to a fixed \( z \), we can set:
+\[
+x = i - j
+\]
+\[
+y = j
+\]
+Thus, the triplet is \( (x, y, z) \).
+
+### Example:
+For \( n = 5 \):
+1. **Determine \( z \)**: Solve for \( z \) where \( S(z) \leq 5 < S(z+1) \). Here, \( z=2 \) because \( S(2)=4 \) and \( S(3)=10 \).
+2. **Calculate pos**: \( \text{pos} = 5 - 4 = 1 \).
+3. **Determine row \( i \)**: Find \( i \) such that \( T(i) \leq 1 < T(i+1) \). Here, \( i=1 \), so \( j = 1 - T(1)=0 \).
+4. **Map to coordinates**: \( x = 1 - 0 = 1 \), \( y = 0 \), \( z=2 \).
+
+Thus, the triplet for \( n=5 \) is \( (1, 0, 2) \).
+
+### Final Answer
+The mapping from integer \( n \) to triplet \( (x, y, z) \) is determined by finding the group \( z \), calculating the position within that group, determining the row and column in a triangular arrangement, and then deriving the coordinates. This method ensures each non-negative integer triplet is uniquely represented by an index \( n \).
+
+For example:
+- For \( n = 0 \): \( (x, y, z) = (0, 0, 0) \)
+- For \( n = 1 \): \( (x, y, z) = (1, 0, 0) \)
+- For \( n = 5 \): \( (x, y, z) = (1, 0, 2) \)
+
+Thus, the final answer for a given \( n \) is:
+\[
+\boxed{(x, y, z)}
+\]
+where \( x \), \( y \), and \( z \) are determined through the steps outlined above.

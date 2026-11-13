@@ -1,0 +1,26 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non‑negative integer")
+    total = 0
+    y = 0
+    while True:
+        cnt = 1 << y.bit_count()
+        if total + cnt > n:
+            offset = n - total
+            pos = []
+            temp = y
+            i = 0
+            while temp:
+                if temp & 1:
+                    pos.append(i)
+                temp >>= 1
+                i += 1
+            x = 0
+            for i, p in enumerate(pos):
+                if (offset >> i) & 1:
+                    x |= 1 << p
+            return (x, y)
+        total += cnt
+        y += 1
+```

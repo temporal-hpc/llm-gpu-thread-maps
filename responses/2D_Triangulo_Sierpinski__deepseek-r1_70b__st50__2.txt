@@ -1,0 +1,23 @@
+To determine the coordinates (x, y) corresponding to a specific index n in the given sequence, we observe that each block of points is grouped by increasing values of y, with each block containing varying numbers of points. The blocks follow an alternating pattern where the number of points doubles every two steps:
+
+- **y=0**: 1 point
+- **y=1 and y=2**: 2 points each (total 4)
+- **y=3 and y=4**: 4 points each (total 8)
+- **y=5 and y=6**: 8 points each (total 16)
+- And so on.
+
+To find the coordinates for a given n:
+
+1. **Identify the block containing n** by summing the sizes of previous blocks until you exceed n.
+2. **Determine the starting index of the current block** to calculate the position within the block.
+3. **Calculate x and y based on the position**, considering whether y is even or odd for direction.
+
+However, due to the complexity and lack of a straightforward formula, it's more efficient to use an enumeration approach rather than derive an exact mathematical formula manually.
+
+For example:
+
+- For n=5:
+  - Determine which block n falls into.
+  - Calculate x and y based on the position within that block.
+
+**Answer**: The coordinates (x, y) for n=5 are \boxed{(0,3)}.

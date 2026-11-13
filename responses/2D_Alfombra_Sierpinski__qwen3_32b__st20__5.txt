@@ -1,0 +1,93 @@
+To determine the coordinates `(x, y)` corresponding to an integer `n` based on the observed pattern, we can break the problem into the following logical steps:
+
+---
+
+### ✅ **Understanding the Pattern**
+
+The pattern is based on dividing the integers into groups of size 8. Within each group, we observe a specific mapping of the local index to `(x, y)` coordinates.
+
+For example, for the group starting at `n = 0` (i.e., `n = 0` to `7`), the coordinates are:
+
+| n | x | y |
+|---|---|---|
+| 0 | 0 | 0 |
+| 1 | 1 | 0 |
+| 2 | 2 | 0 |
+| 3 | 0 | 1 |
+| 4 | 2 | 1 |
+| 5 | 0 | 2 |
+| 6 | 1 | 2 |
+| 7 | 2 | 2 |
+
+This pattern is consistent across all groups of 8 numbers.
+
+---
+
+### 🧠 **Key Observations**
+
+1. **Group Identification**:
+   - Each group is 8 numbers long.
+   - Group number `k` = `n // 8`
+   - Local index within the group `m` = `n % 8`
+
+2. **Determine `y`**:
+   - If `m < 3` → `y = 0`
+   - If `3 ≤ m < 5` → `y = 1`
+   - If `m ≥ 5` → `y = 2`
+
+3. **Compute `x`**:
+   - If `y == 0` → `x = 3 * k + m`
+   - If `y == 1`:
+     - If `m == 3` → `x = 3 * k`
+     - If `m == 4` → `x = 3 * k + 2`
+   - If `y == 2` → `x = 3 * k + (m - 5)`
+
+---
+
+### 🧾 **Python Implementation**
+
+```python
+def get_coordinates(n):
+    k = n // 8
+    m = n % 8
+
+    if m < 3:
+        y = 0
+    elif m < 5:
+        y = 1
+    else:
+        y = 2
+
+    if y == 0:
+        x = 3 * k + m
+    elif y == 1:
+        x = 3 * k + (0 if m == 3 else 2)
+    else:
+        x = 3 * k + (m - 5)
+
+    return (x, y)
+```
+
+---
+
+### ✅ **Example Usage**
+
+```python
+print(get_coordinates(0))   # (0, 0)
+print(get_coordinates(3))   # (0, 1)
+print(get_coordinates(5))   # (0, 2)
+print(get_coordinates(11))  # (3, 1)
+print(get_coordinates(16))  # (6, 0)
+print(get_coordinates(19))  # (6, 1)
+```
+
+---
+
+### 📌 **Summary**
+
+This function accurately computes the `(x, y)` coordinates for any integer `n` by:
+- Grouping numbers into blocks of 8
+- Identifying the local index within the block
+- Applying the derived pattern to calculate the coordinates
+
+It's efficient, clean, and follows the observed logic precisely.

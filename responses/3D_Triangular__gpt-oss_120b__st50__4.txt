@@ -1,0 +1,32 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError
+    def cum(z):
+        return (z + 1) * (z + 2) * (z + 3) // 6
+    lo, hi = 0, 1
+    while cum(hi) <= n:
+        hi <<= 1
+    while lo < hi:
+        mid = (lo + hi) // 2
+        if cum(mid) > n:
+            hi = mid
+        else:
+            lo = mid + 1
+    z = lo
+    prev_c = cum(z - 1) if z else 0
+    offset = n - prev_c
+    def tri(y):
+        return (y + 1) * (y + 2) // 2
+    lo, hi = 0, z
+    while lo < hi:
+        mid = (lo + hi) // 2
+        if tri(mid) > offset:
+            hi = mid
+        else:
+            lo = mid + 1
+    y = lo
+    prev_t = tri(y - 1) if y else 0
+    x = offset - prev_t
+    return (x, y, z)
+```

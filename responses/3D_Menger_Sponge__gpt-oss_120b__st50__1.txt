@@ -1,0 +1,29 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError
+    def valid(x, y, z):
+        while x or y or z:
+            cnt = (x % 3 == 1) + (y % 3 == 1) + (z % 3 == 1)
+            if cnt >= 2:
+                return False
+            x //= 3
+            y //= 3
+            z //= 3
+        return True
+    count = 0
+    size = 1
+    prev = 0
+    while True:
+        for z in range(size):
+            for y in range(size):
+                for x in range(size):
+                    if prev and x < prev and y < prev and z < prev:
+                        continue
+                    if valid(x, y, z):
+                        if count == n:
+                            return (x, y, z)
+                        count += 1
+        prev = size
+        size *= 3
+```

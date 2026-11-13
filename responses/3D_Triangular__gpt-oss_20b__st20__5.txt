@@ -1,0 +1,33 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non‑negative integer")
+    # Find m such that m*(m+1)*(m+2)//6 > n, where z = m-1
+    low, high = 0, 1
+    while high * (high + 1) * (high + 2) // 6 <= n:
+        high <<= 1
+    while low < high:
+        mid = (low + high) // 2
+        if mid * (mid + 1) * (mid + 2) // 6 > n:
+            high = mid
+        else:
+            low = mid + 1
+    m = low
+    z = m - 1
+    prev_cumulative = z * (z + 1) * (z + 2) // 6
+    offset = n - prev_cumulative
+    # Find y such that (y+1)*(y+2)//2 > offset
+    low, high = 0, 1
+    while (high + 1) * (high + 2) // 2 <= offset:
+        high <<= 1
+    while low < high:
+        mid = (low + high) // 2
+        if (mid + 1) * (mid + 2) // 2 > offset:
+            high = mid
+        else:
+            low = mid + 1
+    y = low
+    start_y = y * (y + 1) // 2
+    x = offset - start_y
+    return (x, y, z)
+```

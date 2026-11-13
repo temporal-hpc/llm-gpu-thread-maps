@@ -1,0 +1,99 @@
+To determine the pair $(a, b)$ such that:
+
+$$
+N = a + \frac{b(b+1)}{2}
+$$
+
+we follow a method based on the properties of triangular numbers.
+
+---
+
+### Step-by-Step Explanation
+
+1. **Understand the Structure**:
+   The number $N$ is expressed as the sum of an integer $a$ and a triangular number $\frac{b(b+1)}{2}$. Triangular numbers are of the form:
+
+   $$
+   T_b = \frac{b(b+1)}{2}
+   $$
+
+   So, the task is to find the largest triangular number less than $N$, and then compute $a$ as the difference.
+
+2. **Find an Approximate Value of $b$**:
+   We want to find the largest integer $b$ such that:
+
+   $$
+   \frac{b(b+1)}{2} < N
+   $$
+
+   Solving the inequality:
+
+   $$
+   b(b+1) < 2N
+   $$
+
+   This is a quadratic equation in $b$, and solving it gives:
+
+   $$
+   b = \left\lfloor \frac{\sqrt{8N + 1} - 1}{2} \right\rfloor
+   $$
+
+   This gives an initial estimate $b_0$.
+
+3. **Adjust $b$ if Needed**:
+   After computing $b_0$, we must verify whether $T_{b_0} = \frac{b_0(b_0+1)}{2}$ is less than $N$. If it is not, then we decrement $b_0$ by 1.
+
+4. **Compute $a$**:
+   Once we have the correct $b$, compute $a$ as:
+
+   $$
+   a = N - \frac{b(b+1)}{2}
+   $$
+
+---
+
+### Final Algorithm
+
+Given an integer $N$, the pair $(a, b)$ can be found as follows:
+
+1. Compute:
+   $$
+   b_0 = \left\lfloor \frac{\sqrt{8N + 1} - 1}{2} \right\rfloor
+   $$
+
+2. If $b_0(b_0 + 1)/2 \geq N$, then set $b = b_0 - 1$; otherwise, $b = b_0$.
+
+3. Compute:
+   $$
+   a = N - \frac{b(b+1)}{2}
+   $$
+
+---
+
+### Example
+
+Let $N = 10$.
+
+1. Compute:
+   $$
+   b_0 = \left\lfloor \frac{\sqrt{81} - 1}{2} \right\rfloor = \left\lfloor \frac{9 - 1}{2} \right\rfloor = 4
+   $$
+
+2. Check $T_4 = 10 \geq 10$, so set $b = 3$.
+
+3. Compute:
+   $$
+   a = 10 - \frac{3 \cdot 4}{2} = 10 - 6 = 4
+   $$
+
+So, the pair is $(a, b) = (4, 3)$, and indeed:
+
+$$
+4 + \frac{3 \cdot 4}{2} = 4 + 6 = 10
+$$
+
+---
+
+### Summary
+
+The solution involves computing the largest triangular number less than $N$ and then finding the difference to get the corresponding $a$. The process is efficient and ensures correctness for any positive integer $N$.

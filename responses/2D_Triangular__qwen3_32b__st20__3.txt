@@ -1,0 +1,89 @@
+To determine the coordinates $(x, y)$ for a given integer $ n $, we follow a pattern where the numbers are arranged in a triangular-like structure. Each level $ y $ contains $ y + 1 $ numbers. This means the numbers are grouped into diagonals, where the $ y $-th diagonal contains $ y + 1 $ elements.
+
+---
+
+### **Key Observations:**
+
+- The **starting index** of each diagonal (i.e., for a given $ y $) is:
+  $$
+  S(y) = \frac{y(y + 1)}{2}
+  $$
+  This is the **$ y $-th triangular number**.
+
+- The **ending index** of the $ y $-th diagonal is:
+  $$
+  S(y + 1) - 1 = \frac{(y + 1)(y + 2)}{2} - 1
+  $$
+
+- Therefore, for a given $ n $, we want to find the largest $ y $ such that:
+  $$
+  \frac{y(y + 1)}{2} \leq n < \frac{(y + 1)(y + 2)}{2}
+  $$
+
+- Once we find the correct $ y $, the **$ x $-coordinate** is:
+  $$
+  x = n - \frac{y(y + 1)}{2}
+  $$
+
+---
+
+### **Algorithm Summary:**
+
+1. Compute an initial estimate of $ y $ using the inverse of the triangular number formula:
+   $$
+   y = \left\lfloor \frac{\sqrt{1 + 8n} - 1}{2} \right\rfloor
+   $$
+
+2. Fine-tune $ y $ by checking if it satisfies the triangular number bounds.
+
+3. Compute $ x $ using the formula above.
+
+---
+
+### **Python Implementation:**
+
+```python
+import math
+
+def compute_coordinates(n):
+    if n < 0:
+        raise ValueError("n must be non-negative")
+    
+    # Initial estimate of y using the inverse triangular number formula
+    y_float = (math.sqrt(1 + 8 * n) - 1) / 2
+    y = int(y_float)
+    
+    # Adjust y if necessary
+    while y * (y + 1) // 2 > n:
+        y -= 1
+    while (y + 1) * (y + 2) // 2 <= n:
+        y += 1
+
+    # Compute x
+    x = n - y * (y + 1) // 2
+    return (x, y)
+```
+
+---
+
+### **Example:**
+
+For $ n = 10 $:
+
+- Compute $ y $:
+  $$
+  y = \left\lfloor \frac{\sqrt{1 + 8 \cdot 10} - 1}{2} \right\rfloor = \left\lfloor \frac{\sqrt{81} - 1}{2} \right\rfloor = \left\lfloor \frac{8}{2} \right\rfloor = 4
+  $$
+- Compute $ x $:
+  $$
+  x = 10 - \frac{4 \cdot 5}{2} = 10 - 10 = 0
+  $$
+- So, $ (x, y) = (0, 4) $
+
+---
+
+### **Final Answer:**
+
+$$
+\boxed{(x, y) = \left(n - \frac{y(y + 1)}{2}, \left\lfloor \frac{\sqrt{1 + 8n} - 1}{2} \right\rfloor \right)}
+$$

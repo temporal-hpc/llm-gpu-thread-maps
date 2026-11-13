@@ -1,0 +1,19 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError
+    y = 0
+    while True:
+        cnt = 1 << y.bit_count()
+        if n < cnt:
+            idx = n
+            x = 0
+            while True:
+                if x & ~y == 0:
+                    if idx == 0:
+                        return (x, y)
+                    idx -= 1
+                x += 1
+        n -= cnt
+        y += 1
+```

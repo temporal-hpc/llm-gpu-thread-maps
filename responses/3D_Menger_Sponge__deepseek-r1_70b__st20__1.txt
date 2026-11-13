@@ -1,0 +1,48 @@
+To determine the coordinates \((x, y)\) for a given \(n\), we can follow these steps:
+
+1. **Calculate \(z\):**
+   \[
+   z = \left\lfloor \frac{n}{8} \right\rfloor
+   \]
+   
+2. **Determine the position within the layer:**
+   \[
+   k = n \mod 8
+   \]
+
+3. **Map \(k\) to \((x, y)\) using a predefined lookup table based on observations from layers \(z=0\) and \(z=1\):**
+
+| \(k\) | \(x\) | \(y\) |
+|------|------|------|
+| 0    | 0    | 0    |
+| 1    | 1    | 0    |
+| 2    | 2    | 0    |
+| 3    | 0    | 1    |
+| 4    | 2    | 1    |
+| 5    | 0    | 2    |
+| 6    | 1    | 2    |
+| 7    | 2    | 2    |
+
+Thus, for any given \(n\), the coordinates \((x, y)\) can be found using this table after determining \(k = n \% 8\).
+
+**Answer:**
+
+For a given integer \(n\), the coordinates \((x, y)\) are determined by:
+
+- Compute \(z = \left\lfloor \frac{n}{8} \right\rfloor\).
+- Find \(k = n \mod 8\).
+- Use the lookup table to get \((x, y)\).
+
+Thus,
+
+- When \(n = 0\), \(k = 0\) → \((x, y) = (0, 0)\).
+- When \(n = 1\), \(k = 1\) → \((x, y) = (1, 0)\).
+- And so on based on the table.
+
+The final coordinates can be expressed as:
+
+\[
+(x, y) = \text{{lookup_table}[k]}
+\]
+
+Where `lookup_table` is defined as above.

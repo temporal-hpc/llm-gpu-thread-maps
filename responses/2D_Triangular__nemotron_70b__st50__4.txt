@@ -1,0 +1,24 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer")
+    
+    coord_x, coord_y = 0, 0
+    direction_x, direction_y = 0, 1
+    visited = {(0, 0)}
+    steps = 1
+    
+    for _ in range(n):
+        for _ in range(2):
+            for _ in range(steps):
+                if (coord_x + direction_x, coord_y + direction_y) not in visited:
+                    coord_x += direction_x
+                    coord_y += direction_y
+                    visited.add((coord_x, coord_y))
+                    if len(visited) - 1 == n:
+                        return coord_x, coord_y
+            direction_x, direction_y = direction_y, -direction_x
+        steps += 1
+    
+    return coord_x, coord_y
+```

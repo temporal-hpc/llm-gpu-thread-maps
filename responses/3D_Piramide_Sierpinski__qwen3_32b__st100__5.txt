@@ -1,0 +1,47 @@
+To determine the coordinates $(x, y, z)$ corresponding to a given integer $n$, we can use a **breadth-first traversal** of a 3D grid starting from the origin $(0,0,0)$. The traversal order is such that we visit all points in increasing Manhattan distance from the origin, and for each distance, we visit the points in lexicographical order (i.e., $x$ first, then $y$, then $z$).
+
+### Step-by-Step Approach:
+
+1. **Find the Manhattan distance $d$** such that the total number of points with Manhattan distance less than or equal to $d$ is just greater than $n$.
+   - The number of points at Manhattan distance $k$ is $6k^2 + 2$, but for simplicity, we can use a loop to find the smallest $d$ where the cumulative sum of points up to distance $d$ exceeds $n$.
+
+2. **Determine the remaining count** after accounting for all points with Manhattan distance less than $d$.
+
+3. **Generate the coordinates** at distance $d$ in lexicographical order until we reach the $n$-th point.
+
+### Python Code Example:
+
+```python
+def manhattan_distance(n):
+    d = 0
+    count = 1  # Starting from (0,0,0)
+    while count <= n:
+        d += 1
+        count += 6 * d**2 + 2  # Total points up to distance d
+    # Now find the coordinates at distance d
+    remaining = n - (count - 6 * d**2 - 2)
+    # Generate points at distance d in order (x, y, z)
+    for x in range(d + 1):
+        for y in range(d + 1 - x):
+            z = d - x - y
+            if remaining == 1:
+                return (x, y, z)
+            remaining -= 1
+    return (0, 0, 0)  # Fallback
+
+# Example usage:
+n = 3
+x, y, z = manhattan_distance(n)
+print(f"n={n} -> ({x}, {y}, {z})")
+```
+
+### Explanation:
+
+- The function `manhattan_distance` calculates the Manhattan distance $d$ such that the cumulative number of points up to distance $d$ is just greater than $n$.
+- It then generates all points at distance $d$ in lexicographical order (x, y, z) and returns the $n$-th point in this sequence.
+
+### Example Output:
+
+For $n = 3$, the function would return $(0, 0, 1)$, which matches the expected pattern.
+
+This approach ensures that the coordinates are generated in the desired order, providing a systematic way to map an integer $n$ to its corresponding 3D coordinates in a breadth-first traversal.

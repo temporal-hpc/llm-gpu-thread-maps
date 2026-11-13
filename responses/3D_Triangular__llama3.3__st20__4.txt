@@ -1,0 +1,12 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer.")
+    result = []
+    base = 1
+    while n >= 0:
+        result.append(n % base)
+        n //= base
+        base += 1
+    return tuple(reversed(result))
+```

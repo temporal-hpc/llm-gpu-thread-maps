@@ -1,0 +1,42 @@
+def map_to_coordinates(n):
+    if not isinstance(n, int):
+        raise TypeError
+    if n < 0:
+        raise ValueError
+    pow3 = [1]
+    for _ in range(1, 65):
+        pow3.append(pow3[-1] * 3)
+    def sum_counts(limit):
+        if limit < 0:
+            return 0
+        res = 0
+        ones = 0
+        bits = limit.bit_length()
+        for pos in reversed(range(bits)):
+            if (limit >> pos) & 1:
+                res += (1 << ones) * pow3[pos]
+                ones += 1
+        res += 1 << ones
+        return res
+    low, high = 0, 1
+    while sum_counts(high) <= n:
+        high <<= 1
+    while low < high:
+        mid = (low + high) // 2
+        if sum_counts(mid) <= n:
+            low = mid + 1
+        else:
+            high = mid
+    y = low
+    cum_before = sum_counts(y - 1)
+    offset = n - cum_before
+    x = 0
+    bitpos = 0
+    i = 0
+    while y >> i:
+        if (y >> i) & 1:
+            if (offset >> bitpos) & 1:
+                x |= 1 << i
+            bitpos += 1
+        i += 1
+    return (x, y)

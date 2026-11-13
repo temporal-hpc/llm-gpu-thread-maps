@@ -1,0 +1,34 @@
+To solve this problem, we need to map a given non-negative integer `n` to a coordinate `(x, y)` in a specific sequence. The sequence is structured such that for each integer `k` (starting from 0), the coordinates `(0, k)`, `(1, k)`, ..., `(k, k)` are generated in order. The challenge is to compute the corresponding coordinate for any given `n` efficiently.
+
+### Approach
+1. **Problem Analysis**: The sequence of coordinates follows a triangular number pattern. For each `k`, there are `k + 1` coordinates (from `(0, k)` to `(k, k)`). The starting index of each block for `k` is given by the triangular number `T_k = k*(k + 1)/2`. The value `n` falls within the block corresponding to `k` where `T_k ≤ n < T_{k+1}`. Within this block, the x-coordinate is `n - T_k`, and the y-coordinate is `k`.
+
+2. **Key Insight**: The value `k` can be derived by solving the quadratic equation `k^2 + k - 2n ≤ 0`. The solution involves computing `k = floor((sqrt(8n + 1) - 1)/2)`. This formula efficiently locates the correct block for any given `n`.
+
+3. **Algorithm Selection**: 
+   - **Step 1**: Validate that `n` is a non-negative integer.
+   - **Step 2**: Compute `root = isqrt(8n + 1)`, where `isqrt` is the integer square root function.
+   - **Step 3**: Calculate `k = (root - 1) // 2`.
+   - **Step 4**: The x-coordinate is `n - k*(k + 1)//2`, and the y-coordinate is `k`.
+
+4. **Complexity Analysis**: The operations involve basic arithmetic and an integer square root computation. The integer square root operation is efficient, typically O(log n) for large integers, making the overall solution efficient even for very large values of `n`.
+
+### Solution Code
+```python
+import math
+
+def map_to_coordinates(n):
+    if not (isinstance(n, int) and n >= 0):
+        raise ValueError
+    root = math.isqrt(8 * n + 1)
+    k = (root - 1) // 2
+    return (n - k * (k + 1) // 2, k)
+```
+
+### Explanation
+1. **Input Validation**: The function first checks if `n` is a non-negative integer. If not, it raises a `ValueError`.
+2. **Integer Square Root Calculation**: The expression `8 * n + 1` is computed, and its integer square root is found using `math.isqrt`.
+3. **Finding Block Index `k`**: The value `k` is derived from the formula `(root - 1) // 2`, which effectively solves the quadratic equation to locate the correct block for `n`.
+4. **Coordinate Calculation**: The x-coordinate is computed as `n - k*(k + 1)//2`, which gives the position within the current block. The y-coordinate is simply `k`, representing the block index.
+
+This approach efficiently maps any non-negative integer `n` to its corresponding coordinate in the sequence by leveraging mathematical insights and basic arithmetic operations. The solution handles all edge cases, including very large values of `n`, with optimal performance.

@@ -1,0 +1,47 @@
+To determine the corresponding coordinates $(x, y)$ for a given integer $ n $, we follow a structured mathematical approach.
+
+---
+
+### **Problem Overview**
+
+We are given an integer $ n \geq 0 $, and we want to find a unique coordinate pair $(x, y)$ such that the index $ n $ corresponds to this coordinate under a certain enumeration scheme. The enumeration is such that the index of a coordinate $(x, y)$ is computed as:
+
+$$
+n = \frac{y^2 + 3y + 2x}{2}
+$$
+
+This is the forward mapping from $(x, y)$ to $ n $. To find the inverse mapping — i.e., to recover $(x, y)$ from $ n $ — we derive the following steps.
+
+---
+
+### **Solution Derivation**
+
+1. **Solve for $ y $**:
+   - We rearrange the index formula to isolate $ y $.
+   - The quadratic in $ y $ is:
+     $$
+     y^2 + 3y + 2x = 2n
+     $$
+   - Since $ x $ is bounded by the row $ y $, we can solve for $ y $ using the quadratic formula.
+   - After algebraic manipulation, the valid solution for $ y $ is:
+     $$
+     y = \left\lfloor \frac{\sqrt{9 + 8n} - 3}{2} \right\rfloor
+     $$
+
+2. **Solve for $ x $**:
+   - Once $ y $ is computed, $ x $ can be directly derived from the index formula:
+     $$
+     x = n - \frac{y^2 + 3y}{2}
+     $$
+
+---
+
+### **Final Answer**
+
+Given an integer $ n \geq 0 $, the corresponding coordinate $(x, y)$ is:
+
+$$
+\boxed{
+x = n - \frac{y^2 + 3y}{2}, \quad y = \left\lfloor \frac{\sqrt{9 + 8n} - 3}{2} \right\rfloor
+}
+$$

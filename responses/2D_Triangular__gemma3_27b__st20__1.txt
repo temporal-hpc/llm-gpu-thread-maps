@@ -1,0 +1,10 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input must be a non-negative integer.")
+
+    width = int((n + 1)**0.5)
+    x = n % width
+    y = n // width
+    return (x, y)
+```

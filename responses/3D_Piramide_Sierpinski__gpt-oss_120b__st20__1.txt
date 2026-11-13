@@ -1,0 +1,200 @@
+**Solution Explanation**
+
+For a three‑dimensional grid we number the cells with a single
+non‑negative integer `n`.  
+The most common way to obtain the three coordinates `(x, y, z)` from
+that integer is to *interleave* the binary digits of the three
+coordinates – the so‑called **Morton order** (or *Z‑order*).
+
+```
+bit 0 of n → x₀                (least significant bit of x)
+bit 1 of n → y₀
+bit 2 of n → z₀
+bit 3 of n → x₁                (next bit of x)
+bit 4 of n → y₁
+bit 5 of n → z₁
+…
+```
+
+In other words the i‑th bit of `x` is the bit number `3·i` of `n`,
+the i‑th bit of `y` is the bit number `3·i+1` of `n`,
+and the i‑th bit of `z` is the bit number `3·i+2` of `n`.
+
+The inverse operation – *unranking* a Morton code – can be written
+iteratively: we read the bits of `n` three at a time, put the first
+into `x`, the second into `y`, the third into `z`, and shift `n`
+right by three positions.  After the loop finishes we have the three
+coordinates.
+
+The algorithm works for **any** non‑negative integer `n` and therefore
+fulfils the requirement of the problem.
+
+--------------------------------------------------------------------
+
+#### Algorithm
+```
+morton_to_xyz(n):
+    x = y = z = 0          # result coordinates
+    shift = 0              # which power of two we are currently writing
+    while n > 0:
+        # take the three lowest bits of n
+        x_bit =  n        & 1        # bit 0
+        y_bit = (n >> 1) & 1        # bit 1
+        z_bit = (n >> 2) & 1        # bit 2
+
+        # add the bits to the appropriate coordinate, shifted by 'shift'
+        x |= x_bit << shift
+        y |= y_bit << shift
+        z |= z_bit << shift
+
+        # remove the three bits we have just processed
+        n >>= 3
+        shift += 1                # next bit of each coordinate is a higher power of two
+    return (x, y, z)
+```
+
+--------------------------------------------------------------------
+
+#### Correctness Proof  
+
+We prove that the algorithm returns the unique triple `(x, y, z)` whose
+Morton code equals the input `n`.
+
+---
+
+**Lemma 1**  
+After the `k`‑th iteration of the `while` loop (`k` starting from `0`)
+the variables contain  
+
+```
+x = Σ_{i=0}^{k-1}  (bit_{3i}   of original n) * 2^i
+y = Σ_{i=0}^{k-1}  (bit_{3i+1} of original n) * 2^i
+z = Σ_{i=0}^{k-1}  (bit_{3i+2} of original n) * 2^i
+```
+
+*Proof by induction over `k`.*
+
+*Base (`k = 0`).*  
+Before the first iteration all sums are empty, therefore `x = y = z = 0`,
+which matches the formula.
+
+*Induction step.*  
+Assume the statement true after `k` iterations.  
+During iteration `k` the algorithm extracts the three least‑significant
+bits of the current value of `n`. Those bits are exactly the bits
+`3k`, `3k+1`, `3k+2` of the **original** `n` because the algorithm
+shifts `n` right by three positions at the end of every iteration.
+The three extracted bits are stored in `x_bit`, `y_bit`, `z_bit` and are
+added to `x`, `y`, `z` with a left shift of `k` (`<< shift`).  
+Consequently the contributions of the bits `3k … 3k+2` are added as
+`bit * 2^k` to the three sums, which yields the formula for `k+1`. ∎
+
+
+
+**Lemma 2**  
+When the loop terminates (`n == 0`) the three sums of Lemma&nbsp;1 contain
+*all* bits of the original integer `n`.
+
+*Proof.*  
+The loop removes three bits from `n` in each iteration (`n >>= 3`).
+It stops exactly when no bits are left, i.e. after processing the most
+significant group of three bits. Therefore the index `k` of the last
+iteration is `⌈ (number of bits of original n) / 3 ⌉`, and the sums
+include every bit of the original number. ∎
+
+
+
+**Lemma 3**  
+Let `(x, y, z)` be the values produced by the algorithm.
+The Morton code obtained by interleaving the binary representations of
+`x`, `y` and `z` (with `x`‑bits first, then `y`, then `z`) is exactly the
+input integer `n`.
+
+*Proof.*  
+From Lemma&nbsp;1 each bit of `x` at position `i` equals the bit `3i` of the
+original `n`. The same holds for `y` (`3i+1`) and `z` (`3i+2`).  
+Consequently, when we interleave the bits of `(x, y, z)` we reconstruct
+the original sequence of bits `… 3i+2 3i+1 3i …`.  By Lemma&nbsp;2 no bit
+is missing, therefore the reconstructed Morton code coincides with the
+original integer `n`. ∎
+
+
+
+**Theorem**  
+`morton_to_xyz` returns the unique triple `(x, y, z)` such that the
+Morton/Z‑order code of `(x, y, z)` equals the given thread identifier
+`n`.
+
+*Proof.*  
+The algorithm terminates because `n` is strictly decreasing
+(`n >>= 3`).  By Lemma&nbsp;3 the produced triple yields a Morton code equal
+to the original `n`.  
+The Morton encoding is a bijection `ℕ → ℕ³`; therefore there is exactly
+one triple with that property, and the algorithm returns it. ∎
+
+
+
+--------------------------------------------------------------------
+
+#### Complexity Analysis  
+
+Let `b = ⌈log₂ (n+1)⌉` be the number of bits of `n`.  
+The loop processes three bits per iteration, thus it runs
+`⌈b / 3⌉` times.
+
+*Time*: `O(b) = O(log n)`  
+*Memory*: only a constant amount of integer variables – `O(1)`.
+
+--------------------------------------------------------------------
+
+#### Reference Implementation  (Python 3)
+
+```python
+import sys
+
+def morton_to_xyz(code: int) -> tuple[int, int, int]:
+    """
+    Decode a 3‑dimensional Morton (Z‑order) code.
+    Returns the coordinates (x, y, z).
+    """
+    x = y = z = 0          # result
+    shift = 0              # current bit position inside each coordinate
+
+    while code:
+        # extract three lowest bits
+        x_bit =  code        & 1          # bit 0 → x
+        y_bit = (code >> 1) & 1          # bit 1 → y
+        z_bit = (code >> 2) & 1          # bit 2 → z
+
+        # place them at the proper power of two
+        x |= x_bit << shift
+        y |= y_bit << shift
+        z |= z_bit << shift
+
+        # discard the three bits we have just used
+        code >>= 3
+        shift += 1
+
+    return x, y, z
+
+
+def solve() -> None:
+    """
+    Reads a single integer (the thread ID) from standard input and
+    prints the three coordinates separated by blanks.
+    """
+    data = sys.stdin.read().strip()
+    if not data:
+        return
+    n = int(data)
+    x, y, z = morton_to_xyz(n)
+    print(x, y, z)
+
+
+if __name__ == "__main__":
+    solve()
+```
+
+The program follows exactly the algorithm proven correct above, runs
+in `O(log n)` time, uses `O(1)` additional memory, and therefore
+conforms to the required specifications.

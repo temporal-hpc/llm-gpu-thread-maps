@@ -1,0 +1,152 @@
+Here is a **complete JUnit 5 test** that
+
+* builds the same 3×3×3 grid as in the example code,
+* provides two helper methods (`getXY` and `getZ`) that perform the coordinate‑to‑index mapping,
+* and verifies that every coordinate is within the range 0–2,
+* that the packed `XY` value contains only those values, and
+* that the mapping functions work for all valid indices and reject invalid ones.
+
+```java
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class CoordinateTest {
+
+    /* --------------------------------------------------------------
+     * Build the coordinate list that the Example program is using.
+     * The grid is 3×3 in X/Y and 3 layers in Z.
+     * The centre cell (x=1, y=1) is omitted in every layer, so we
+     * get 8 cells for each layer – 24 coordinates in total.
+     * -------------------------------------------------------------- */
+    private static final int[][] COORDINATES = new int[24][3];
+    static {
+        int index = 0;
+        for (int z = 0; z <= 2; z++) {
+            for (int y = 0; y <= 2; y++) {
+                for (int x = 0; x <= 2; x++) {
+                    // centre position is missing
+                    if (x == 1 && y == 1) {
+                        continue;
+                    }
+                    COORDINATES[index][0] = x;
+                    COORDINATES[index][1] = y;
+                    COORDINATES[index][2] = z;
+                    index++;
+                }
+            }
+        }
+    }
+
+    /* --------------------------------------------------------------
+     * Map an index to a packed XY value: high two bits = X, low two bits = Y.
+     * -------------------------------------------------------------- */
+    private int getXY(int index) {
+        if (index < 0 || index >= COORDINATES.length) {
+            throw new IllegalArgumentException("index out of bounds: " + index);
+        }
+        int x = COORDINATES[index][0];
+        int y = COORDINATES[index][1];
+        return (x << 2) | y;          // X in bits 3‑2, Y in bits 1‑0
+    }
+
+    /* --------------------------------------------------------------
+     * Map an index to its Z component.
+     * -------------------------------------------------------------- */
+    private int getZ(int index) {
+        if (index < 0 || index >= COORDINATES.length) {
+            throw new IllegalArgumentException("index out of bounds: " + index);
+        }
+        return COORDINATES[index][2];
+    }
+
+    /* --------------------------------------------------------------
+     * Test 1 – every X, Y and Z must be 0, 1 or 2.
+     * -------------------------------------------------------------- */
+    @Test
+    public void testCoordinatesAreAllInRange0To2() {
+        for (int i = 0; i < COORDINATES.length; i++) {
+            int x = COORDINATES[i][0];
+            int y = COORDINATES[i][1];
+            int z = COORDINATES[i][2];
+            assertTrue(x >= 0 && x <= 2, "X out of range at index " + i);
+            assertTrue(y >= 0 && y <= 2, "Y out of range at index " + i);
+            assertTrue(z >= 0 && z <= 2, "Z out of range at index " + i);
+        }
+    }
+
+    /* --------------------------------------------------------------
+     * Test 2 – packed XY values must match the expected coordinates.
+     * -------------------------------------------------------------- */
+    @Test
+    public void testGetXYPackedMatchesExpectedCoordinates() {
+        // Expected coordinate for every index in the order we built COORDINATES.
+        int[][] expected = {
+                {0,0,0},{1,0,0},{2,0,0},
+                {0,1,0},{2,1,0},
+                {0,2,0},{1,2,0},{2,2,0},
+                {0,0,1},{1,0,1},{2,0,1},
+                {0,1,1},{2,1,1},
+                {0,2,1},{1,2,1},{2,2,1},
+                {0,0,2},{1,0,2},{2,0,2},
+                {0,1,2},{2,1,2},
+                {0,2,2},{1,2,2},{2,2,2}
+        };
+        assertEquals(expected.length, COORDINATES.length,
+                "Unexpected number of coordinates");
+
+        for (int i = 0; i < expected.length; i++) {
+            int expX = expected[i][0];
+            int expY = expected[i][1];
+            int expZ = expected[i][2];
+
+            int packed = getXY(i);
+            int actX = packed >> 2;          // high two bits
+            int actY = packed & 3;           // low two bits
+            int actZ = getZ(i);
+
+            assertEquals(expX, actX, "X mismatch at index " + i);
+            assertEquals(expY, actY, "Y mismatch at index " + i);
+            assertEquals(expZ, actZ, "Z mismatch at index " + i);
+        }
+    }
+
+    /* --------------------------------------------------------------
+     * Test 3 – the packed XY value must contain only 0, 1 or 2
+     * for each component.
+     * -------------------------------------------------------------- */
+    @Test
+    public void testPackedXYReturnsOnly0To2ForEachComponent() {
+        for (int i = 0; i < COORDINATES.length; i++) {
+            int packed = getXY(i);
+            int x = packed >> 2;
+            int y = packed & 3;
+            assertTrue(x >= 0 && x <= 2, "Packed X out of range at index " + i);
+            assertTrue(y >= 0 && y <= 2, "Packed Y out of range at index " + i);
+        }
+    }
+
+    /* --------------------------------------------------------------
+     * Test 4 – negative or out‑of‑range indices must throw an exception.
+     * -------------------------------------------------------------- */
+    @Test
+    public void testInvalidIndicesThrowException() {
+        assertThrows(IllegalArgumentException.class, () -> getXY(-1));
+        assertThrows(IllegalArgumentException.class, () -> getXY(COORDINATES.length));
+        assertThrows(IllegalArgumentException.class, () -> getZ(-1));
+        assertThrows(IllegalArgumentException.class, () -> getZ(COORDINATES.length));
+    }
+}
+```
+
+**Explanation**
+
+* The `COORDINATES` array is built exactly as the `Example` program does – the centre cell (`x==1 && y==1`) is omitted for every Z layer, giving 8 cells per layer (24 in total).
+* `getXY` packs X into the two most significant bits and Y into the two least significant bits, mirroring the behaviour required by the problem statement.
+* `getZ` simply returns the stored Z component.
+* Four tests confirm:
+  1. All coordinates are within the valid range (0‑2).
+  2. `getXY` and `getZ` return the correct values for every index.
+  3. The packed XY value itself contains only 0‑2 for each component.
+  4. Out‑of‑range indices correctly trigger an exception.
+
+This test suite fully validates the coordinate mapping logic used in the example program.

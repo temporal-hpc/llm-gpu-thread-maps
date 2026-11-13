@@ -1,0 +1,51 @@
+To determine the coordinates $(x, y)$ corresponding to a given integer $n$, we observe that the numbers are arranged in a triangular pattern. Each diagonal (or level) corresponds to a fixed $y$ value, and the numbers within that diagonal range from $x = 0$ to $x = y$.
+
+---
+
+### Step-by-step Derivation
+
+1. **Pattern Observation**:
+   - The numbers are arranged in diagonals where each diagonal corresponds to a fixed $y$.
+   - For a given $y$, the values of $x$ range from $0$ to $y$, and the total number of elements in the first $y$ diagonals is:
+     $$
+     T(y) = \frac{y(y + 1)}{2}
+     $$
+     This is the sum of the first $y$ natural numbers.
+
+2. **Finding the Correct Diagonal (y)**:
+   - We want to find the largest $y$ such that:
+     $$
+     T(y) = \frac{y(y + 1)}{2} \leq n
+     $$
+   - Solving for $y$ in this inequality gives:
+     $$
+     y = \left\lfloor \frac{\sqrt{8n + 1} - 1}{2} \right\rfloor
+     $$
+
+3. **Finding the x-coordinate**:
+   - Once $y$ is determined, the starting index of that diagonal is $T(y)$.
+   - The offset within that diagonal is:
+     $$
+     x = n - \frac{y(y + 1)}{2}
+     $$
+
+---
+
+### Final Formula
+
+Given an integer $n$, the coordinates $(x, y)$ are computed as follows:
+
+- $$
+  y = \left\lfloor \frac{\sqrt{8n + 1} - 1}{2} \right\rfloor
+  $$
+- $$
+  x = n - \frac{y(y + 1)}{2}
+  $$
+
+---
+
+### Final Answer
+
+$$
+\boxed{(x, y)}
+$$

@@ -1,0 +1,70 @@
+To convert a linear index `n` into corresponding 3D coordinates `(x, y, z)` in a 3x3x3 grid, we assume a **row-major traversal order**. This means the grid is traversed in the order of x, then y, then z. The formula to compute each coordinate is as follows:
+
+---
+
+### 📘 **Formula**
+
+Given a 3D grid of size 3×3×3:
+
+- **x = n % 3**
+- **y = (n // 3) % 3**
+- **z = n // 9**
+
+---
+
+### ✅ **Example Calculation**
+
+Let’s calculate the 3D coordinates for `n = 3` using the above formula:
+
+1. **x = 3 % 3 = 0**
+2. **y = (3 // 3) % 3 = 1 % 3 = 1**
+3. **z = 3 // 9 = 0**
+
+So, the result is:  
+**`(x, y, z) = (0, 1, 0)`**
+
+---
+
+### 🧮 **Another Example**
+
+For `n = 9`:
+
+1. **x = 9 % 3 = 0**
+2. **y = (9 // 3) % 3 = 3 % 3 = 0**
+3. **z = 9 // 9 = 1**
+
+Result:  
+**`(x, y, z) = (0, 0, 1)`**
+
+---
+
+### 📌 **Why This Works**
+
+- The grid is traversed in row-major order, i.e., all `x` values for a fixed `y` and `z` are visited first.
+- The grid has 3 values along each axis, so:
+  - There are 3 x-values per row.
+  - 3 rows per y-slice.
+  - 3 y-slices per z-layer.
+- Therefore, the total number of values in the grid is 3 × 3 × 3 = 27.
+
+---
+
+### 🧠 **Generalization**
+
+If the grid size is not 3×3×3 but `dimX × dimY × dimZ`, the generalized formula becomes:
+
+- **x = n % dimX**
+- **y = (n // dimX) % dimY**
+- **z = n // (dimX × dimY)**
+
+This is the standard approach for converting a flat index into a 3D coordinate in a row-major order.
+
+---
+
+### 🧾 **Summary**
+
+To convert a linear index `n` into 3D coordinates in a 3×3×3 grid:
+
+- Use **modulo and integer division** to derive the x, y, and z values.
+- This assumes **row-major traversal** (x → y → z).
+- The result for `n = 3` is **`(0, 1, 0)`**.

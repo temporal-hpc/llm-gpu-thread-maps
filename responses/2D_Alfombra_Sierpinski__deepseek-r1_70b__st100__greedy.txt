@@ -1,0 +1,36 @@
+To determine the values of \( x \) and \( y \) for a given \( n \), we can follow these steps based on the observed pattern:
+
+1. **Identify Cycles**: The sequence repeats every 5 points, consisting of:
+   - An even \( y \) level with 3 points.
+   - An odd \( y \) level with 2 points.
+
+2. **Determine Cycle and Position**:
+   - Calculate which cycle the given \( n \) falls into by dividing \( n \) by 5.
+   - Find the position within the cycle using the remainder.
+
+3. **Assign \( x \) and \( y \)**:
+   - For even \( y \): Start at \( x = 0 \) and increment by 1 for each step.
+   - For odd \( y \): Start at \( x = 0 \) and increment by 2 for each step.
+
+4. **Adjust for Cycles**: Each new cycle increases the base \( x \) by 3.
+
+**Example Calculations**:
+
+- For \( n = 5 \):
+  - Cycle: \( 5 // 5 = 1 \)
+  - Position: \( 5 \% 5 = 0 \)
+  - Even \( y \): \( y = 2 \times 1 = 2 \), \( x = 0 + (1 \times 3) = 3 \)
+
+- For \( n = 8 \):
+  - Cycle: \( 8 // 5 = 1 \)
+  - Position: \( 8 \% 5 = 3 \)
+  - Odd \( y \): \( y = 2 \times 1 + 1 = 3 \), \( x = 0 + (1 \times 3) = 3 \)
+
+**Final Answer**:
+
+For each \( n \), determine the cycle and position, then assign \( x \) and \( y \) accordingly. The values are calculated as follows:
+
+- If within an even \( y \) level: \( x = \text{position} + (cycle \times 3) \)
+- If within an odd \( y \) level: \( x = (\text{position} \times 2) + (cycle \times 3) \)
+
+Thus, the values of \( x \) and \( y \) for any given \( n \) can be systematically determined using this method.

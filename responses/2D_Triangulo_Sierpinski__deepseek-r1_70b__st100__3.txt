@@ -1,0 +1,13 @@
+To determine the number of points for each \( y \):
+
+1. **For even \( y \) (excluding 0):** There are exactly 2 points where \( x = 0 \) and \( x = y \).
+2. **For odd \( y \):** The number of points is \( y + 1 \), with \( x \) ranging from 0 to \( y \) in increments of 1.
+3. **Special case for \( y = 0 \):** There is only 1 point where \( x = 0 \).
+
+This pattern holds based on the given data up to \( y = 4 \). 
+
+For example:
+- \( y = 2 \) (even): Points at \( (0, 2) \) and \( (2, 2) \).
+- \( y = 3 \) (odd): Points from \( (0, 3) \) to \( (3, 3) \), totaling 4 points.
+
+Thus, the number of points for each \( y \) is determined by its parity.

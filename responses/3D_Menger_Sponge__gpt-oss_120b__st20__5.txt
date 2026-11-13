@@ -1,0 +1,24 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError
+    count = -1
+    candidate = 0
+    while True:
+        c = candidate
+        ones = 0
+        while c:
+            if c % 3 == 1:
+                ones += 1
+                if ones > 1:
+                    break
+            c //= 3
+        if ones <= 1:
+            count += 1
+            if count == n:
+                x = candidate % 3
+                y = (candidate // 3) % 3
+                z = (candidate // 9) % 3
+                return (x, y, z)
+        candidate += 1
+```

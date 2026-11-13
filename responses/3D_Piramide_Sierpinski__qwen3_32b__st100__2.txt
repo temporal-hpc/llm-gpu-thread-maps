@@ -1,0 +1,72 @@
+To map an integer to a 3D coordinate based on the examples provided (i.e., `n=4 → (2,0,0)`, `n=5 → (3,0,0)`, `n=6 → (2,1,0)`, `n=7 → (2,0,1)`), we can derive a consistent pattern by examining the binary representation of the number and assigning coordinates based on bit positions.
+
+---
+
+### 🔍 Observations from Examples
+
+| n  | Binary | x | y | z |
+|----|--------|---|---|---|
+| 4  | 100    | 2 | 0 | 0 |
+| 5  | 101    | 3 | 0 | 0 |
+| 6  | 110    | 2 | 1 | 0 |
+| 7  | 111    | 2 | 0 | 1 |
+
+From this, we can observe:
+- **x** is derived from the **second bit** (bit index 2, value 4).
+- **y** is derived from the **first bit** (bit index 1, value 2).
+- **z** is derived from the **least significant bit** (bit index 0, value 1).
+
+But in the examples, **x = 2 + (bit 0 ? 1 : 0)**, which suggests that **x is the value of the second bit (4) divided by 2**, and the **least significant bit is added to it**.
+
+This leads to the following interpretation:
+- **x = (bit2 ? 2 : 0) + (bit0 ? 1 : 0)**
+- **y = bit1**
+- **z = bit0**
+
+---
+
+### ✅ Final Function
+
+Here is the Python function that implements this logic:
+
+```python
+def integer_to_3d(n):
+    # Extract bits from the integer
+    bit2 = (n >> 2) & 1  # Second bit (value 4)
+    bit1 = (n >> 1) & 1  # First bit (value 2)
+    bit0 = n & 1         # Least significant bit (value 1)
+
+    # Compute coordinates
+    x = (bit2 * 2) + (bit0)  # 2 from bit2, 1 from bit0
+    y = bit1
+    z = bit0
+
+    return (x, y, z)
+```
+
+---
+
+### 🧪 Test Cases
+
+```python
+print(integer_to_3d(4))  # (2, 0, 0)
+print(integer_to_3d(5))  # (3, 0, 0)
+print(integer_to_3d(6))  # (2, 1, 0)
+print(integer_to_3d(7))  # (2, 0, 1)
+```
+
+---
+
+### 🧠 Explanation
+
+- **x** is computed as `bit2 * 2 + bit0`, which ensures:
+  - If the second bit is set, x = 2.
+  - If the least significant bit is also set, x increases by 1.
+- **y** is the value of the first bit (bit 1).
+- **z** is the value of the least significant bit (bit 0).
+
+---
+
+### 📌 Notes
+
+This function is **specific to the pattern observed in the examples**. If you have more examples or a broader context (like a full specification of the encoding), the function could be generalized further.

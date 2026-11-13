@@ -1,0 +1,231 @@
+**Solution Explanation**
+
+For a three‑dimensional regular grid we number the cells by the
+*Z‑order* (Morton) curve.
+The binary representation of the index is obtained by interleaving the
+binary representations of the three coordinates
+
+```
+index =  x0 y0 z0 x1 y1 z1 x2 y2 z2 …
+```
+
+(`x0` – the least significant bit of `x`, `y0` – the least significant
+bit of `y`, …).
+
+The task is to recover the three coordinates from the given index.
+Only elementary bit operations are needed – the algorithm works in
+`O(log N)` where `N` is the index.
+
+--------------------------------------------------------------------
+
+#### 1.  De‑interleaving (inverse Morton code)
+
+For a 64‑bit unsigned integer we extract the bits that belong to each
+coordinate:
+
+```
+x = compact_3bits(index, 0)   // bits 0,3,6,… become bits 0,1,2,… of x
+y = compact_3bits(index, 1)   // bits 1,4,7,… become bits 0,1,2,… of y
+z = compact_3bits(index, 2)   // bits 2,5,8,… become bits 0,1,2,… of z
+```
+
+`compact_3bits(v, offset)` removes all bits of `v` whose position
+mod 3 is different from `offset` and squeezes the remaining bits to the
+right.
+
+The well‑known “bit‑shuffle” routine does exactly that.
+For a 64‑bit value it can be written as a cascade of masks and shifts:
+
+```python
+def compact_3bits(v: int, offset: int) -> int:
+    # keep only the bits we need
+    if offset == 0:               # bits 0,3,6,… → mask 0x1249249249249249
+        v &= 0x1249249249249249
+    elif offset == 1:             # bits 1,4,7,… → mask 0x2492492492492492
+        v &= 0x2492492492492492
+    else:                         # offset == 2 → mask 0x4924924924924924
+        v &= 0x4924924924924924
+
+    # now compress the three‑bit groups
+    v = (v | (v >> 2)) & 0x30c30c30c30c30c3
+    v = (v | (v >> 4)) & 0xF00F00F00F00F00F
+    v = (v | (v >> 8)) & 0x00FF0000FF0000FF
+    v = (v | (v >> 16)) & 0x0000FFFF0000FFFF
+    v = (v | (v >> 32)) & 0x00000000FFFFFFFF
+    return v
+```
+
+The constants are the binary patterns that keep the wanted bits
+(`0x1249…` for positions `0,3,6,…`, `0x2492…` for `1,4,7,…`,
+`0x4924…` for `2,5,8,…`).  
+After the first mask the value contains only the bits belonging to the
+requested coordinate, spaced three positions apart.
+The successive “shuffle‑down” steps bring those bits together.
+
+--------------------------------------------------------------------
+
+#### 2.  Algorithm
+
+```
+input : N                # the index (0 ≤ N < 2^63)
+output: (x, y, z)
+
+x = compact_3bits(N, 0)
+y = compact_3bits(N, 1)
+z = compact_3bits(N, 2)
+return (x, y, z)
+```
+
+--------------------------------------------------------------------
+
+#### 3.  Correctness Proof  
+
+We prove that the algorithm returns exactly the coordinates whose
+interleaved bits give the original index.
+
+---
+
+##### Lemma 1  
+For any non‑negative integer `c` and any `k ≥ 0`
+
+```
+bit k of c   =   bit (3·k + d) of index
+```
+
+where `d = 0,1,2` is the axis (`x`, `y`, `z` respectively).
+
+*Proof.*  
+By definition of the Morton order the binary representation of the
+index consists of the bits of the three coordinates taken in the order
+`x0 y0 z0 x1 y1 z1 …`.  
+Consequently the `k`‑th bit of `x` appears at position `3·k` of the
+index, the `k`‑th bit of `y` at position `3·k+1`, and the `k`‑th bit of
+`z` at position `3·k+2`. ∎
+
+
+
+##### Lemma 2  
+`compact_3bits(v, d)` returns a number whose binary representation
+contains exactly the bits of `v` that are at positions `3·k + d`
+(`k = 0,1,…`) placed at positions `k`.
+
+*Proof.*  
+The first mask removes all bits whose position modulo 3 differs from `d`,
+so only the desired bits survive, still spaced three positions apart.
+Each subsequent step
+
+```
+v = (v | (v >> s)) & mask
+```
+
+with `s = 2,4,8,16,32` and a suitable mask moves the remaining bits
+closer to the least significant side while discarding the gaps.
+After the final step the bits occupy consecutive positions `k`. ∎
+
+
+
+##### Lemma 3  
+For any index `I`
+
+```
+x = compact_3bits(I, 0)
+y = compact_3bits(I, 1)
+z = compact_3bits(I, 2)
+```
+
+satisfy  
+
+```
+I = interleave_bits(x, y, z)          (Morton code)
+```
+
+*Proof.*  
+Take the binary expansion of `I`.  
+By Lemma&nbsp;1 the bits belonging to `x` are precisely those at
+positions `3·k`.  
+By Lemma&nbsp;2 `compact_3bits(I,0)` extracts those bits and packs them
+into the binary expansion of `x`.  
+The same reasoning holds for `y` (`d = 1`) and `z` (`d = 2`).  
+Therefore the three numbers contain exactly the three disjoint
+sub‑sequences of bits of `I`.  
+Re‑interleaving them restores `I`. ∎
+
+
+
+##### Theorem  
+The algorithm `decode(N)` described in the solution returns the unique
+triple `(x, y, z)` whose Morton index equals `N`.
+
+*Proof.*  
+The algorithm computes `x, y, z` exactly as in Lemma&nbsp;3.
+Consequently the Morton interleaving of the three results yields `N`.
+Since the Morton mapping is a bijection between triples of non‑negative
+integers and natural numbers, this triple is the only one that maps to
+`N`. ∎
+
+
+
+--------------------------------------------------------------------
+
+#### 4.  Complexity Analysis  
+
+`compact_3bits` performs a constant number of bitwise operations,
+independent of the magnitude of the argument.
+Therefore the whole conversion works in  
+
+```
+Time   : O(1)          (actually a very small constant)
+Memory : O(1)
+```
+
+--------------------------------------------------------------------
+
+#### 5.  Reference Implementation  (Python 3)
+
+```python
+# ------------------------------------------------------------
+#  inverse Morton code (Z‑order) for three dimensions
+# ------------------------------------------------------------
+
+MASKS = (
+    0x1249249249249249,   # keep bits 0,3,6,…   → x
+    0x2492492492492492,   # keep bits 1,4,7,…   → y
+    0x4924924924924924    # keep bits 2,5,8,…   → z
+)
+
+def _compact_3bits(v: int, axis: int) -> int:
+    """extract bits belonging to the given axis (0=x,1=y,2=z)"""
+    v &= MASKS[axis]                     # keep only the wanted bits
+
+    # shuffle the three‑bit groups down to a contiguous word
+    v = (v | (v >> 2)) & 0x30c30c30c30c30c3
+    v = (v | (v >> 4)) & 0xf00f00f00f00f00f
+    v = (v | (v >> 8)) & 0x00ff0000ff0000ff
+    v = (v | (v >> 16)) & 0x0000ffff0000ffff
+    v = (v | (v >> 32)) & 0x00000000ffffffff
+    return v
+
+
+def index_to_coord(idx: int) -> tuple[int, int, int]:
+    """
+    Convert a Morton index to its (x, y, z) coordinates.
+    idx must be a non‑negative integer that fits into a Python int.
+    """
+    x = _compact_3bits(idx, 0)
+    y = _compact_3bits(idx, 1)
+    z = _compact_3bits(idx, 2)
+    return (x, y, z)
+
+
+# ------------------------------------------------------------
+#  Example / simple test
+# ------------------------------------------------------------
+if __name__ == "__main__":
+    # given example
+    test = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+    for i in test:
+        print(i, "->", index_to_coord(i))
+```
+
+The program follows exactly the algorithm proven correct above and
+conforms to the required `O(1)` time and `O(1)` memory consumption.

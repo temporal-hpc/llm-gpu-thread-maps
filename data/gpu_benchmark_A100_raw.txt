@@ -1,0 +1,56 @@
+=== A100 PROFESSIONAL BENCHMARK (PEAK POWER + SCOPE FIX) ===
+Target Points: 500000000
+Min Test Duration: 3.0 sec (to saturate power sensors)
+VRAM: ~16.48 GB
+
+
+>>> DOMAIN: 2D TRIANGULAR MAPPING
+Model (Source)                 |   Avg Time |   Avg Pwr |  Peak Pwr | Tot Energy | Algorithm Logic    | Complexity
+--------------------------------------------------------------------------------------------------------------------------
+Bounding Box                   |   2.968 ms |   194.6 W |   201.9 W | 11551.26 mJ | If(x<=y)           | O(1)
+Navarro et al. (2018)          |   1.462 ms |   350.3 W |   354.5 W | 10239.96 mJ | Analytical         | O(1)
+DeepSeek-r1:70b (20pts)        |   1.461 ms |   346.3 W |   358.0 W | 10121.97 mJ | Analytical         | O(1)
+DeepSeek-r1:70b (50pts)        |   1.462 ms |   351.5 W |   370.3 W | 10276.15 mJ | Analytical         | O(1)
+GPT-OSS:120b (20pts)           |   1.461 ms |   357.8 W |   369.4 W | 10458.76 mJ | Analytical         | O(1)
+GPT-OSS:120b (50pts)           |   1.462 ms |   373.1 W |   372.4 W | 10907.80 mJ | Analytical         | O(1)
+GPT-OSS:120b (100pts)          |   1.462 ms |   375.9 W |   375.0 W | 10991.14 mJ | Analytical         | O(1)
+Llama3.3 (20pts)               |   1.462 ms |   377.7 W |   377.3 W | 11042.69 mJ | Analytical         | O(1)
+Qwen3:235b (20pts)             |   1.462 ms |   380.6 W |   379.4 W | 11125.93 mJ | Analytical         | O(1)
+Qwen3:32b (20pts)              |   1.462 ms |   382.1 W |   380.9 W | 11171.67 mJ | Analytical         | O(1)
+Qwen3:32b (100pts)             |   1.462 ms |   383.9 W |   382.6 W | 11223.86 mJ | Analytical         | O(1)
+DeepSeek-r1:70b (100pts)       |   2.007 ms |   406.6 W |   418.8 W | 16322.85 mJ | Sqrt + Loop        | O(1)
+GPT-OSS:20b (50pts)            |   1.520 ms |   390.0 W |   405.0 W | 11855.52 mJ | Approx + If        | O(1)
+GPT-OSS:20b (100pts)           |   1.520 ms |   401.1 W |   411.7 W | 12197.04 mJ | Approx + If        | O(1)
+Qwen3:32b (50pts)              |  14.873 ms |   267.8 W |   275.5 W | 79654.37 mJ | Binary Search      | O(log N)
+
+>>> DOMAIN: 3D PYRAMID MAPPING
+Model (Source)                 |   Avg Time |   Avg Pwr |  Peak Pwr | Tot Energy | Algorithm Logic    | Complexity
+--------------------------------------------------------------------------------------------------------------------------
+Bounding Box                   |  10.026 ms |   185.1 W |   193.1 W | 37109.50 mJ | If(x<=y<=z)        | O(1)
+Navarro et al. (2018)          |   3.839 ms |   288.6 W |   290.4 W | 22156.34 mJ | Analytical         | O(1)
+GPT-OSS:120b (100pts)          |   3.839 ms |   291.2 W |   290.1 W | 22357.18 mJ | Analytical         | O(1)
+DeepSeek-r1:70b (50pts)        |   6.211 ms |   267.4 W |   289.8 W | 33217.76 mJ | Cbrt + Loop        | O(1)
+Qwen3:32b (20pts)              |   6.211 ms |   276.6 W |   275.2 W | 34355.19 mJ | Cbrt + Loop        | O(1)
+Qwen3:32b (50pts)              |   6.211 ms |   276.5 W |   275.2 W | 34348.09 mJ | Cbrt + Loop        | O(1)
+Qwen3:32b (100pts)             |   6.211 ms |   276.8 W |   275.2 W | 34386.18 mJ | Cbrt + Loop        | O(1)
+GPT-OSS:20b (100pts)           |  29.335 ms |   243.2 W |   275.2 W | 142711.57 mJ | BinSearch Z&Y      | O(log N)
+Qwen3:235b (20pts)             |  29.336 ms |   234.5 W |   241.1 W | 137567.25 mJ | BinSearch Z&Y      | O(log N)
+GPT-OSS:120b (50pts)           |  51.580 ms |   212.6 W |   215.3 W | 219280.69 mJ | BinSearch+Lin      | O(N^1/3)
+GPT-OSS:120b (20pts)           | 117.098 ms |   226.3 W |   227.7 W | 529909.60 mJ | Linear Search      | O(N^1/3)
+GPT-OSS:20b (50pts)            | 117.097 ms |   226.5 W |   227.7 W | 530341.60 mJ | Linear Search      | O(N^1/3)
+
+>>> DOMAIN: 2D SIERPINSKI FRACTAL
+Model (Source)                 |   Avg Time |   Avg Pwr |  Peak Pwr | Tot Energy | Algorithm Logic    | Complexity
+--------------------------------------------------------------------------------------------------------------------------
+Bounding Box                   |  65.740 ms |   126.3 W |   126.1 W | 166018.22 mJ | If(Fractal)        | O(1)
+Navarro et al. (2017)          |   8.622 ms |   193.6 W |   193.4 W | 33381.84 mJ | Bitwise            | O(log N)
+GPT-OSS:120b (100pts)          |   8.622 ms |   194.7 W |   193.4 W | 33573.26 mJ | Bitwise            | O(log N)
+Qwen3:235b (20pts)             |   8.622 ms |   188.5 W |   193.7 W | 32497.81 mJ | Bitwise            | O(log N)
+Qwen3:235b (50pts)             |   8.622 ms |   194.9 W |   194.0 W | 33618.79 mJ | Bitwise            | O(log N)
+
+>>> DOMAIN: 3D SIERPINSKI FRACTAL
+Model (Source)                 |   Avg Time |   Avg Pwr |  Peak Pwr | Tot Energy | Algorithm Logic    | Complexity
+--------------------------------------------------------------------------------------------------------------------------
+Bounding Box                   |  63.436 ms |   125.9 W |   126.4 W | 159747.23 mJ | If(Fractal)        | O(1)
+Navarro et al. (2017)          |   4.189 ms |   209.1 W |   209.5 W | 17514.24 mJ | Bitwise            | O(log N)
+GPT-OSS:120b (100pts)          |   4.189 ms |   210.5 W |   210.1 W | 17630.39 mJ | Bitwise            | O(log N)

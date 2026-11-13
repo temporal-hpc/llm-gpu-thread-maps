@@ -1,0 +1,33 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer")
+
+    x, y, z = 0, 0, 0
+    s = 1
+    while n >= s:
+        n -= s
+        s += 1
+        if s == 4: 
+            s = 1
+            if z == 0: 
+                y += 1
+            else: 
+                x += 1; z = 0
+
+    offset = (s - 1) // 2
+    if s % 2 == 1:
+        x += n + offset
+        if n < offset: 
+            y -= (offset - n)
+        else: 
+            z += (n - offset)
+    else:
+        x -= (offset - n)
+        if n < offset: 
+            y += (offset - n)
+        else: 
+            z += (n - offset)
+
+    return (x, y, z)
+```

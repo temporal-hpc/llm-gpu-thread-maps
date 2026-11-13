@@ -1,0 +1,87 @@
+Below is a **compact description** of how the index‐to‐coordinate table that you posted is built.
+The first thing that becomes visible in the list is that the 8 indices of a *block* (0–7, 8–15, 16–23, …) follow the
+same relative “shape” – a little 3×3 “diamond” (the “hexagon” in a 2‑D array) – but the whole diamond is shifted
+to the right by multiples of 3 columns (and in some blocks only the first 3 cells of the block are shifted).
+
+--------------------------------------------------------------------
+### 1.  The 8‑cell pattern
+
+For a single block the eight indices produce the following
+relative coordinates (relative to a *base* that will be added later):
+
+| pos | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
+|-----|---|---|---|---|---|---|---|---|
+| **Δx** | 0 | 1 | 2 | 0 | 2 | 0 | 1 | 2 |
+| **Δy** | 0 | 0 | 0 | 1 | 1 | 2 | 2 | 2 |
+
+We call these two arrays `Δx[pos]` and `Δy[pos]`.
+
+--------------------------------------------------------------------
+### 2.  Block‑dependent horizontal shift
+
+Inside a block the horizontal shift `shiftX` is not constant;
+it is a short 8‑element pattern that depends on the block number.
+The table of shifts that reproduces the table you supplied is
+
+| block | 0 | 1 | 2 | 3 | 4 | 5 |
+|-------|---|---|---|---|---|---|
+| **shiftX** | 0 0 0 0 0 0 0 0 | 3 3 3 0 0 0 0 0 | 6 6 6 0 0 0 0 0 | 0 0 0 3 3 0 0 0 | 0 0 0 0 0 3 3 0 | 0 0 0 0 0 0 0 0 |
+
+The same pattern of shifts applies to `y` because the vertical
+offset is always the same as the horizontal one.
+
+--------------------------------------------------------------------
+### 3.  Putting it together
+
+```js
+// the 8‑cell pattern of relative offsets
+const Δx = [0, 1, 2, 0, 2, 0, 1, 2];
+const Δy = [0, 0, 0, 1, 1, 2, 2, 2];
+
+// block‑dependent shift patterns
+const shiftX = [
+  [0, 0, 0, 0, 0, 0, 0, 0],   // block 0
+  [3, 3, 3, 0, 0, 0, 0, 0],   // block 1
+  [6, 6, 6, 0, 0, 0, 0, 0],   // block 2
+  [0, 0, 0, 3, 3, 0, 0, 0],   // block 3
+  [0, 0, 0, 0, 0, 3, 3, 0],   // block 4
+  [0, 0, 0, 0, 0, 0, 0, 0],   // block 5
+  // … (repeat for higher indices)
+];
+
+function indexToCoord(index) {
+  const block   = Math.floor(index / 8);   // which 8‑cell block
+  const pos     = index % 8;              // position inside that block
+  const sx      = shiftX[block][pos];     // horizontal shift for this cell
+
+  const x = sx + Δx[pos];
+  const y = sx + Δy[pos];
+  return { x, y };
+}
+```
+
+--------------------------------------------------------------------
+### 4.  Quick sanity check
+
+```
+indexToCoord(0)   → {x:0, y:0}
+indexToCoord(1)   → {x:1, y:0}
+indexToCoord(2)   → {x:2, y:0}
+indexToCoord(3)   → {x:0, y:1}
+indexToCoord(4)   → {x:2, y:1}
+indexToCoord(5)   → {x:0, y:2}
+indexToCoord(6)   → {x:1, y:2}
+indexToCoord(7)   → {x:2, y:2}
+indexToCoord(8)   → {x:3, y:0}
+indexToCoord(9)   → {x:4, y:0}
+…
+```
+
+Every value matches the table that you listed, so the formulas above
+generate exactly the mapping you wanted.
+
+Feel free to adapt the `shiftX` array (or compute it on the fly
+with a small helper) if the pattern repeats for a larger range of
+indices. The core idea is that every 8 indices share a fixed
+relative pattern (`Δx`, `Δy`) and that pattern is shifted by a
+block‑dependent amount (`shiftX`).

@@ -1,0 +1,61 @@
+To map the integer `n` to coordinates `(x, y, z)`, follow these steps:
+
+1. **Determine `z`:**
+   - If `n < 8`, then `z = 0`.
+   - If `n ≥ 8`, compute `z` as:
+     ```
+     z = ((n - 8) // 4) + 1
+     ```
+
+2. **Calculate the starting index `s` for the current `z`:**
+   - Compute `s = 8 + 4 * (z - 1)`.
+
+3. **Determine `m` within the group:**
+   - Calculate `m = (n - s) // 2`.
+
+4. **Determine if `n` is even or odd within the group:**
+   - Check if `(n - s)` is even (`remainder = 0`) or odd (`remainder = 1`).
+
+5. **Assign `x` and `y` based on `m` and whether `n` is even or odd:**
+
+   - **For even `n` (remainder = 0):**
+     ```
+     x = m % 3
+     y = m // 2
+     ```
+
+   - **For odd `n` (remainder = 1):**
+     ```
+     x = (m + 2) % 3
+     y = m // 2
+     ```
+
+6. **Examples:**
+
+   - For `n = 0`: 
+     - `z = 0`, `s=0`, `m=0`, even → `(x, y) = (0%3, 0//2) = (0, 0)`
+   
+   - For `n = 12`:
+     - `z = ((12-8)//4)+1 = (4//4)+1 = 2`
+     - `s=12`, `m=(12-12)//2=0`, even → `(x, y) = (0%3, 0//2) = (0, 0)`
+   
+   - For `n = 9`:
+     - `z = ((9-8)//4)+1 = (1//4)+1 = 0+1=1`
+     - `s=8`, `m=(9-8)//2=0.5→0` (since integer division), odd → `(x, y) = ((0+2)%3, 0//2)=(2,0)` but wait, actual data shows x=1,y=0 for n=9, so perhaps the formula needs adjustment.
+
+It appears that while `z` can be calculated accurately using the provided formula, determining `x` and `y` precisely requires further refinement. For an exact mapping, a lookup table based on observed values might be more reliable given the complexity of the pattern.
+
+**Final Answer:**
+
+The coordinates `(x, y, z)` for integer `n` are determined by first calculating `z` using:
+
+```
+if n < 8:
+    z = 0
+else:
+    z = ((n - 8) // 4) + 1
+```
+
+Within each group defined by `z`, the values of `x` and `y` follow specific patterns that can be determined through further analysis or a predefined lookup table based on observed data.
+
+\boxed{(x, y, z)}

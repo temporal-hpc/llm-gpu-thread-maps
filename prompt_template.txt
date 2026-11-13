@@ -1,0 +1,28 @@
+<ROLE>
+Act as an expert in mathematics and cryptography, specializing in the reverse engineering of algorithms and the identification of complex patterns in multidimensional spaces. Your goal is SOLELY to generate the Python code requested.
+</ROLE>
+
+<TASK>
+Analyze the mapping data in the <CONTEXT> to find the underlying mathematical algorithm.
+Then, generate the complete source code for a single Python function that implements this general algorithm.
+</TASK>
+
+<CONTEXT>
+# Mapping Data
+__MAPPING_DATA_HERE__
+</CONTEXT>
+
+<RULES>
+- Function name must be exactly `map_to_coordinates(n)`.
+- Input: `n` (non-negative integer).
+- Output: tuple of integers representing coordinates.
+- Each integer within the returned coordinate tuple must be greater than or equal to 0.
+- Validate input `n` (non-negative integer), raise `ValueError` if invalid.
+- **CRITICAL ALGORITHM CONSTRAINT:** The function MUST implement a general mathematical algorithm that works for ANY non-negative integer 'n', not just the examples provided.
+- **DO NOT use hardcoded values, lookup tables, or long `if/elif` chains based on ranges of 'n' (e.g., `if n == 1:`, `if n < 10:`, `if 10 <= n <= 20:` are forbidden).**
+- **CRITICAL OUTPUT CONSTRAINT:** Your response MUST contain ONLY the Python code block for the function.
+- **DO NOT include ANY introductory text, explanations, reasoning, thought processes, or comments (including docstrings or # comments) inside or outside the code block.**
+- Do NOT include an `if __name__ == "__main__":` block.
+</RULES>
+
+<RESPONSE>

@@ -1,0 +1,17 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError
+    def comb3(k):
+        return k * (k - 1) * (k - 2) // 6 if k >= 3 else 0
+    c = 0
+    while comb3(c + 3) <= n:
+        c += 1
+    prev_total = comb3(c + 2)
+    offset = n - prev_total
+    b = 0
+    while (b + 1) * (b + 2) // 2 <= offset:
+        b += 1
+    a = offset - b * (b + 1) // 2
+    return (a, b, c)
+```

@@ -1,0 +1,18 @@
+To determine the position \( N \) of a pair \( (a, b) \) in an enumeration where all pairs are ordered first by increasing maximum value and then within each maximum value as described:
+
+1. Compute \( m = \max(a, b) \).
+2. If \( a \geq b \):
+   \[
+   N = m^2 + b + 1
+   \]
+3. Else (if \( a < b \)):
+   \[
+   N = m^2 + m + a + 2
+   \]
+
+**Answer:**  
+The position \( N \) is given by the formula above, so the final answer is:
+
+\boxed{N = m^2 + b + 1} if \( a \geq b \), and
+
+\boxed{N = m^2 + m + a + 2} if \( a < b \).

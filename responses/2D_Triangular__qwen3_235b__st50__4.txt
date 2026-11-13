@@ -1,0 +1,34 @@
+To determine if a given number is a triangular number, we use the mathematical property that a number \( x \) is triangular if and only if \( 8x + 1 \) is a perfect square. Triangular numbers are defined as the sum of the first \( n \) natural numbers (for \( n \geq 1 \)), and the formula for the \( n \)-th triangular number is \( T_n = \frac{n(n+1)}{2} \). Rearranging this equation leads to the condition that \( 8x + 1 \) must be a perfect square for \( x \) to be triangular.
+
+### Approach
+1. **Check for Negative Input**: Triangular numbers are non-negative, so if the input \( x \) is negative, it cannot be triangular.
+2. **Compute \( y = 8x + 1 \)**: This transforms the problem into checking whether \( y \) is a perfect square.
+3. **Check for Perfect Square**: Calculate the integer square root \( r \) of \( y \) using `math.isqrt`. If \( r^2 = y \), then \( y \) is a perfect square, and \( x \) is triangular; otherwise, it is not.
+
+### Solution Code
+```python
+import math
+
+def main():
+    x = int(input().strip())
+    if x < 0:
+        print("false")
+    else:
+        y = 8 * x + 1
+        r = math.isqrt(y)
+        if r * r == y:
+            print("true")
+        else:
+            print("false")
+
+if __name__ == "__main__":
+    main()
+```
+
+### Explanation
+1. **Input Handling**: The program reads an integer input \( x \).
+2. **Negative Check**: If \( x \) is negative, it immediately outputs "false" since triangular numbers are non-negative.
+3. **Transformation**: For non-negative \( x \), compute \( y = 8x + 1 \). This value \( y \) must be a perfect square for \( x \) to be triangular.
+4. **Perfect Square Check**: The integer square root \( r \) of \( y \) is computed. If \( r^2 \) equals \( y \), \( y \) is a perfect square, confirming \( x \) is triangular (output "true"); otherwise, it is not (output "false").
+
+This approach efficiently checks the triangular number condition using basic arithmetic and integer square root operations, ensuring correctness for all valid inputs. The solution handles edge cases such as zero (which is considered triangular as \( T_0 = 0 \)) and negative numbers appropriately.

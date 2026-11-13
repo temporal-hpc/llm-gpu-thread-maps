@@ -1,0 +1,27 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non‑negative integer")
+    # positions for even z layers (z = 0 or 2)
+    even_positions = [
+        (0, 0), (1, 0), (2, 0),
+        (0, 1), (2, 1),
+        (0, 2), (1, 2), (2, 2)
+    ]
+    # positions for odd z layer (z = 1)
+    odd_positions = [
+        (0, 0), (2, 0),
+        (0, 2), (2, 2)
+    ]
+    block = n // 20
+    r = n % 20
+    z_local = 0 if r < 8 else 1 if r < 12 else 2
+    if z_local == 1:
+        pos = odd_positions[r - 8]
+    else:
+        offset = 0 if z_local == 0 else 12
+        pos = even_positions[r - offset]
+    x_local, y_local = pos
+    x_offset = 3 * block
+    return (x_offset + x_local, y_local, z_local)
+```

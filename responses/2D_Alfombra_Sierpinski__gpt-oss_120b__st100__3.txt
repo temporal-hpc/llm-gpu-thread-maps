@@ -1,0 +1,13 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError
+    offsets = [(0,0),(1,0),(2,0),(0,1),(2,1),(0,2),(1,2),(2,2)]
+    if n < 8:
+        return offsets[n]
+    b, r = divmod(n, 8)
+    bx, by = map_to_coordinates(b)
+    ox, oy = bx * 3, by * 3
+    dx, dy = offsets[r]
+    return ox + dx, oy + dy
+```

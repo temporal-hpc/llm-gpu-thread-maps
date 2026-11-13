@@ -1,0 +1,9 @@
+**Answer**
+
+The number of ways to distribute the \(n\) identical balls into the \(k\) distinct boxes is
+
+\[
+\boxed{\displaystyle \binom{\,n+k-1\,}{\,k-1\,}}
+\]
+
+(If the boxes are required to be non‑empty, the answer is \(\displaystyle \binom{\,n-1\,}{\,k-1\,}\).)

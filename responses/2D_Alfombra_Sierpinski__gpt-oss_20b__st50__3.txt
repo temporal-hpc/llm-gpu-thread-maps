@@ -1,0 +1,16 @@
+The Manhattan distance from the center thread \((1,1)\) to each of the specified threads is as follows:
+
+- Thread 20 is at \((2,1)\) → distance \(1\).
+- Thread 44 is at \((2,7)\) → distance \(7\).
+- Thread 29 is at \((0,5)\) → distance \(5\).
+- Thread 46 is at \((1,8)\) → distance \(7\).
+- Thread 30 is at \((1,5)\) → distance \(4\).
+
+Hence the output is:
+```
+1
+7
+5
+7
+4
+```

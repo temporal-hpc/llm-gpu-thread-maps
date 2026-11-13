@@ -1,0 +1,48 @@
+To solve this problem, we need to convert a given thread index `n` into 2D coordinates `(x, y)` based on a specific pattern. The pattern arranges threads in diagonal layers where each layer `d` contains `d + 1` threads. The coordinates for each thread in layer `d` are `(i, d - i)` for `i` ranging from `0` to `d`.
+
+### Approach
+1. **Problem Analysis**: The problem requires mapping a 1D thread index `n` to 2D coordinates `(x, y)` such that:
+   - Layer `d` starts at thread index `d*(d + 1)/2` and contains `d + 1` threads.
+   - For a given `n`, we first determine the layer `d` in which it resides.
+   - Within layer `d`, the thread index `n` corresponds to position `i = n - d*(d + 1)/2`, and the coordinates are `(i, d - i)`.
+
+2. **Key Insight**: The layer `d` for a given `n` can be derived using the formula:
+   \[
+   d = \left\lfloor \frac{\sqrt{8n + 1} - 1}{2} \right\rfloor
+   \]
+   This formula comes from solving the quadratic equation \(d(d + 1)/2 \leq n\) for the largest integer `d`.
+
+3. **Algorithm Selection**:
+   - **Integer Square Root Calculation**: Since we cannot use external libraries, we compute the integer square root of \(8n + 1\) using binary search.
+   - **Determine Layer `d`**: Using the integer square root, compute `d` as \((hi - 1) // 2\), where `hi` is the integer square root of \(8n + 1\).
+   - **Compute Coordinates**: Once `d` is known, compute the position `i` within the layer as \(i = n - d(d + 1)/2\). The coordinates are then `(i, d - i)`.
+
+4. **Complexity Analysis**:
+   - **Binary Search for Square Root**: The binary search runs in \(O(\log(\sqrt{8n + 1}))\) time, which simplifies to \(O(\log n)\) for large `n`.
+   - **Overall Complexity**: The solution efficiently handles very large values of `n` (up to \(10^{18}\)) with logarithmic time complexity, making it optimal for the problem constraints.
+
+### Solution Code
+```python
+def thread_to_coordinates(n):
+    m = 8 * n + 1
+    lo, hi = 0, m
+    while lo <= hi:
+        mid = (lo + hi) // 2
+        mid_sq = mid * mid
+        if mid_sq <= m:
+            lo = mid + 1
+        else:
+            hi = mid - 1
+    d = (hi - 1) // 2
+    i = n - d * (d + 1) // 2
+    return (i, d - i)
+```
+
+### Explanation
+1. **Initialization**: Calculate `m` as \(8n + 1\), which is used to determine the layer `d`.
+2. **Binary Search for Square Root**: Perform binary search on the range `[0, m]` to find the largest integer `hi` such that \(hi^2 \leq m\). This `hi` is the integer square root of `m`.
+3. **Determine Layer `d`**: Compute `d` using the formula \((hi - 1) // 2\). This gives the layer number in which the thread `n` resides.
+4. **Position within Layer**: Calculate the position `i` of the thread within its layer as \(i = n - d(d + 1)/2\).
+5. **Return Coordinates**: The coordinates for the thread are `(i, d - i)`, where `i` is the x-coordinate and `d - i` is the y-coordinate.
+
+This approach efficiently maps the thread index to 2D coordinates by leveraging mathematical insights and binary search, ensuring optimal performance even for very large values of `n`.

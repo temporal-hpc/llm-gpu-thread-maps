@@ -1,0 +1,25 @@
+To solve this problem, we need to determine the coordinates (x, y) in a grid based on a given index n. The grid is structured such that each layer y starts at a specific index and contains an increasing number of points as y increases. 
+
+### Approach
+1. **Identify Layers**: Each layer y starts at index `T(y) = y*(y+1)/2`, where T(y) is the triangular number for y. This means layer 0 starts at index 0, layer 1 starts at index 1, layer 2 starts at index 3, and so on.
+2. **Determine Layer (y)**: For a given n, determine which layer it falls into by solving the quadratic equation derived from triangular numbers. This is done using the formula `y = int((sqrt(8n + 1) - 1) / 2)`.
+3. **Calculate Position within Layer**: Once the layer y is determined, compute the position x within that layer as `x = n - T(y)`.
+
+### Solution Code
+```python
+import math
+
+def find_point(n):
+    if n < 0:
+        return None  # Assuming n is a non-negative integer
+    y = int((math.sqrt(8 * n + 1) - 1) // 2)
+    x = n - (y * (y + 1)) // 2
+    return (x, y)
+```
+
+### Explanation
+1. **Layer Identification**: Each layer y starts at index `T(y)` which is the sum of all integers from 0 to y. This triangular number helps in identifying where each new layer begins.
+2. **Quadratic Solution for Layer**: Using the formula derived from solving the quadratic equation, we efficiently determine the layer y without iterating through possible values, making the solution optimal even for large n.
+3. **Position Calculation**: Once the layer is known, the position within that layer (x) is simply the difference between n and the starting index of the layer.
+
+This approach ensures that we can quickly and accurately find the coordinates in constant time, O(1), using mathematical properties rather than iterative search.

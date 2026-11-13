@@ -1,0 +1,93 @@
+To convert a single number $ N $ into a 3D coordinate $ (x, y, z) $, we can define a systematic enumeration of all integer 3D points based on increasing values of $ z $, then $ y $, then $ x $, such that $ 0 \leq x \leq y \leq z $. The approach involves three key steps: determining the layer $ z $, computing the offset $ m $ within that layer, and finally decomposing $ m $ into $ x $ and $ y $.
+
+---
+
+### **Step 1: Determine the Layer $ z $**
+
+We define a cumulative function $ S(z) $ that gives the total number of points from all layers $ 0 $ through $ z $:
+
+$$
+S(z) = \frac{(z+1)(z+2)(z+3)}{6}
+$$
+
+This formula counts all the integer 3D points $ (x, y, z) $ such that $ 0 \leq x \leq y \leq z $.
+
+To find the correct layer $ z $ for a given $ N $, we solve for the smallest $ z $ such that:
+
+$$
+S(z-1) \leq N < S(z)
+$$
+
+This can be efficiently computed using binary search or approximated as $ z \approx \sqrt[3]{6N} $.
+
+---
+
+### **Step 2: Compute the Offset $ m $ Within the Layer**
+
+Once $ z $ is determined, we calculate the offset $ m $ within the current layer:
+
+$$
+m = N - S(z-1)
+$$
+
+This $ m $ represents the position of the point within the current layer $ z $.
+
+---
+
+### **Step 3: Decompose $ m $ into $ x $ and $ y $**
+
+Within each layer $ z $, the points are ordered by increasing $ y $, and within each $ y $, by increasing $ x $, such that $ 0 \leq x \leq y \leq z $. The number of such points for a fixed $ z $ is:
+
+$$
+\text{Points in layer } z = \frac{(z+1)(z+2)}{2}
+$$
+
+To find $ y $ and $ x $ from $ m $, we use the following formulas:
+
+- Compute $ y $ as:
+  $$
+  y = \left\lfloor \frac{\sqrt{8m + 1} - 1}{2} \right\rfloor
+  $$
+
+- Then compute $ x $ as:
+  $$
+  x = m - \frac{y(y+1)}{2}
+  $$
+
+---
+
+### **Final Result**
+
+The 3D coordinate corresponding to the number $ N $ is:
+
+$$
+\boxed{(x, y, z)}
+$$
+
+Where:
+
+- $ z $ is the smallest integer satisfying $ S(z-1) \leq N < S(z) $, with $ S(z) = \frac{(z+1)(z+2)(z+3)}{6} $
+- $ m = N - S(z-1) $
+- $ y = \left\lfloor \frac{\sqrt{8m + 1} - 1}{2} \right\rfloor $
+- $ x = m - \frac{y(y+1)}{2} $
+
+---
+
+### **Example**
+
+Let’s compute the coordinate for $ N = 5 $ (0-based):
+
+1. Find $ z $ such that $ S(z-1) \leq 5 < S(z) $:
+   - $ S(1) = 4 $, $ S(2) = 10 $ → $ z = 2 $
+
+2. Compute $ m = 5 - S(1) = 5 - 4 = 1 $
+
+3. Compute $ y = \left\lfloor \frac{\sqrt{8 \cdot 1 + 1} - 1}{2} \right\rfloor = \left\lfloor \frac{3 - 1}{2} \right\rfloor = 1 $
+
+4. Compute $ x = 1 - \frac{1(1+1)}{2} = 1 - 1 = 0 $
+
+So, the coordinate is:
+
+$$
+\boxed{(0, 1, 2)}
+$$

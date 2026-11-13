@@ -1,0 +1,106 @@
+To determine the **nth element** in the sequence where each number $ x $ appears $ 2^{\text{number of 1s in binary representation of } x} $ times, we follow a structured approach based on cumulative counts.
+
+---
+
+### 🔢 **Understanding the Sequence**
+
+Each number $ x $ appears in the sequence a number of times equal to $ 2^{\text{popcount}(x)} $, where **popcount(x)** is the number of 1s in the binary representation of $ x $.
+
+For example:
+- $ x = 0 $ → binary: `0` → 0 ones → appears $ 2^0 = 1 $ time
+- $ x = 1 $ → binary: `1` → 1 one → appears $ 2^1 = 2 $ times
+- $ x = 2 $ → binary: `10` → 1 one → appears $ 2^1 = 2 $ times
+- $ x = 3 $ → binary: `11` → 2 ones → appears $ 2^2 = 4 $ times
+- $ x = 4 $ → binary: `100` → 1 one → appears $ 2^1 = 2 $ times
+
+So the sequence begins:
+```
+0, 1, 1, 2, 2, 3, 3, 3, 3, 4, 4, 5, 5, 5, 5, ...
+```
+
+---
+
+### 🧠 **Approach to Find the nth Element**
+
+We define a function $ S(y) $, which gives the **total number of elements in the sequence up to and including number $ y $**.
+
+$$
+S(y) = \sum_{x=0}^{y} 2^{\text{popcount}(x)}
+$$
+
+We want to find the **smallest $ y $** such that:
+
+$$
+S(y) \geq n + 1
+$$
+
+This is because the first element is at index 0, so the $ n $-th element corresponds to the $ (n+1) $-th position in the cumulative count.
+
+---
+
+### 🔄 **Efficient Computation of $ S(y) $**
+
+We can compute $ S(y) $ efficiently using a **recursive formula** based on the binary representation of $ y $:
+
+Let $ k = \lfloor \log_2(y) \rfloor $, and $ r = y - 2^k $.
+
+Then:
+
+$$
+S(y) = 3^k + 2 \cdot S(r)
+$$
+
+This formula is derived from the fact that all numbers from $ 0 $ to $ 2^k - 1 $ contribute $ 3^k $ to the sum, and the remaining $ r $ values are handled recursively.
+
+---
+
+### 🔍 **Binary Search for $ y $**
+
+Given $ n $, we perform a **binary search** over $ y $ to find the smallest value such that $ S(y) \geq n + 1 $. This ensures we efficiently locate the correct $ y $ without computing the entire sequence.
+
+---
+
+### ✅ **Example**
+
+Let’s find the 10th element in the sequence.
+
+- $ n = 10 $
+- We want $ S(y) \geq 11 $
+
+We compute:
+- $ S(3) = 9 $
+- $ S(4) = 11 $
+
+So the 10th element is the second occurrence of $ x = 4 $, and the answer is:
+
+$$
+\boxed{4}
+$$
+
+---
+
+### 🧾 **Final Answer**
+
+Given any $ n $, the **nth element** in the sequence is the smallest integer $ y $ such that:
+
+$$
+S(y) \geq n + 1
+$$
+
+Where $ S(y) $ is computed recursively using the formula:
+
+$$
+S(y) = 3^k + 2 \cdot S(y - 2^k)
+$$
+
+This method allows us to efficiently determine the value of the nth element in the sequence.
+
+---
+
+### 📦 **Final Boxed Answer**
+
+$$
+\boxed{y}
+$$
+
+Where $ y $ is the smallest integer such that $ S(y) \geq n + 1 $, and $ S(y) $ is computed using the recursive formula described.

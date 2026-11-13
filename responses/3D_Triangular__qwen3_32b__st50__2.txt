@@ -1,0 +1,88 @@
+To determine the coordinates $(x, y)$ of the $n$-th element in a sequence where elements are ordered by the sum $x + y$ (denoted $z$), and for each $z$, elements are ordered by increasing $x$, we follow a structured mathematical approach.
+
+---
+
+### **Step-by-Step Explanation**
+
+1. **Understanding the Sequence Structure**:
+   - The sequence is grouped by $z = x + y$, starting from $z = 0$.
+   - For each $z$, there are $z + 1$ pairs: $(0, z), (1, z - 1), \dots, (z, 0)$.
+   - The number of elements up to and including $z$ is the triangular number:
+     $$
+     T(z) = \frac{(z + 1)(z + 2)}{2}
+     $$
+
+2. **Finding the Correct $z$**:
+   - To locate the group where the $n$-th element lies, we solve for the smallest integer $z$ such that:
+     $$
+     \frac{(z + 1)(z + 2)}{2} \geq n
+     $$
+   - This is equivalent to finding the smallest integer $m$ such that:
+     $$
+     \frac{m(m + 1)}{2} \geq n
+     $$
+     Then, $z = m - 1$.
+
+3. **Finding the Position Within the Group**:
+   - Once $z$ is determined, the number of elements before the group $z$ is:
+     $$
+     T(z - 1) = \frac{z(z + 1)}{2}
+     $$
+   - The position within the group is:
+     $$
+     \text{pos} = n - T(z - 1) - 1
+     $$
+
+4. **Determining the Coordinates**:
+   - The $x$-coordinate is $\text{pos}$.
+   - The $y$-coordinate is $z - \text{pos}$.
+
+---
+
+### **Final Formula**
+
+Given a positive integer $n$, the coordinates $(x, y)$ of the $n$-th element are computed as follows:
+
+1. Compute:
+   $$
+   m = \left\lceil \frac{\sqrt{8n + 1} - 1}{2} \right\rceil
+   $$
+2. Set:
+   $$
+   z = m - 1
+   $$
+3. Compute:
+   $$
+   T(z - 1) = \frac{z(z + 1)}{2}
+   $$
+4. Find the position within the group:
+   $$
+   \text{pos} = n - T(z - 1) - 1
+   $$
+5. The result is:
+   $$
+   x = \text{pos}, \quad y = z - \text{pos}
+   $$
+
+---
+
+### **Example**
+
+For $n = 7$:
+
+- $m = \left\lceil \frac{\sqrt{57} - 1}{2} \right\rceil = 4$
+- $z = 3$
+- $T(z - 1) = \frac{3 \cdot 4}{2} = 6$
+- $\text{pos} = 7 - 6 - 1 = 0$
+- $x = 0$, $y = 3$
+
+✅ The 7th element is $(0, 3)$.
+
+---
+
+### **Final Answer**
+
+$$
+\boxed{(x, y) = \left(n - \frac{z(z + 1)}{2} - 1, \, z - \left(n - \frac{z(z + 1)}{2} - 1\right)\right)}
+$$
+where $z = \left\lceil \frac{\sqrt{8n + 1} - 1}{2} \right\rceil - 1$

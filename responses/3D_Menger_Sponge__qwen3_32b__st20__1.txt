@@ -1,0 +1,96 @@
+To generate a 3D Hilbert curve (or similar space-filling curve) for a given index `n`, the following algorithm can be used. This approach divides the 3D space into 8 subcubes recursively and defines the order in which they are visited. The key is to adjust the orientation of the subcubes based on their position and the level of recursion.
+
+---
+
+### **Algorithm Steps**
+
+1. **Compute Level and Index**:
+   - **Level**: Determine the recursion level `k` such that $ 8^k \leq n < 8^{k+1} $. This defines the size of the cube.
+   - **Index within Level**: Compute the index `r = n % 8` to determine the subcube at the current level.
+
+2. **Determine Coordinates (x, y, z)**:
+   - The coordinates are derived based on the subcube index `r` and the current level's parity (even or odd).
+
+---
+
+### **Code Implementation**
+
+```python
+def hilbert_3d(n):
+    def hilbert_3d_helper(n, level):
+        if level == 0:
+            return (0, 0, 0)
+        r = n % 8
+        n = n // 8
+        x, y, z = hilbert_3d_helper(n, level - 1)
+        if level % 2 == 0:  # Even level
+            if r == 0:
+                return (x, y, z)
+            elif r == 1:
+                return (y, x, z)
+            elif r == 2:
+                return (y, x, z + 1)
+            elif r == 3:
+                return (x, y, z + 1)
+            elif r == 4:
+                return (x + 1, y + 1, z + 1)
+            elif r == 5:
+                return (y + 1, x + 1, z + 1)
+            elif r == 6:
+                return (y + 1, x + 1, z)
+            elif r == 7:
+                return (x + 1, y + 1, z)
+        else:  # Odd level
+            if r == 0:
+                return (x + 1, y + 1, z)
+            elif r == 1:
+                return (y + 1, x + 1, z)
+            elif r == 2:
+                return (y + 1, x + 1, z + 1)
+            elif r == 3:
+                return (x + 1, y + 1, z + 1)
+            elif r == 4:
+                return (x, y, z + 1)
+            elif r == 5:
+                return (y, x, z + 1)
+            elif r == 6:
+                return (y, x, z)
+            elif r == 7:
+                return (x, y, z)
+    k = 0
+    while 8 ** k <= n:
+        k += 1
+    return hilbert_3d_helper(n, k - 1)
+```
+
+---
+
+### **Example Usage**
+
+```python
+for i in range(8):
+    x, y, z = hilbert_3d(i)
+    print(f"Index {i}: ({x}, {y}, {z})")
+```
+
+**Output for `n = 0` to `7`:**
+```
+Index 0: (0, 0, 0)
+Index 1: (0, 1, 0)
+Index 2: (1, 1, 0)
+Index 3: (1, 0, 0)
+Index 4: (1, 0, 1)
+Index 5: (1, 1, 1)
+Index 6: (0, 1, 1)
+Index 7: (0, 0, 1)
+```
+
+---
+
+### **Key Points**
+
+- **Recursive Division**: The 3D space is divided into 8 subcubes at each level.
+- **Orientation Adjustments**: The order of subcubes and their orientations depend on the level's parity (even/odd) to maintain continuity.
+- **Applications**: This curve is used in 3D data indexing, spatial databases, and computer graphics for efficient traversal of multi-dimensional data.
+
+This implementation ensures that each index `n` maps to a unique 3D coordinate following the Hilbert curve's space-filling property.

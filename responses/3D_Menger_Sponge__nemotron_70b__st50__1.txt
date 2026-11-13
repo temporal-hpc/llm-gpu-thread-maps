@@ -1,0 +1,13 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer")
+
+    def deinterleave(x):
+        z = x & 0x00000003
+        y = (x & 0x0000001C) >> 2
+        x = (x & 0x00001FE0) >> 5
+        return x, y, z
+
+    return deinterleave(n)
+```

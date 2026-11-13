@@ -1,0 +1,13 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer")
+    
+    col = n % 3
+    row = n // 3
+    while row >= col:
+        row += 1 if col % 2 == 0 else -1
+        if row < 0:
+            row, col = 0, col + 1
+    return (row, col)
+```

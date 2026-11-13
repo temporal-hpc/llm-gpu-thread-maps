@@ -1,0 +1,92 @@
+To solve the problem of mapping a non-negative integer `n` to a coordinate `(x, y)` following a specific pattern, we need to understand the structure of the mapping. The pattern is such that each row `y` contains `y + 1` elements. The first few values and their corresponding coordinates are:
+
+- `n = 0` → `(0, 0)`
+- `n = 1` → `(0, 1)`
+- `n = 2` → `(1, 1)`
+- `n = 3` → `(0, 2)`
+- `n = 4` → `(1, 2)`
+- `n = 5` → `(2, 2)`
+- `n = 6` → `(0, 3)`
+- `n = 7` → `(1, 3)`
+- `n = 8` → `(2, 3)`
+- `n = 9` → `(3, 3)`
+
+From this, we can observe that the total number of elements up to row `y` is:
+
+$$
+\text{Total up to } y = \frac{y(y + 1)}{2}
+$$
+
+This means that the value of `n` lies in row `y` if:
+
+$$
+\frac{y(y + 1)}{2} \leq n < \frac{(y + 1)(y + 2)}{2}
+$$
+
+---
+
+### Implementation Strategy
+
+We aim to find the largest `y` such that:
+
+$$
+\frac{y(y + 1)}{2} \leq n
+$$
+
+Once we find such a `y`, the `x` coordinate can be computed as:
+
+$$
+x = n - \frac{y(y + 1)}{2}
+$$
+
+To ensure accuracy and robustness (especially for large `n`), we use a **binary search approach** to find `y` efficiently. This avoids potential inaccuracies that could arise from using floating-point approximations.
+
+---
+
+### Final Code
+
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non-negative integer")
+
+    def find_y(n):
+        low = 0
+        high = 1
+        # Double high until it exceeds n
+        while high * (high + 1) // 2 <= n:
+            high *= 2
+        # Binary search to find the correct y
+        while low < high:
+            mid = (low + high + 1) // 2
+            if mid * (mid + 1) // 2 <= n:
+                low = mid
+            else:
+                high = mid - 1
+        return low
+
+    y = find_y(n)
+    x = n - y * (y + 1) // 2
+    return (x, y)
+```
+
+---
+
+### Example Usage
+
+```python
+print(map_to_coordinates(0))  # (0, 0)
+print(map_to_coordinates(3))  # (0, 2)
+print(map_to_coordinates(5))  # (2, 2)
+print(map_to_coordinates(9))  # (3, 3)
+print(map_to_coordinates(10)) # (0, 4)
+```
+
+---
+
+### Time and Space Complexity
+
+- **Time Complexity**: O(log y), where `y` is the row number. The binary search ensures logarithmic time performance.
+- **Space Complexity**: O(1), as we use only a constant amount of extra space.
+
+This approach is both efficient and accurate, making it suitable for large values of `n`.

@@ -1,0 +1,27 @@
+To determine the coordinates (x, y) based on the given index `n`, we can observe a specific pattern within each layer. Each layer is determined by the value of `z = (n >> 4) & 1`. Within each layer, `lower_n = n & 15` and the coordinates follow this rule:
+
+- For `lower_n` values from 0 to 7:
+  - When `lower_n % 3 < 2`, increment x.
+  - Otherwise, reset x and increment y.
+
+Here's how it works step-by-step for `z=0` (i.e., `n = 0` to `15`):
+
+1. **Initialize** x = 0, y = 0.
+2. For each increment in `lower_n`:
+   - If `(lower_n % 3) < 2`, increment x by 1.
+   - Else, set x to 0 and increment y by 1.
+
+Following this logic:
+
+- **n=0 (lower_n=0):** x=0, y=0
+- **n=1 (lower_n=1):** x=1, y=0
+- **n=2 (lower_n=2):** x=2, y=0
+- **n=3 (lower_n=3):** x=0, y=1
+- **n=4 (lower_n=4):** x=1, y=1
+- **n=5 (lower_n=5):** x=2, y=1
+- **n=6 (lower_n=6):** x=0, y=2
+- **n=7 (lower_n=7):** x=1, y=2
+
+And so on up to `lower_n=15`.
+
+Thus, the coordinates for a given `n` can be determined by applying this rule within each layer.

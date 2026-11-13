@@ -1,0 +1,16 @@
+To determine the values of \( x \), \( y \), and \( z \) for a given integer \( n \), we can observe the following patterns based on the examples provided:
+
+1. **Determine \( z \):** The value of \( z \) is determined by the highest bit in the binary representation of \( n \). For example:
+   - When \( 0 \leq n < 8 \) (binary: 000 to 111), \( z = 0 \).
+   - When \( 8 \leq n < 16 \) (binary: 1000 to 1111), \( z = 1 \).
+
+2. **Determine \( x \) and \( y \):** Within each \( z \) layer, the values of \( x \) and \( y \) follow a specific sequence:
+   - For even values of \( n \) within a \( z \) layer, \( x \) alternates between 0 and 2.
+   - For odd values of \( n \) within a \( z \) layer, \( x \) increases from 1 to 2.
+   - The value of \( y \) increments after every two steps in \( n \).
+
+For example:
+- When \( n = 8 \), \( z = 1 \). Within this layer, the sequence starts with \( (x, y) = (0, 0) \).
+- As \( n \) increases within the same \( z \) layer, \( x \) and \( y \) follow the observed pattern.
+
+By applying these observations, we can map any integer \( n \) to its corresponding \( x \), \( y \), and \( z \) values.

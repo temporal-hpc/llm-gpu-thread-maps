@@ -1,0 +1,14 @@
+To determine the value of \( y \) for a given \( n \), observe that \( y \) increases at specific intervals. Based on the observed data:
+
+- \( y = 0 \) when \( n = 0 \)
+- \( y = 1 \) when \( n = 1, 2 \)
+- \( y = 2 \) when \( n = 3, 4 \)
+- \( y = 3 \) when \( n = 5, 6, 7, 8 \)
+- \( y = 4 \) when \( n = 9, 10 \)
+- \( y = 5 \) when \( n = 11, 12, 13, 14 \)
+- \( y = 6 \) when \( n = 15, 16, 17, 18 \)
+
+Thus, for each increment in \( y \), the range of \( n \) values expands, following a pattern where \( y \) increases by 1 after every few increments of \( n \).
+
+**Answer:**
+The value of \( y \) can be determined based on the ranges provided. For example, using the intervals above, you would determine which interval your specific \( n \) falls into to find the corresponding \( y \).

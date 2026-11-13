@@ -1,0 +1,36 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non‑negative integer")
+    def f(z):
+        return (z + 1) * (z + 2) * (z + 3) // 6
+    def g(y):
+        return (y + 1) * (y + 2) // 2
+    # find z such that f(z) > n
+    low, high = 0, 1
+    while f(high) <= n:
+        high <<= 1
+    while low < high:
+        mid = (low + high) // 2
+        if f(mid) <= n:
+            low = mid + 1
+        else:
+            high = mid
+    z = low
+    prev_f = f(z - 1) if z > 0 else 0
+    offset = n - prev_f
+    # find y such that g(y) > offset
+    low, high = 0, 1
+    while g(high) <= offset:
+        high <<= 1
+    while low < high:
+        mid = (low + high) // 2
+        if g(mid) <= offset:
+            low = mid + 1
+        else:
+            high = mid
+    y = low
+    prev_g = y * (y + 1) // 2
+    x = offset - prev_g
+    return (x, y, z)
+```

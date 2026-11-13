@@ -1,0 +1,11 @@
+```python
+import math
+
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non‑negative integer")
+    k = int((math.isqrt(8 * n + 1) - 1) // 2) + 1
+    y = k - 1
+    x = n - y * (y + 1) // 2
+    return (x, y)
+```

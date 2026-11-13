@@ -1,0 +1,14 @@
+To map an integer \( n \) to a pair of non-negative integers \( (x, y) \), follow these steps:
+
+1. **Identify the Group (\( z \))**:
+   - Determine which triangular number group \( n \) falls into by finding the largest \( z \) such that the sum \( T_z = \frac{z(z+1)}{2} \leq n \).
+
+2. **Calculate Position within Group**:
+   - Compute the position of \( n \) within its group: \( pos = n - T_z \).
+
+3. **Determine \( x \) and \( y \)**:
+   - For the determined \( z \), map \( pos \) to coordinates \( (x, y) \) such that they correspond to the \( pos \)-th element in a specific ordering of pairs within the group. This can be done by considering all pairs where \( x + y = k \) for varying \( k \).
+
+While an explicit formula isn't derived here, this approach outlines how \( n \) is mapped into pairs using triangular number grouping.
+
+\boxed{(x, y)}

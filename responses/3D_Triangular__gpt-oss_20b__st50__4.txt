@@ -1,0 +1,26 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non‑negative integer")
+    def tetra(z):
+        return (z + 1) * (z + 2) * (z + 3) // 6
+    # find smallest z such that tetra(z) > n
+    low, high = 0, 1
+    while tetra(high) <= n:
+        high <<= 1
+    while low < high:
+        mid = (low + high) // 2
+        if tetra(mid) <= n:
+            low = mid + 1
+        else:
+            high = mid
+    z = low
+    prev = tetra(z - 1) if z > 0 else 0
+    offset = n - prev
+    # find y such that (y+1)(y+2)/2 > offset
+    y = 0
+    while (y + 1) * (y + 2) // 2 <= offset:
+        y += 1
+    x = offset - y * (y + 1) // 2
+    return (x, y, z)
+```

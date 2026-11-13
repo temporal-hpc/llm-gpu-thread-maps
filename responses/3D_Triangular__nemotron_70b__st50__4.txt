@@ -1,0 +1,22 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer")
+
+    z = int((n ** (1/3))) if n > 0 else 0
+    remaining = n - (z ** 3)
+    
+    y = int(((remaining + (z == 0)) ** (1/2))) if remaining > 0 or z == 0 else 0
+    x = remaining - (y ** 2) + max(0, (z == 0) * (y > 0))
+    
+    # Adjustments to fit the pattern observed in the mapping data
+    if y >= z:
+        y -= 1
+        if x >= y:
+            x = y
+            if y >= z:
+                y -= 1
+                x = y
+                
+    return (x, max(y, z), z)
+```

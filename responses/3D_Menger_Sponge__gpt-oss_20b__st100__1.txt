@@ -1,0 +1,29 @@
+You can get the three coordinates directly from the index by treating the index as a three‑digit number in base‑3.  
+In that representation the least‑significant digit is **x**, the next digit is **y**, and the most‑significant digit is **z**:
+
+```
+          n = x + 3·y + 9·z
+```
+
+So for a given `n`
+
+```python
+def map_index_to_xyz(n):
+    # x – fastest changing
+    x = n % 3
+    # y – next fastest
+    y = (n // 3) % 3
+    # z – the remaining part
+    z = n // 9
+    return (x, y, z)
+```
+
+This simple arithmetic (modulus and integer division) reproduces the mapping:
+
+- 0 → (0,0,0)  
+- 1 → (1,0,0)  
+- 2 → (2,0,0)  
+- 3 → (0,1,0)  
+- 4 → (1,1,0)  
+- 5 → (2,1,0)  
+…and continues up to index 59 (with z increasing as the `n` grows).

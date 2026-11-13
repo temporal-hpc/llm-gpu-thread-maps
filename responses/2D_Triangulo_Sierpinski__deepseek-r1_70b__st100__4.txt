@@ -1,0 +1,19 @@
+To determine the values of \( x \) and \( y \) for a given index \( n \), follow these steps:
+
+1. **Identify \( y \) using cumulative sums:**
+   - Calculate the cumulative number of points up to each \( y \) level until you find the smallest \( y \) where the sum exceeds \( n+1 \).
+
+2. **Determine the offset within \( y \):**
+   - Compute how far \( n \) is from the start of its respective \( y \) level.
+
+3. **Calculate \( x \) based on the number of points in \( y \):**
+   - For each \( y \), depending on whether it has 2, 4, 8, etc., points, assign \( x \) accordingly by distributing the offset across possible values.
+
+**Answer:**
+
+For a given index \( n \):
+
+- \( y = \boxed{\text{[value based on cumulative sum]}} \)
+- \( x = \boxed{\text{[calculated value within } y\text{ level]}} \)
+
+(Note: Replace [value based on cumulative sum] and [calculated value within y level] with the specific values determined through the steps above.)

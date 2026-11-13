@@ -1,0 +1,10 @@
+To determine the coordinates (x, y, z) for each value of n based on the observed pattern, we can use the following method:
+
+1. **Identify Cycles**: Notice that every group of 4 consecutive values of n forms a cycle where x increases, then resets or changes in a specific manner.
+2. **Within Each Cycle**:
+   - For n = 4k + 0: Set x to 2k and reset y and z to 0.
+   - For n = 4k + 1: Increment x by 1 from the previous value within this cycle.
+   - For n = 4k + 2: Reset x to 2k (the base for this cycle) and increment y by 1.
+   - For n = 4k + 3: Keep x at 2k, keep y as is, and increment z by 1.
+
+By following this pattern, you can systematically determine the coordinates for any given n.

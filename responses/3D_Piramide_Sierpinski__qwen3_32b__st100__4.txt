@@ -1,0 +1,105 @@
+The pattern in the coordinates for the numbers 0 through 15 is based on the **binary representation** of each number. The key insight is that each coordinate (x, y, z) corresponds to the **positions of the set bits** in the binary form, with the following mapping:
+
+- **x** is the position of the **leftmost set bit** (i.e., the highest power of 2 in the number).
+- **y** is the position of the **next set bit** to the right.
+- **z** is the position of the **next set bit** after that.
+
+Positions are counted from **right to left**, starting at 0. If a bit is not set, its corresponding coordinate is 0.
+
+---
+
+### Examples:
+
+#### **n = 5 (101 in binary)**  
+- Binary: `101`  
+- Set bits at positions: 2 (value 4) and 0 (value 1)  
+- So, **x = 2**, **y = 0**, **z = 0**
+
+#### **n = 6 (110 in binary)**  
+- Binary: `110`  
+- Set bits at positions: 2 (value 4) and 1 (value 2)  
+- So, **x = 2**, **y = 1**, **z = 0**
+
+#### **n = 7 (111 in binary)**  
+- Binary: `111`  
+- Set bits at positions: 2 (value 4), 1 (value 2), and 0 (value 1)  
+- So, **x = 2**, **y = 1**, **z = 0**  
+  (Wait! This contradicts the earlier pattern.)
+
+Wait — this suggests a **mistake** in the earlier reasoning. Let's re-evaluate.
+
+---
+
+### Correct Pattern:
+
+The coordinates are determined by the **positions of the set bits**, with the **leftmost set bit** assigned to **x**, the **next set bit** to **y**, and the **next set bit** to **z**. If a bit is not set, its coordinate is **0**. The positions are **0-based** from right to left.
+
+Let’s recompute the coordinates for n = 7 (111):
+
+- Binary: `111`  
+- Set bits at positions: 2 (value 4), 1 (value 2), and 0 (value 1)  
+- So, **x = 2**, **y = 1**, **z = 0**
+
+Wait, but earlier we said z = 1 for n = 7. That suggests a **different rule**.
+
+Let’s look at the pattern for z:
+
+- For n = 3 (011), z = 1  
+- For n = 7 (111), z = 1  
+- For n = 11 (1011), z = 1  
+- For n = 15 (1111), z = 1
+
+So **z = 1** when the **least significant bit is set** (i.e., the rightmost bit is 1).
+
+So the **correct rule** is:
+
+- **x** = position of the **leftmost set bit**  
+- **y** = position of the **middle set bit** (if exists)  
+- **z** = 1 if the **rightmost bit is set**, else 0
+
+This explains the pattern for z.
+
+---
+
+### Final Rule:
+
+Given a number `n`:
+
+1. Convert `n` to binary.
+2. Find the positions of the set bits (right to left, 0-based).
+3. Assign:
+   - **x** = position of the **leftmost set bit**
+   - **y** = position of the **next set bit** (middle)
+   - **z** = 1 if the **rightmost bit is set**, else 0
+
+---
+
+### Examples:
+
+#### **n = 5 (101)**  
+- Set bits at positions: 2, 0  
+- **x = 2**, **y = 0**, **z = 1**
+
+#### **n = 6 (110)**  
+- Set bits at positions: 2, 1  
+- **x = 2**, **y = 1**, **z = 0**
+
+#### **n = 7 (111)**  
+- Set bits at positions: 2, 1, 0  
+- **x = 2**, **y = 1**, **z = 1**
+
+#### **n = 8 (1000)**  
+- Set bit at position: 3  
+- **x = 3**, **y = 0**, **z = 0**
+
+---
+
+### Final Answer:
+
+The coordinates (x, y, z) for a number `n` are determined by the **positions of the set bits** in its binary representation, with:
+
+- **x** = position of the **leftmost set bit**
+- **y** = position of the **next set bit** (middle)
+- **z** = 1 if the **rightmost bit is set**, else 0
+
+Positions are **0-based**, counting from right to left.

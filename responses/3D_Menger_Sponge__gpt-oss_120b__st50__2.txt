@@ -1,0 +1,21 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError
+    block, s = divmod(n, 20)
+    x0 = block * 3
+    if s < 8:
+        dz = 0
+        idx = s
+        order = [(0,0),(1,0),(2,0),(0,1),(2,1),(0,2),(1,2),(2,2)]
+    elif s < 12:
+        dz = 1
+        idx = s - 8
+        order = [(0,0),(2,0),(0,2),(2,2)]
+    else:
+        dz = 2
+        idx = s - 12
+        order = [(0,0),(1,0),(2,0),(0,1),(2,1),(0,2),(1,2),(2,2)]
+    dx, y = order[idx]
+    return (x0 + dx, y, dz)
+```

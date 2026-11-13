@@ -1,0 +1,6 @@
+The longest increasing contiguous sub‑array in each dataset is
+
+```
+6
+7
+```

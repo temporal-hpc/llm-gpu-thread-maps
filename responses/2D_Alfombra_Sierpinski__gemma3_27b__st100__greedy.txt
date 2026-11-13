@@ -1,0 +1,14 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input must be a non-negative integer.")
+
+    block_size = 3
+    block_number = n // block_size
+    offset = n % block_size
+
+    x = (block_number * 3) + offset
+    y = block_number // 3
+
+    return (x, y)
+```

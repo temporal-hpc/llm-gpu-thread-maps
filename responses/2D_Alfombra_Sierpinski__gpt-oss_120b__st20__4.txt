@@ -1,0 +1,10 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError
+    k = n % 8
+    base = (n // 8) * 3
+    x_offsets = [0, 1, 2, 0, 2, 0, 1, 2]
+    y_vals = [0, 0, 0, 1, 1, 2, 2, 2]
+    return (base + x_offsets[k], y_vals[k])
+```

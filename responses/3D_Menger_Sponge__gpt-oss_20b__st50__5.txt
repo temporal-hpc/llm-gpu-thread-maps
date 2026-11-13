@@ -1,0 +1,22 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non‑negative integer")
+    block_index = n // 20
+    offset_in_block = n % 20
+    x_offset = block_index * 3
+    count = 0
+    for z in range(3):
+        for y in range(3):
+            for x in range(3):
+                if z % 2 == 0:          # even z: all points except the center (1,1)
+                    if x == 1 and y == 1:
+                        continue
+                else:                  # odd z: only corners (x and y are 0 or 2)
+                    if (x & 1) or (y & 1):
+                        continue
+                if count == offset_in_block:
+                    return (x_offset + x, y, z)
+                count += 1
+    raise ValueError("n out of range")
+```

@@ -1,0 +1,112 @@
+To determine the position of a number `n` in an **infinite spiral starting from the center**, we can use a geometric approach based on the **layer** and **side** of the spiral.
+
+---
+
+### 🧠 **Understanding the Spiral Pattern**
+
+The spiral starts at the center with `1` at position `(0, 0)`. From there, the spiral moves in a clockwise direction, increasing in size. Each **layer** of the spiral is defined by an odd number: `1, 3, 5, 7, ...`, where each number represents the length of the side of the square in that layer.
+
+- The **top-right corner** of the spiral for a given layer `k` is at `(k, k)`, and the square number at this corner is `(2k + 1)²`.
+- From this corner, we can compute the positions of the other three corners by moving in a counter-clockwise direction.
+- The number `n` will lie on one of the four sides of the square between two consecutive corners.
+
+---
+
+### 🧮 **Algorithm Overview**
+
+1. **Determine the Layer `k`:**
+
+   The layer is determined by finding the smallest integer `k` such that `(2k + 1)² ≥ n`.
+
+2. **Find the Corner and Side:**
+
+   - The top-right corner in this layer is at `(k, k)`.
+   - The square value at this corner is `L = (2k + 1)²`.
+   - Compute `delta = L - n` to determine how far `n` is from the top-right corner.
+   - Depending on the value of `delta`, determine which side of the square `n` lies on (0 to 3), and its offset from the corner.
+
+3. **Compute the Coordinates:**
+
+   Use the side and offset to compute the final coordinates.
+
+---
+
+### ✅ **Python Implementation**
+
+```python
+import math
+
+def spiral(n):
+    if n == 1:
+        return (0, 0)
+    
+    k = int((math.sqrt(n) - 1) // 2 + 1)
+    L = (2 * k + 1) ** 2
+    delta = L - n
+    
+    if delta < 2 * k:
+        side = 3
+        r = delta
+        return (-k + r, k)
+    elif delta < 3 * k:
+        side = 0
+        r = delta - 2 * k
+        return (k, -k + r)
+    elif delta < 4 * k:
+        side = 1
+        r = delta - 3 * k
+        return (k - r, -k)
+    else:
+        side = 2
+        r = delta - 4 * k
+        return (-k, -k + r)
+```
+
+---
+
+### 📌 **Example: `spiral(23)`**
+
+Let's trace this for `n = 23`:
+
+- `sqrt(23) ≈ 4.795`, so `k = 2`
+- `L = (2*2 + 1)^2 = 25`, so `delta = 25 - 23 = 2`
+- Since `delta < 2*k = 4`, we're on **side 3**, and `r = 2`
+- Return: `(-2 + 2, 2) = (0, 2)`
+
+So, `spiral(23)` returns `(0, 2)`.
+
+---
+
+### ✅ **Edge Case: `n = 1`**
+
+- The center of the spiral is at `(0, 0)`, so the function handles `n = 1` separately to return the correct result.
+
+---
+
+### 🧪 **Test Cases**
+
+```python
+print(spiral(1))   # (0, 0)
+print(spiral(2))   # (1, 0)
+print(spiral(9))   # (0, -1)
+print(spiral(10))  # (0, -1)
+print(spiral(23))  # (0, 2)
+print(spiral(25))  # (2, 2)
+```
+
+---
+
+### 🧵 **Why This Works**
+
+This method leverages the mathematical structure of the spiral and avoids traversing the spiral step-by-step. It directly computes the position using the geometry of the square layers, making it very efficient.
+
+---
+
+### 🧠 **Time Complexity**
+
+- **O(1)**: All operations are constant time.
+- **O(1)**: No loops or iterations involved.
+
+---
+
+This solution is both **efficient** and **mathematically elegant**, making it ideal for large values of `n`.

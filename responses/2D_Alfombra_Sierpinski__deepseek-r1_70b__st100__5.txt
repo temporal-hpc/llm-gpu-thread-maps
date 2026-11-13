@@ -1,0 +1,33 @@
+To determine the coordinates \((x, y)\) based on the index \(n\), observe the following pattern:
+
+1. **Determine Group (y):**
+   - Divide \(n\) by 3 to get the quotient \(q\) and remainder \(r\).
+   - The quotient \(q\) represents the group or \(y\)-coordinate.
+
+2. **Determine Position within Group (x):**
+   - If \(q\) is even, then \(x = r\).
+   - If \(q\) is odd, then:
+     - For \(r=0\), \(x=0\).
+     - For \(r=1\), \(x=2\).
+
+This results in the following mapping:
+
+- \(n = 0 \rightarrow (0, 0)\)
+- \(n = 1 \rightarrow (1, 0)\)
+- \(n = 2 \rightarrow (2, 0)\)
+- \(n = 3 \rightarrow (0, 1)\)
+- \(n = 4 \rightarrow (2, 1)\)
+- \(n = 5 \rightarrow (0, 2)\)
+- \(n = 6 \rightarrow (1, 2)\)
+- \(n = 7 \rightarrow (2, 2)\)
+- \(n = 8 \rightarrow (3, 0)\)
+
+So, the coordinates can be determined using this pattern.
+
+\[
+(x, y) = 
+\begin{cases}
+(r, q) & \text{if } q \text{ is even} \\
+(0 \text{ if } r=0, 2 \text{ if } r=1, \ldots, q) & \text{if } q \text{ is odd}
+\end{cases}
+\]

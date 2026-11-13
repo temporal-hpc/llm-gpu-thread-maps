@@ -1,0 +1,58 @@
+To determine the **level** $ y $ such that a given integer $ n $ lies within the range of elements assigned to that level, we can model the problem using **triangular numbers**.
+
+---
+
+### 🧠 Problem Understanding
+
+Assume that:
+- Each **level $ y $** contains $ y + 1 $ elements.
+- The total number of elements up to and including level $ y $ is the sum $ 1 + 2 + \dots + (y+1) $, which is the **triangular number** $ T_{y+1} = \frac{(y+1)(y+2)}{2} $.
+- The cumulative number of elements **up to level $ y $** is $ S(y) = \frac{(y+1)(y+2)}{2} $.
+
+Given a number $ n $, we want to find the **level $ y $** such that:
+
+$$
+S(y-1) < n \leq S(y)
+$$
+
+This is equivalent to finding the smallest $ y $ such that:
+
+$$
+\frac{(y+1)(y+2)}{2} > n
+$$
+
+---
+
+### ✅ Solution Derivation
+
+Let’s define $ k = y + 1 $. Then the condition becomes:
+
+$$
+\frac{k(k+1)}{2} > n
+$$
+
+To find the smallest such $ k $, we solve:
+
+$$
+k = \left\lfloor \frac{\sqrt{8n + 1} - 1}{2} \right\rfloor + 1
+$$
+
+Then, the corresponding level is:
+
+$$
+y = k - 1
+$$
+
+Substituting back:
+
+$$
+y = \left\lfloor \frac{\sqrt{8n + 1} - 1}{2} \right\rfloor
+$$
+
+---
+
+### ✅ Final Answer
+
+$$
+\boxed{\left\lfloor \dfrac{\sqrt{8n + 1} - 1}{2} \right\rfloor}
+$$

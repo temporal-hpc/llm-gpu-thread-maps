@@ -1,0 +1,22 @@
+To determine the coordinates (x, y) for a given index `n`, we can observe a pattern in how the points are plotted. The movement alternates between moving along the x-axis and y-axis in specific intervals:
+
+1. **Phase 1**: Move right along y=0 for 3 steps.
+2. **Phase 2**: Move up to y=1 and move right for 2 steps.
+3. **Phase 3**: Move up to y=2 at x=0.
+4. **Phase 4**: Move right along y=2 for 2 steps.
+5. **Phase 5**: Move down to y=0 and move right for 3 steps.
+6. **Phase 6**: Move up to y=1 at x=3.
+7. **Phase 7**: Continue the pattern by alternating directions and step counts.
+
+Using this pattern, we can map each `n` to its corresponding (x, y) coordinates.
+
+**Answer:**
+
+The coordinates for index `n` are determined by following the described movement pattern. For example:
+
+- For `n = 0`, the coordinates are `(0, 0)`.
+- For `n = 1`, the coordinates are `(1, 0)`.
+- For `n = 2`, the coordinates are `(2, 0)`.
+- Continue applying the pattern to find the specific (x, y) for any given `n`.
+
+The final answer for a specific `n` would be determined by following these steps.

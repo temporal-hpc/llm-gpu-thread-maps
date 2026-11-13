@@ -1,0 +1,19 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input must be a non-negative integer")
+    coordinates = [0, 0, 0]
+    dim = 0
+    while n >= (dim + 1) ** 3 - 1:
+        dim += 1
+    layer_size = 3 * dim ** 2 + 3 * dim + 1
+    offset = (layer_size * (dim // 3)) if dim % 3 == 0 else ((dim // 3) * layer_size + ((dim % 3) - 1) * (3 * dim + 2))
+    n -= offset
+    face_offset = n // (3 * dim + 1)
+    coordinates[face_offset] += (n // (3 * dim + 1)) if face_offset < 2 else 0
+    n %= 3 * dim + 1
+    row_col = n // dim
+    coordinates[(face_offset + 1) % 3] += row_col if face_offset > 0 and face_offset < 3 else (n - (row_col * dim))
+    coordinates[face_offset] += n - ((dim) * row_col)
+    return tuple(coordinates)
+```

@@ -1,0 +1,45 @@
+**Answer**  
+
+The most straight‑forward way to turn a 1‑D thread index into 3‑D voxel
+coordinates in a 3 × 3 × 3 block is to use integer division and
+modulo.  
+In the kernel you can write something like this:
+
+```cpp
+__global__ void processVoxels( … )
+{
+    // global linear index of the current thread
+    int idx = blockIdx.x * blockDim.x + threadIdx.x;
+
+    /* keep only the first 20 voxels – the caller will launch at
+       least 20 threads per block, but we guard the out‑of‑range
+       indices in the host code */
+    if (idx >= 20) return;
+
+    // x  – fastest varying coordinate
+    int x = idx % 3;
+
+    // y  – next fastest coordinate
+    int y = (idx / 3) % 3;
+
+    // z  – slowest coordinate (block of 9 voxels per slice)
+    int z = idx / 9;
+    
+    // … now you can use (x,y,z) inside the kernel …
+}
+```
+
+With this mapping you get the coordinates
+
+```
+idx 0 → (0,0,0)
+idx 1 → (1,0,0)
+idx 2 → (2,0,0)
+idx 3 → (0,1,0)
+idx 4 → (1,1,0)
+… etc.
+```
+
+(If the example you saw had a typo for index 4, this is the correct
+formula.  If you really need a custom pattern, you can replace the
+calculation with a small lookup table that lists the 20 coordinates.)

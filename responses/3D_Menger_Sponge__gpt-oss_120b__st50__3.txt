@@ -1,0 +1,20 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non‑negative integer")
+    block = n // 20
+    i = n % 20
+    order8 = [(0, 0), (1, 0), (2, 0), (0, 1), (2, 1), (0, 2), (1, 2), (2, 2)]
+    order4 = [(0, 0), (2, 0), (0, 2), (2, 2)]
+    if i < 8:
+        z = 0
+        x_local, y = order8[i]
+    elif i < 12:
+        z = 1
+        x_local, y = order4[i - 8]
+    else:
+        z = 2
+        x_local, y = order8[i - 12]
+    x = block * 3 + x_local
+    return (x, y, z)
+```

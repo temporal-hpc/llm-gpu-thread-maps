@@ -1,0 +1,30 @@
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non‑negative integer")
+    # helper to compute the cumulative count up to a given z
+    def cumulative(z):
+        return (z + 1) * (z + 2) * (z + 3) // 6
+    # find the smallest z such that cumulative(z) > n
+    lo, hi = 0, 1
+    while cumulative(hi) <= n:
+        hi <<= 1  # multiply by 2
+    while lo < hi:
+        mid = (lo + hi) >> 1
+        if cumulative(mid) > n:
+            hi = mid
+        else:
+            lo = mid + 1
+    z = hi
+    # offset within the group for this z
+    if z == 0:
+        offset = n
+    else:
+        offset = n - cumulative(z - 1)
+    # compute y using the inverse of the shifted triangular numbers
+    import math
+    sqrt_val = math.isqrt(8 * offset + 1)
+    t = (sqrt_val - 1) // 2 + 1
+    y = t - 1
+    # compute x as the remaining offset
+    x = offset - y * (y + 1) // 2
+    return (x, y, z)

@@ -1,0 +1,6 @@
+def map_to_coordinates(n):
+  if n < 0:
+    raise ValueError("Input must be a non-negative integer")
+  row = int(n / 8)
+  col = n % 8
+  return (row, col)

@@ -1,0 +1,245 @@
+**Solution Explanation**
+
+For a point `(x , y)` we write the coordinates in base 3  
+
+```
+x = … d2 d1 d0   (each dk ∈ {0,1,2})
+y = … e2 e1 e0
+```
+
+The given list contains **exactly** the points for which no digit pair
+`(dk , ek)` is `(1 , 1)`.  
+In other words
+
+```
+while x>0 or y>0:
+        if x % 3 == 1 and y % 3 == 1 :   forbidden
+        x //= 3 ;   y //= 3
+```
+
+This is the well‑known *Sierpinski carpet* condition.
+
+The points are ordered **row major** – first by increasing `y`,
+inside the same `y` by increasing `x`.
+
+--------------------------------------------------------------------
+
+### 1.   From a natural number to a pair of base‑3 digits
+
+For one ternary digit position we have the 8 admissible pairs
+
+```
+y‑digit = 0 :  x‑digit = 0,1,2          (3 possibilities)
+y‑digit = 1 :  x‑digit = 0,2            (2 possibilities)
+y‑digit = 2 :  x‑digit = 0,1,2          (3 possibilities)
+```
+
+If we list them in the order shown above, the *index* of a pair is
+`0 … 7` :
+
+```
+0 → (0,0)   1 → (0,1)   2 → (0,2)
+3 → (1,0)   4 → (1,2)
+5 → (2,0)   6 → (2,1)   7 → (2,2)
+```
+
+Because `y` is the outer loop, the most significant ternary digit of
+`y` decides first which block of points we are in, and inside that block
+the ternary digit of `x` decides the order.  
+Consequently a **mixed radix** representation with base 8 for the whole
+pair works:
+
+* write `n` in base 8 → digits `a0 , a1 , …` (least significant first)
+* each digit `ai` tells us the pair `(yi , xi)` by the table above
+* the ternary numbers are built digit by digit
+
+--------------------------------------------------------------------
+
+### 2.   Algorithm
+```
+input  n (non‑negative integer)
+
+if n is not a non‑negative int → raise ValueError
+
+digits = base‑8 representation of n (least significant first)
+
+y = 0 ; x = 0 ; power = 1          # power = 3⁰ , 3¹ , 3² , …
+for d in digits:
+        (yd , xd) = table[d]      # table as shown above
+        y += yd * power
+        x += xd * power
+        power *= 3                # next ternary position
+
+return (x , y)
+```
+
+The loop runs `O(log₈ n)` times, i.e. `O(log n)`.
+
+--------------------------------------------------------------------
+
+### 3.   Correctness Proof  
+
+We prove that the algorithm returns the `n`‑th pair `(x , y)` of the
+sequence described in the statement.
+
+---
+
+#### Lemma 1  
+For a fixed ternary digit position the admissible pairs
+`(y‑digit , x‑digit)` are exactly the eight pairs listed in the table,
+and they appear in the row‑major order
+`y‑digit = 0 (x = 0,1,2) , y‑digit = 1 (x = 0,2) , y‑digit = 2 (x = 0,1,2)`.
+
+*Proof.*  
+The condition forbids only the simultaneous digit `1` in both numbers.
+If `y‑digit = 0` or `2` there is no restriction on `x‑digit` → three
+possibilities.  
+If `y‑digit = 1` the digit `1` for `x` is forbidden → two possibilities.
+Listing them with the `y`‑digit first gives exactly the order written
+above. ∎
+
+
+
+#### Lemma 2  
+Let `a0 , a1 , … , ak‑1` be the base‑8 digits of a non‑negative integer
+`N`.  
+Define `yi , xi` from each `ai` by the table of Lemma&nbsp;1 and build
+
+```
+Y = Σ yi·3ⁱ ,   X = Σ xi·3ⁱ .
+```
+
+Then the pair `(X , Y)` satisfies the carpet condition
+(no simultaneous digit `1`) and every admissible pair appears for a
+unique `N`.
+
+*Proof.*  
+At each ternary position `i` the pair `(yi , xi)` is taken from the
+eight allowed pairs, therefore it is never `(1,1)`.  
+Consequently no position contains the forbidden combination, so the
+constructed `(X , Y)` is admissible.
+
+Conversely, any admissible pair `(X , Y)` has, for each ternary position,
+a digit pair belonging to the eight allowed ones; reading those pairs
+from least to most significant gives a unique sequence of indices
+`ai ∈ {0,…,7}` and therefore a unique base‑8 number `N`. ∎
+
+
+
+#### Lemma 3  
+If two numbers `N₁ < N₂` are written in base 8 and transformed as in
+Lemma&nbsp;2, the resulting pairs satisfy the row‑major order:
+`Y₁ < Y₂` or (`Y₁ = Y₂` and `X₁ < X₂`).
+
+*Proof.*  
+Base‑8 is positional with the most significant digit having the largest
+weight.  
+In the mixed‑radix system the *most significant* digit decides the most
+significant ternary digit of `Y`; only when those are equal does the next
+digit (still belonging to `Y`) decide, and finally the `X`‑digits are
+considered.  
+Thus the numeric order of `N` coincides with the lexicographic order
+first on `Y` then on `X`, i.e. the required row‑major order. ∎
+
+
+
+#### Lemma 4  
+The algorithm returns the pair that is the `n`‑th element (0‑based) of the
+row‑major enumeration of admissible points.
+
+*Proof.*  
+The algorithm extracts the base‑8 digits of `n`, maps each digit to the
+corresponding ternary digit pair using the table of Lemma&nbsp;1 and
+reassembles the ternary numbers `X , Y`.  
+By Lemma&nbsp;2 the obtained pair is admissible, and by Lemma&nbsp;3 the
+order of pairs produced by increasing `n` is exactly the row‑major order.
+Therefore the pair returned for a given `n` is precisely the `n`‑th
+pair of the required sequence. ∎
+
+
+
+#### Theorem  
+`map_to_coordinates(n)` (the implemented function) returns the
+coordinates `(x , y)` of the `n`‑th thread in the list, and raises
+`ValueError` for invalid arguments.
+
+*Proof.*  
+Input validation follows directly from the specification.  
+For a valid `n` the function executes the steps described in Lemma&nbsp;4,
+hence returns the correct pair. ∎
+
+
+
+--------------------------------------------------------------------
+
+### 4.   Complexity Analysis  
+
+Let `L = ⌈log₈ (n+1)⌉` be the number of base‑8 digits of `n`.
+
+* extracting the digits: `O(L)`
+* processing each digit (constant work): `O(L)`
+
+Since `L = Θ(log n)`, the total time is `O(log n)` and the memory
+consumption is `O(1)` (only a few integer variables).
+
+--------------------------------------------------------------------
+
+### 5.   Reference Implementation (Python 3)
+
+```python
+def map_to_coordinates(n):
+    """
+    Return the (x, y) coordinates of the n‑th thread.
+
+    The points are those (x, y) for which, in every base‑3 digit,
+    the pair of digits is never (1, 1).  They are ordered by increasing
+    y, then increasing x (row‑major order).
+
+    Parameters
+    ----------
+    n : int
+        Zero‑based index of the required point (must be non‑negative).
+
+    Returns
+    -------
+    tuple[int, int]
+        (x, y) coordinates.
+
+    Raises
+    ------
+    ValueError
+        If n is not a non‑negative integer.
+    """
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non‑negative integer")
+
+    # mapping from a base‑8 digit to (y_digit, x_digit)
+    # order: y=0 with x=0,1,2 ; y=1 with x=0,2 ; y=2 with x=0,1,2
+    table = [
+        (0, 0), (0, 1), (0, 2),   # 0,1,2
+        (1, 0), (1, 2),           # 3,4
+        (2, 0), (2, 1), (2, 2)    # 5,6,7
+    ]
+
+    # base‑8 digits of n (least significant first)
+    if n == 0:
+        digits = [0]
+    else:
+        digits = []
+        while n:
+            digits.append(n % 8)
+            n //= 8
+
+    x = y = 0
+    power = 1          # current weight = 3**position
+    for d in digits:
+        yd, xd = table[d]
+        y += yd * power
+        x += xd * power
+        power *= 3
+
+    return (x, y)
+```
+
+The function follows exactly the algorithm proven correct above and
+conforms to the required signature.

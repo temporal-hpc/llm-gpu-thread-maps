@@ -1,0 +1,19 @@
+The function `map_to_coordinates` takes a non-negative integer `n` and returns a tuple `(x, y)` representing the coordinates in a specific mapping. The mapping follows a pattern where each diagonal (with constant `x + y`) is filled sequentially. The solution uses the mathematical derivation to compute the coordinates efficiently.
+
+- For a given `n`, the diagonal index `y` is determined by solving the quadratic equation derived from the sum of the first `y` natural numbers.
+- The discriminant `1 + 8 * n` is computed, and its integer square root is found using `math.isqrt`.
+- The value `y` is calculated as `(root - 1) // 2`, where `root` is the integer square root of the discriminant.
+- The coordinate `x` is then `n - y * (y + 1) // 2`.
+- If `n` is negative, a `ValueError` is raised as per the requirement for non-negative input.
+
+The implementation includes the necessary import and handles edge cases correctly.
+
+\boxed{\text{import math}\\
+\text{def map\_to\_coordinates(n):}\\
+\text{    if n < 0:}\\
+\text{        raise ValueError}\\
+\text{    discriminant = 1 + 8 * n}\\
+\text{    root = math.isqrt(discriminant)}\\
+\text{    y = (root - 1) // 2}\\
+\text{    x = n - y * (y + 1) // 2}\\
+\text{    return (x, y)}}

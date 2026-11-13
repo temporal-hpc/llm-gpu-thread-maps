@@ -1,0 +1,4 @@
+def map_to_coordinates(n):
+  x = n % 16
+  y = n // 16
+  return (x, y)

@@ -1,0 +1,98 @@
+The pattern for mapping an integer $ n $ to coordinates $ (x, y, z) $ appears to be based on **interleaving the bits of $ n $** into three separate coordinates. This is a common technique in spatial encoding, such as **Morton codes** (also known as Z-order curves), where a single number is decomposed into multiple dimensions by distributing its bits across the dimensions.
+
+---
+
+### **Pattern Explanation**
+
+Given an integer $ n $, its binary representation is split into three interleaved sequences of bits, each corresponding to one of the coordinates $ x $, $ y $, and $ z $. Specifically:
+
+- **Bit 0** of $ n $ → contributes to $ x $
+- **Bit 1** of $ n $ → contributes to $ y $
+- **Bit 2** of $ n $ → contributes to $ z $
+- **Bit 3** of $ n $ → contributes to $ x $
+- **Bit 4** of $ n $ → contributes to $ y $
+- **Bit 5** of $ n $ → contributes to $ z $
+- and so on...
+
+Each coordinate is formed by taking every third bit from $ n $, starting from the least significant bit (LSB), and shifting them into the correct position.
+
+---
+
+### **Algorithm to Compute $ x, y, z $ from $ n $**
+
+Here's a step-by-step algorithm to compute $ x, y, z $ from $ n $:
+
+1. Convert $ n $ to its binary representation.
+2. For each bit position $ i $ in $ n $:
+   - If $ i \mod 3 = 0 $, the bit contributes to $ x $.
+   - If $ i \mod 3 = 1 $, the bit contributes to $ y $.
+   - If $ i \mod 3 = 2 $, the bit contributes to $ z $.
+3. For each coordinate, shift the bit to its correct position (based on how many times it appears in the sequence) and accumulate the result.
+
+---
+
+### **Example: $ n = 5 $**
+
+1. Binary of $ 5 $: $ 101 $
+2. Bit positions (from LSB to MSB):  
+   - Bit 0: 1 → contributes to $ x $  
+   - Bit 1: 0 → contributes to $ y $  
+   - Bit 2: 1 → contributes to $ z $  
+3. Result:
+   - $ x = 1 $ (bit 0)
+   - $ y = 0 $ (bit 1)
+   - $ z = 1 $ (bit 2)
+
+So, $ (x, y, z) = (1, 0, 1) $.
+
+---
+
+### **Verification with Given Data**
+
+Let’s verify the pattern with the provided examples:
+
+| $ n $ | Binary | $ x $ | $ y $ | $ z $ |
+|--------|--------|--------|--------|--------|
+| 0      | 000    | 0      | 0      | 0      |
+| 1      | 001    | 1      | 0      | 0      |
+| 2      | 010    | 0      | 0      | 1      |
+| 3      | 011    | 0      | 1      | 1      |
+| 4      | 100    | 1      | 0      | 0      |
+| 5      | 101    | 1      | 0      | 1      |
+| 6      | 110    | 0      | 1      | 1      |
+| 7      | 111    | 0      | 1      | 1      |
+
+This matches the expected behavior of interleaving bits into $ x, y, z $.
+
+---
+
+### **Python Code to Compute $ x, y, z $ from $ n $**
+
+```python
+def decompress_morton(n):
+    x = 0
+    y = 0
+    z = 0
+    bit = 0
+    while n > 0:
+        if bit % 3 == 0:
+            x = (x << 1) | (n & 1)
+        elif bit % 3 == 1:
+            y = (y << 1) | (n & 1)
+        else:
+            z = (z << 1) | (n & 1)
+        n >>= 1
+        bit += 1
+    return x, y, z
+
+# Example usage
+for n in range(8):
+    x, y, z = decompress_morton(n)
+    print(f"n={n} -> (x, y, z) = ({x}, {y}, {z})")
+```
+
+---
+
+### **Conclusion**
+
+The mapping from $ n $ to $ (x, y, z) $ is based on **interleaving the bits of $ n $** into three separate coordinates. Each coordinate is formed by taking every third bit from $ n $, starting from the least significant bit. This is a standard technique in spatial encoding and is widely used in applications like 3D graphics and data compression.

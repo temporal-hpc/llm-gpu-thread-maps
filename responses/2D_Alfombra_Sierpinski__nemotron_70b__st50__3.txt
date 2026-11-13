@@ -1,0 +1,11 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer")
+
+    col = n % 3
+    row = ((n - col) // 3) * 2 + (col > 1)
+    offset = max(0, ((n // 3) - (row // 2)) // 3) * 6
+    
+    return (row + (offset // 3), col + (offset % 3))
+```

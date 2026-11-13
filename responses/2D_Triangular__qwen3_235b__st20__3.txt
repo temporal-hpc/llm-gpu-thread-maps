@@ -1,0 +1,36 @@
+To solve this problem, we need to map a nonnegative integer `n` to a unique pair of nonnegative integers `(x, y)` based on the Cantor pairing function. The Cantor pairing function is a mathematical function that uniquely encodes two nonnegative integers into a single nonnegative integer. The reverse process involves decoding the integer `n` back into the original pair `(x, y)`.
+
+### Approach
+1. **Problem Analysis**: The problem requires us to find the pair `(x, y)` such that `n` is the position of `(x, y)` in the diagonal enumeration of the grid of nonnegative integers. The enumeration proceeds along diagonals where the sum `x + y` is constant. For each diagonal `s = x + y`, the number of points before this diagonal is given by the triangular number `s(s + 1)/2`.
+2. **Key Insight**: For a given `n`, we determine the diagonal `s` in which `n` lies. This diagonal `s` is the largest integer such that the triangular number `s(s + 1)/2` is less than or equal to `n`.
+3. **Mathematical Formulation**: 
+   - Compute `s` as `floor((sqrt(8n + 1) - 1)/2)`. This is derived from solving the quadratic equation `s^2 + s - 2n ≤ 0`.
+   - Once `s` is found, the offset within the diagonal is `x = n - s(s + 1)/2`.
+   - The corresponding `y` is then `s - x`.
+4. **Efficiency**: The solution efficiently computes `s` using integer square root operations, which runs in constant time for practical purposes, making the overall approach O(1).
+
+### Solution Code
+```python
+import math
+
+def get_point(n):
+    if n < 0:
+        raise ValueError("n must be a nonnegative integer")
+    t = math.isqrt(8 * n + 1)
+    s = (t - 1) // 2
+    x = n - s * (s + 1) // 2
+    y = s - x
+    return (x, y)
+```
+
+### Explanation
+1. **Input Validation**: The function first checks if `n` is nonnegative, raising a `ValueError` if not.
+2. **Finding Diagonal `s`**:
+   - Compute `t` as the integer square root of `8n + 1` using `math.isqrt`.
+   - Derive `s` as `(t - 1) // 2`, which gives the largest integer such that the triangular number `s(s + 1)/2` is ≤ `n`.
+3. **Calculating Coordinates**:
+   - `x` is the offset within the diagonal `s`, computed as `n - s(s + 1)/2`.
+   - `y` is derived as `s - x`, ensuring `x + y = s`.
+4. **Output**: The function returns the tuple `(x, y)`, which is the unique pair corresponding to the input `n`.
+
+This approach efficiently decodes the integer `n` into its corresponding coordinates `(x, y)` using mathematical operations, ensuring correctness and optimal performance.

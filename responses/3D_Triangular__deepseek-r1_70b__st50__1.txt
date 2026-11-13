@@ -1,0 +1,13 @@
+To solve the problem of finding non-negative integers \(a\) and \(b\) such that \(a + b = n\) and \(a \times b\) is maximized, we can follow these steps:
+
+1. **Understand the Problem**: We need to split the integer \(n\) into two parts \(a\) and \(b\) such that their sum equals \(n\), and their product is as large as possible.
+
+2. **Mathematical Insight**: The product \(ab\) is maximized when \(a\) and \(b\) are as close to each other as possible. This can be derived from the properties of quadratic functions or by using calculus.
+
+3. **Solution**:
+   - If \(n\) is even, then both \(a\) and \(b\) should be equal to \(\frac{n}{2}\).
+   - If \(n\) is odd, one part will be \(\frac{n-1}{2}\) and the other \(\frac{n+1}{2}\).
+
+4. **Conclusion**: The maximum product is achieved by setting \(a = \left\lfloor \frac{n}{2} \right\rfloor\) and \(b = \left\lceil \frac{n}{2} \right\rceil\).
+
+**Answer**: The pair of non-negative integers that maximizes the product is \(\boxed{\left( \left\lfloor \frac{n}{2} \right\rfloor, \left\lceil \frac{n}{2} \right\rceil \right)}\).

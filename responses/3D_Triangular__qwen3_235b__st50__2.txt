@@ -1,0 +1,44 @@
+To solve this problem, we need to compute the cumulative sum of a specific sequence up to a given index. The sequence is defined such that for a given integer `k`, the sequence starts at `k`, decreases by 1 until it reaches 0, and then increases by 1 back to `k`. The length of the sequence is `2k + 1`. The task is to compute the cumulative sum of the first `i` elements of this sequence for multiple test cases.
+
+### Approach
+1. **Understanding the Sequence**: The sequence for a given `k` is structured as follows:
+   - The first `k + 1` elements are `k, k-1, ..., 0`.
+   - The next `k` elements are `1, 2, ..., k`.
+   - Thus, the entire sequence has `2k + 1` elements.
+
+2. **Cumulative Sum Calculation**:
+   - **For `i <= k`**: The cumulative sum up to index `i` (where `i` ranges from 0 to `k`) can be derived using the formula for the sum of the first `i` terms of a decreasing arithmetic sequence starting from `k`. The sum is given by:
+     \[
+     C_i = i \times k - \frac{i \times (i - 1)}{2}
+     \]
+   - **For `i > k`**: The cumulative sum includes the sum of the first `k + 1` elements (which is \(\frac{k \times (k + 1)}{2}\)) plus the sum of the next `j = i - (k + 1)` elements of the increasing sequence starting from 1. The sum of the next `j` elements is given by:
+     \[
+     C_i = \frac{k \times (k + 1)}{2} + \frac{j \times (j + 1)}{2}
+     \]
+     where \(j = i - (k + 1)\).
+
+### Solution Code
+```python
+t = int(input().strip())
+results = []
+for _ in range(t):
+    k, i = map(int, input().split())
+    if i <= k:
+        res = i * k - (i * (i - 1)) // 2
+    else:
+        j = i - (k + 1)
+        res = (k * (k + 1)) // 2 + (j * (j + 1)) // 2
+    results.append(str(res))
+print("\n".join(results))
+```
+
+### Explanation
+1. **Reading Input**: The first line reads the number of test cases `T`. Each subsequent line contains two integers `k` and `i`.
+2. **Processing Each Test Case**:
+   - **Case 1 (`i <= k`)**: The cumulative sum is calculated as the sum of the first `i` terms of a decreasing sequence starting from `k`. The formula \(i \times k - \frac{i \times (i - 1)}{2}\) efficiently computes this sum.
+   - **Case 2 (`i > k`)**: The cumulative sum is split into two parts:
+     - The sum of the first `k + 1` elements (from `k` down to `0`), which is \(\frac{k \times (k + 1)}{2}\).
+     - The sum of the next `j = i - (k + 1)` elements (from `1` up to `j`), which is \(\frac{j \times (j + 1)}{2}\).
+3. **Output**: The results for all test cases are collected in a list and printed at the end, each on a new line.
+
+This approach efficiently computes the cumulative sums by leveraging arithmetic sequence properties, ensuring optimal performance even for large inputs. The solution handles all edge cases, including when `i` is 0 or the maximum possible value (`2k + 1`).

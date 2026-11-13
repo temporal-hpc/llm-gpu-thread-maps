@@ -1,0 +1,15 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input must be a non-negative integer.")
+
+    side_length = int(n**0.5)
+    if side_length * side_length == n:
+        x = n % side_length
+        y = n // side_length
+    else:
+        x = n % (side_length + 1)
+        y = n // (side_length + 1)
+        
+    return (x, y)
+```

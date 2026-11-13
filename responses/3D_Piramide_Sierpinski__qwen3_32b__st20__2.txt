@@ -1,0 +1,63 @@
+To solve the problem of finding the **non-increasing triplet** `(a, b, c)` such that `a + b + c = N` and `a ≥ b ≥ c ≥ 0`, where the triplet is the `pos`-th in a lexicographical (descending) order, we follow a structured algorithm that mirrors the natural enumeration of such triplets.
+
+---
+
+### ✅ **Algorithm Overview**
+
+We iterate over all possible values of `a` from `N` down to `0`. For each `a`, we compute `K = N - a`, which is the remaining sum to be distributed between `b` and `c`.
+
+To ensure `b ≥ c`, we enforce `b ≥ K - b` → `b ≥ K/2`. This gives us the **minimum valid value** of `b` (i.e., `b_min = (K + 1) // 2`).
+
+The **maximum valid value** of `b` is `min(a, K)` because `b` cannot exceed `a` (to maintain `a ≥ b`) and must be at most `K` (to keep `c = K - b ≥ 0`).
+
+If the count of valid `b` values in this range is greater than the remaining `pos`, we compute the exact `b` and `c` using the position within the group.
+
+---
+
+### ✅ **Implementation in Python**
+
+```python
+def find_triplet(N, pos):
+    for a in range(N, -1, -1):
+        K = N - a
+        if K < 0:
+            continue
+        b_min = (K + 1) // 2  # ceil(K / 2)
+        b_max = min(a, K)
+        if b_max < b_min:
+            continue
+        cnt = b_max - b_min + 1
+        if pos < cnt:
+            b = b_max - pos
+            c = K - b
+            return (a, b, c)
+        else:
+            pos -= cnt
+    return None  # Should never reach here if pos is valid
+```
+
+---
+
+### ✅ **Example: N = 5, pos = 3**
+
+All valid triplets (in descending order):
+1. (5, 0, 0)
+2. (4, 1, 0)
+3. (3, 2, 0)
+4. (3, 1, 1)
+5. (2, 2, 1)
+
+So, `pos = 3` → returns `(3, 1, 1)`
+
+---
+
+### ✅ **Time and Space Complexity**
+
+- **Time Complexity**: O(N), as we iterate from N down to 0.
+- **Space Complexity**: O(1), no additional data structures used.
+
+---
+
+### ✅ **Conclusion**
+
+This approach efficiently enumerates all valid non-increasing triplets in descending lexicographical order and retrieves the `pos`-th element directly using arithmetic and range counting, without generating all triplets up front. It is optimal and robust for the problem.

@@ -1,0 +1,14 @@
+The condition that determines whether \(x\) is valid for a given \(y\) is that \(x\) must be a submask of \(y\) in binary representation. This means that every bit set to 1 in \(x\) must also be set to 1 in \(y\). 
+
+This condition is mathematically expressed as \((x \mathbin{\&} y) = x\), where \(\mathbin{\&}\) denotes the bitwise AND operation. 
+
+- For \(y = 2\) (binary \(10\)):
+  - \(x = 0\) (binary \(00\)): \(0 \mathbin{\&} 2 = 0\), which equals \(x\), so valid.
+  - \(x = 1\) (binary \(01\)): \(1 \mathbin{\&} 2 = 0\), which does not equal \(x\), so invalid.
+  - \(x = 2\) (binary \(10\)): \(2 \mathbin{\&} 2 = 2\), which equals \(x\), so valid.
+  
+This matches the example where the valid \(x\) values for \(y = 2\) are 0 and 2.
+
+The condition \((x \mathbin{\&} y) = x\) ensures that \(x\) is within the range \([0, y]\) and satisfies the submask property, as any bit set in \(x\) must also be set in \(y\), implying \(x \leq y\).
+
+\boxed{(x \& y) = x}

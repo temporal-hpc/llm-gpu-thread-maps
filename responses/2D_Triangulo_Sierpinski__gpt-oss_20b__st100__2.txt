@@ -1,0 +1,22 @@
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError
+    y = 0
+    cum = 0
+    while True:
+        count = 1 << y.bit_count()
+        if cum + count > n:
+            break
+        cum += count
+        y += 1
+    m = n - cum
+    counter = 0
+    sub = 0
+    while sub <= y:
+        if (sub & y) == sub:
+            if counter == m:
+                return (sub, y)
+            counter += 1
+        sub += 1
+    raise RuntimeError
+

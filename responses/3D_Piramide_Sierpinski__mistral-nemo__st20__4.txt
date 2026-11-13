@@ -1,0 +1,2 @@
+def map_to_coordinates(n):
+    return (n % 6, n // 6 % 2, n // 36)

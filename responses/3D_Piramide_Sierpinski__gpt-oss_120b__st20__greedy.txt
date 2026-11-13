@@ -1,0 +1,159 @@
+**Solution Explanation**
+
+For a non‑negative integer `n` we have to produce the three
+coordinates `(x, y, z)` that appear in the table of the statement.
+The table is the result of the *inverse* of the 3‑dimensional
+Morton (Z‑order) encoding.  
+In a Morton code the bits of the three coordinates are interleaved:
+
+```
+bit 0 of n → bit 0 of x
+bit 1 of n → bit 0 of y
+bit 2 of n → bit 0 of z
+bit 3 of n → bit 1 of x
+bit 4 of n → bit 1 of y
+bit 5 of n → bit 1 of z
+…
+```
+
+Consequently the three coordinates are obtained by extracting the
+bits of `n` that belong to each axis and rebuilding the integer that
+those bits represent.
+
+The algorithm is therefore:
+
+```
+x = bits of n at positions 0,3,6,…   (least‑significant first)
+y = bits of n at positions 1,4,7,…   (least‑significant first)
+z = bits of n at positions 2,5,8,…   (least‑significant first)
+```
+
+The three numbers are built by shifting the extracted bits back to the
+right place and OR‑ing them together.
+
+The implementation below follows this idea.  It works for any
+non‑negative integer `n` and reproduces exactly the mapping shown in
+the problem statement.
+
+**Correctness Proof**
+
+We prove that the function `map_index_to_xyz` returns the unique
+triple `(x, y, z)` that satisfies the Morton decoding described above.
+
+*Lemma 1*  
+For any non‑negative integer `n`, let `b_i` be the i‑th bit of `n`
+(`b_i = (n >> i) & 1`).  
+Define  
+
+```
+x = Σ_{k≥0} b_{3k}   · 2^{k}
+y = Σ_{k≥0} b_{3k+1} · 2^{k}
+z = Σ_{k≥0} b_{3k+2} · 2^{k}
+```
+
+Then `x, y, z` are exactly the numbers obtained by taking the bits of
+`n` at positions `0,3,6,…`, `1,4,7,…`, `2,5,8,…` respectively and
+interpreting each subsequence as a binary integer (least‑significant
+bit first).
+
+*Proof of Lemma 1*  
+The definition of `x` (the other two are analogous) groups together
+all bits whose index is a multiple of three.  For each `k` the bit
+`b_{3k}` contributes `2^{k}` to `x` iff it is `1`.  This is precisely
+the binary value whose bit‑string consists of the bits `b_{0},
+b_{3}, b_{6}, …` with `b_{0}` being the least‑significant bit.
+∎
+
+
+
+*Lemma 2*  
+The triple `(x, y, z)` constructed in Lemma 1 is the unique triple that
+maps to `n` by the 3‑dimensional Morton (Z‑order) encoding.
+
+*Proof of Lemma 2*  
+Morton encoding interleaves the binary representations of `x, y, z`
+exactly as described in Lemma 1: the i‑th bit of the encoded integer
+is the i‑th bit of `x` if `i ≡ 0 (mod 3)`, the i‑th bit of `y` if
+`i ≡ 1 (mod 3)`, and the i‑th bit of `z` if `i ≡ 2 (mod 3)`.  Hence
+the decoding performed in Lemma 1 inverts that process and yields the
+only possible pre‑image of `n`. ∎
+
+
+
+*Theorem*  
+`map_index_to_xyz(n)` returns the coordinates shown in the table for
+all `0 ≤ n ≤ 19` and, more generally, for every non‑negative integer
+`n`.
+
+*Proof of Theorem*  
+The function implements exactly the construction of Lemma 1:
+it iterates over the bits of `n`, and for each bit at position `i`
+adds `1 << (i // 3)` to the appropriate coordinate (`i % 3`).  This
+is equivalent to the formulas of Lemma 1, therefore by Lemma 2 the
+produced triple is the unique Morton decoding of `n`.  The table in
+the statement is precisely that decoding for the first twenty
+indices, so the function matches the required mapping. ∎
+
+
+
+**Complexity Analysis**
+
+Let `L = ⌊log₂ n⌋ + 1` be the number of bits of `n`.  
+The algorithm scans each bit once, performing only constant‑time
+operations per bit.
+
+```
+Time   : Θ(L) = Θ(log n)
+Memory : O(1)   (only three integer variables)
+```
+
+**Reference Implementation (Python 3)**
+
+```python
+def map_index_to_xyz(n: int) -> tuple[int, int, int]:
+    """
+    Convert a non‑negative integer index `n` to its 3‑D Morton (Z‑order)
+    coordinates (x, y, z).
+
+    The bits of `n` are de‑interleaved:
+        - bits 0,3,6,… form the binary representation of x,
+        - bits 1,4,7,… form the binary representation of y,
+        - bits 2,5,8,… form the binary representation of z.
+
+    Parameters
+    ----------
+    n : int
+        Non‑negative integer index.
+
+    Returns
+    -------
+    (x, y, z) : tuple[int, int, int]
+        The coordinates corresponding to `n`.
+    """
+    if n < 0:
+        raise ValueError("n must be non‑negative")
+
+    x = y = z = 0          # accumulated coordinates
+    shift = 0               # which bit of the coordinate we are filling
+    while n:
+        # extract the three least‑significant bits of n
+        bits = n & 0b111
+
+        # bit 0 → x, bit 1 → y, bit 2 → z
+        if bits & 1:
+            x |= 1 << shift
+        if bits & 2:
+            y |= 1 << shift
+        if bits & 4:
+            z |= 1 << shift
+
+        # move to the next group of three bits
+        n >>= 3
+        shift += 1
+
+    return x, y, z
+```
+
+The function follows exactly the algorithm proven correct above,
+conforms to the required signature, and runs in `O(log n)` time with
+`O(1)` additional memory.

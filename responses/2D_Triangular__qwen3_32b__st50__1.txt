@@ -1,0 +1,73 @@
+To determine the coordinates $(x, y)$ of a point in a spiral traversal pattern for a given index $n$, we can use the following mathematical approach:
+
+---
+
+### **Step-by-Step Explanation**
+
+1. **Understand the Spiral Pattern**:
+   - The spiral is constructed such that each "layer" adds a new ring of points.
+   - The positions are ordered in a way that can be modeled using **triangular numbers**. For a given layer $y$, the number of points in the ring is $8y$.
+
+2. **Determine the Layer $y$**:
+   - The layer $y$ corresponds to the largest integer such that the cumulative number of points up to layer $y$ is less than $n$.
+   - Mathematically, solve for $y$ in the inequality:
+     $$
+     y(y + 1) < 2n \leq (y + 1)(y + 2)
+     $$
+   - This can be derived by solving the quadratic equation:
+     $$
+     y = \left\lfloor \frac{\sqrt{8n + 1} - 1}{2} - \epsilon \right\rfloor
+     $$
+     where $\epsilon$ is a small positive value (e.g., $10^{-9}$) to handle exact squares.
+
+3. **Calculate the Offset $x$**:
+   - Once $y$ is determined, compute the offset within the current layer:
+     $$
+     x = n - \frac{y(y + 1)}{2} - 1
+     $$
+   - This gives the position $x$ within the current ring.
+
+---
+
+### **Final Formulas**
+
+Given an index $n$, the coordinates $(x, y)$ are computed as:
+
+1. **Layer $y$**:
+   $$
+   y = \left\lfloor \frac{\sqrt{8n + 1} - 1}{2} - \epsilon \right\rfloor
+   $$
+   (where $\epsilon$ is a small positive number, e.g., $10^{-9}$)
+
+2. **Offset $x$**:
+   $$
+   x = n - \frac{y(y + 1)}{2} - 1
+   $$
+
+---
+
+### **Example**
+
+Let’s compute $(x, y)$ for $n = 10$:
+
+1. **Compute $y$**:
+   $$
+   \sqrt{8 \times 10 + 1} = \sqrt{81} = 9
+   $$
+   $$
+   y = \left\lfloor \frac{9 - 1}{2} - 10^{-9} \right\rfloor = \left\lfloor 4 - 10^{-9} \right\rfloor = 3
+   $$
+
+2. **Compute $x$**:
+   $$
+   x = 10 - \frac{3 \times 4}{2} - 1 = 10 - 6 - 1 = 3
+   $$
+
+**Result**: $(x, y) = (3, 3)$
+
+---
+
+### **Key Notes**
+
+- The spiral pattern assumes that each layer $y$ has $8y$ points, and the cumulative number of points up to layer $y$ is $\frac{y(y + 1)}{2}$.
+- The formulas work for any $n \geq 1$, and the coordinates $(x, y)$ correspond to the position in the spiral.

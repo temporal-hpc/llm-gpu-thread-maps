@@ -1,0 +1,100 @@
+To convert a number into 3D coordinates (x, y, z), we can follow a structured approach based on the assumption that the number represents a position in a 3D grid with a specific pattern. Here's a step-by-step explanation:
+
+---
+
+### **Step 1: Determine `z` from the number**
+We divide the number into groups of 12 to determine the `z`-coordinate.
+
+- Let `q = n // 12` (quotient)
+- Let `r = n % 12` (remainder)
+
+If the remainder `r < 8`, the `z`-coordinate is even:  
+  ```python
+  z = 2 * q
+  ```
+
+If the remainder `r >= 8`, the `z`-coordinate is odd:  
+  ```python
+  z = 2 * q + 1
+  ```
+
+---
+
+### **Step 2: Compute the offset within the block**
+Once `z` is determined, we compute the offset within the block of size 8 or 4.
+
+- If `z` is even:
+  ```python
+  offset = r
+  ```
+
+- If `z` is odd:
+  ```python
+  offset = r - 8
+  ```
+
+---
+
+### **Step 3: Map the offset to `x` and `y`**
+Assuming the offset maps to a 2D grid:
+
+- **For even `z` (block size 8):**  
+  The offset is mapped to a 2x4 grid.  
+  ```python
+  x = offset // 4
+  y = offset % 4
+  ```
+
+- **For odd `z` (block size 4):**  
+  The offset is mapped to a 2x2 grid.  
+  ```python
+  x = offset // 2
+  y = offset % 2
+  ```
+
+---
+
+### **Final Code Implementation**
+
+```python
+def number_to_coords(n):
+    q = n // 12
+    r = n % 12
+
+    if r < 8:
+        z = 2 * q
+        offset = r
+    else:
+        z = 2 * q + 1
+        offset = r - 8
+
+    if z % 2 == 0:
+        x = offset // 4
+        y = offset % 4
+    else:
+        x = offset // 2
+        y = offset % 2
+
+    return (x, y, z)
+```
+
+---
+
+### **Example Usage**
+
+```python
+print(number_to_coords(0))   # (0, 0, 0)
+print(number_to_coords(7))   # (1, 3, 0)
+print(number_to_coords(8))   # (0, 0, 1)
+print(number_to_coords(11))  # (1, 1, 1)
+print(number_to_coords(12))  # (0, 0, 2)
+print(number_to_coords(19))  # (1, 3, 2)
+print(number_to_coords(20))  # (0, 0, 3)
+```
+
+---
+
+### **Notes**
+- This mapping is based on the assumption that the grid follows a 2x4 pattern for even `z` and 2x2 for odd `z`.
+- If your problem uses a different mapping (e.g., swapping x and y or using a different grid size), adjust the logic accordingly.
+- This method ensures a unique 3D coordinate for each number in a structured way.

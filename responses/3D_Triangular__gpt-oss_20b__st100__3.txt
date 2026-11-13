@@ -1,0 +1,33 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non‑negative integer")
+    def cumulative(z):
+        return (z + 1) * (z + 2) * (z + 3) // 6
+    # find minimal z with cumulative(z) > n
+    low, high = 0, 1
+    while cumulative(high) <= n:
+        high <<= 1
+    while low < high:
+        mid = (low + high) // 2
+        if cumulative(mid) <= n:
+            low = mid + 1
+        else:
+            high = mid
+    z = low
+    prev = cumulative(z - 1) if z > 0 else 0
+    k = n - prev
+    # find y such that y(y+1)/2 <= k < (y+1)(y+2)/2
+    low_y, high_y = 0, z
+    while low_y < high_y:
+        mid = (low_y + high_y) // 2
+        start = mid * (mid + 1) // 2
+        end = (mid + 1) * (mid + 2) // 2 - 1
+        if k <= end:
+            high_y = mid
+        else:
+            low_y = mid + 1
+    y = low_y
+    x = k - y * (y + 1) // 2
+    return (x, y, z)
+```

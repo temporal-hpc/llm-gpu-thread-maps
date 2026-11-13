@@ -1,0 +1,48 @@
+To solve for \( x \), \( y \), and \( z \) given an integer \( n \):
+
+1. **Determine the Block**:
+   - Compute the block number as \( \text{block} = \left\lfloor \frac{n}{20} \right\rfloor \).
+
+2. **Calculate Remainder**:
+   - Find the remainder within the current block: \( r = n \% 20 \).
+
+3. **Determine \( z \)**:
+   - If \( r < 8 \), set \( z = 0 \).
+   - If \( 8 \leq r < 12 \), set \( z = 1 \).
+   - If \( r \geq 12 \), set \( z = 2 \).
+
+4. **Calculate Local Remainder**:
+   - For \( z = 0 \) or \( z = 2 \): 
+     - If \( z = 0 \), \( \text{local\_rem} = r \).
+     - If \( z = 2 \), \( \text{local\_rem} = r - 12 \).
+
+5. **Determine \( x \) and \( y \)**:
+   - Use lookup tables based on \( z \) to find \( x \) and \( y \) from the local remainder.
+
+6. **Adjust for Block**:
+   - Add \( 3 \times \text{block} \) to \( x \).
+
+### Final Answer
+
+The values of \( x \), \( y \), and \( z \) can be determined using the above steps, resulting in:
+
+\[
+x = 3k + a, \quad y = b, \quad z = c
+\]
+
+where \( k \) is the block number, and \( a \), \( b \), and \( c \) are determined from the remainder within each block.
+
+For example, for \( n = 20 \):
+
+- Block: \( 1 \)
+- Remainder: \( 0 \)
+- \( z = 0 \)
+- Local remainder: \( 0 \)
+- Lookup gives \( x = 0 \), \( y = 0 \)
+- Adjusted \( x = 3 \times 1 + 0 = 3 \)
+
+Thus, the values are:
+
+\[
+\boxed{x = 3}, \quad \boxed{y = 0}, \quad \boxed{z = 0}
+\]

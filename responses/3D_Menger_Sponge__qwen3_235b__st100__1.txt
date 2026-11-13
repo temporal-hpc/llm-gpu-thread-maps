@@ -1,0 +1,46 @@
+To solve this problem, we need to generate the nth valid triplet (a, b, c) where each of a, b, and c can be 0, 1, or 2. The triplet is considered valid if it does not contain two consecutive 1s. Specifically, the conditions for validity are that (a and b cannot both be 1) and (b and c cannot both be 1).
+
+### Approach
+1. **Problem Analysis**: The problem requires generating all possible triplets (a, b, c) where each element is in the set {0, 1, 2}, but skipping any triplet where there are two consecutive 1s (i.e., (a, b) = (1, 1) or (b, c) = (1, 1)). The solution involves listing these valid triplets in lexicographical order and returning the nth triplet (0-indexed).
+
+2. **Intuition**: Since the possible values for a, b, and c are limited (only 3 values each), we can iterate through all 27 possible triplets (3^3 = 27). For each triplet, we check if it meets the validity conditions. We count the valid triplets in order until we reach the nth one.
+
+3. **Algorithm Selection**: We use three nested loops to iterate through all possible values of a, b, and c (from 0 to 2). For each combination, we check if it is valid (i.e., no two consecutive 1s). If it is valid, we increment our count. When the count matches the given n, we output the current triplet.
+
+4. **Complexity Analysis**: The algorithm checks all 27 possible triplets in constant time O(1) since the number of iterations is fixed (3x3x3 = 27). This is optimal for the problem constraints where n is guaranteed to be between 0 and 21 (inclusive).
+
+### Solution Code
+```cpp
+#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    int count = 0;
+    for (int a = 0; a < 3; a++) {
+        for (int b = 0; b < 3; b++) {
+            for (int c = 0; c < 3; c++) {
+                if ((a == 1 && b == 1) || (b == 1 && c == 1)) {
+                    continue;
+                }
+                if (count == n) {
+                    cout << a << " " << b << " " << c << endl;
+                    return 0;
+                }
+                count++;
+            }
+        }
+    }
+    return 0;
+}
+```
+
+### Explanation
+1. **Reading Input**: The integer `n` is read from standard input, representing the index of the desired valid triplet (0-indexed).
+2. **Triplet Generation**: Using three nested loops, the code generates all possible triplets (a, b, c) where each element ranges from 0 to 2.
+3. **Validity Check**: For each triplet, the code checks if it contains two consecutive 1s (either in positions a and b, or b and c). If it does, the triplet is skipped.
+4. **Counting Valid Triplets**: Valid triplets are counted in order. When the count matches `n`, the current triplet is printed, and the program exits immediately.
+5. **Termination**: The program guarantees termination since `n` is constrained to be between 0 and 21, and there are exactly 22 valid triplets.
+
+This approach efficiently enumerates valid triplets in lexicographical order and retrieves the nth triplet without unnecessary computations, leveraging the problem's constraints for optimal performance.

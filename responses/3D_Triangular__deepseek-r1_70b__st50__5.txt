@@ -1,0 +1,43 @@
+To solve this problem, we need to determine the coordinates (x, y, z) corresponding to a given integer N in a 3D grid. The grid is structured such that each layer `z` contains triangular numbers of points starting from the origin and expanding outward.
+
+### Approach
+1. **Identify the Layer**: Each layer `z` starts with a specific number of points determined by triangular numbers. We need to find the smallest layer `z` such that the cumulative sum of points up to that layer is at least N.
+2. **Determine Position within Layer**: Once the correct layer is identified, compute the position of N within that layer.
+3. **Calculate Coordinates**: Within the identified layer, determine the exact coordinates (x, y) by iterating through the triangular numbers.
+
+### Solution Code
+```python
+def get_coordinates(N):
+    if N == 1:
+        return (0, 0, 0)
+    
+    sum_layers = 0
+    z = 0
+    
+    while True:
+        next_sum = sum_layers + ((z + 1) * (z + 2)) // 2
+        if N <= next_sum:
+            break
+        sum_layers = next_sum
+        z += 1
+    
+    pos_in_layer = N - sum_layers
+    
+    S = 0
+    y = 0
+    while True:
+        if S + (y + 1) >= pos_in_layer:
+            break
+        S += (y + 1)
+        y += 1
+    
+    x = pos_in_layer - S - 1
+    return (x, y, z)
+```
+
+### Explanation
+1. **Identify the Layer**: The code iteratively calculates the cumulative sum of triangular numbers to determine which layer `z` contains the point N.
+2. **Determine Position within Layer**: After identifying the correct layer, it computes the position of N within that layer by subtracting the cumulative sum up to the previous layers from N.
+3. **Calculate Coordinates**: Using a nested loop, the code calculates the exact coordinates (x, y) within the identified layer by iterating through triangular numbers until the correct position is found.
+
+This approach efficiently narrows down the layer and then the exact position within that layer, ensuring optimal performance even for large values of N.

@@ -1,0 +1,28 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError
+    block, rem = divmod(n, 12)
+    if rem < 8:
+        z = 2 * block
+        off = rem
+        if off < 3:
+            y = 0
+            x = off
+        elif off < 5:
+            y = 1
+            x = 0 if off == 3 else 2
+        else:
+            y = 2
+            x = off - 5
+    else:
+        z = 2 * block + 1
+        off = rem - 8
+        if off < 2:
+            y = 0
+            x = 0 if off == 0 else 2
+        else:
+            y = 2
+            x = 0 if off == 2 else 2
+    return (x, y, z)
+```

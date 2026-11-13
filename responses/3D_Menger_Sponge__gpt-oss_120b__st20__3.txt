@@ -1,0 +1,15 @@
+```python
+import itertools
+
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError
+    cnt = 0
+    for z in itertools.count():
+        for y in itertools.count():
+            for x in itertools.count():
+                if (x == 1) + (y == 1) + (z == 1) <= 1:
+                    if cnt == n:
+                        return (x, y, z)
+                    cnt += 1
+```

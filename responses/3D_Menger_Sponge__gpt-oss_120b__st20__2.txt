@@ -1,0 +1,17 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError
+    p, r = divmod(n, 12)
+    base_z = 2 * p
+    if r < 8:
+        z = base_z
+        offset = r
+        seq = [(x, y) for y in range(3) for x in range(3) if not (y == 1 and x == 1)]
+    else:
+        z = base_z + 1
+        offset = r - 8
+        seq = [(x, y) for y in (0, 2) for x in (0, 2)]
+    x, y = seq[offset]
+    return (x, y, z)
+```

@@ -1,0 +1,18 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer")
+    layer = int((3 * (n ** 0.5) - 3) ** 2)
+    pos_in_layer = n - layer
+    side_length = int((layer ** 0.5) + 1)
+    x = pos_in_layer % side_length
+    y = pos_in_layer // side_length
+    if layer == 0:
+        return (x, y)
+    else:
+        offset_x = (side_length - 1) // 2
+        offset_y = (side_length - 1) // 2
+        x += offset_x
+        y += offset_y
+        return (x, y)
+```

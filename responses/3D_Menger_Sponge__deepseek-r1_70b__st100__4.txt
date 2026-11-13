@@ -1,0 +1,26 @@
+To determine the (x, y, z) coordinates for a given index `n`, follow these steps:
+
+1. **Calculate z**:
+   \[
+   z = \left\lfloor \frac{n}{8} \right\rfloor
+   \]
+   
+2. **Find m**:
+   \[
+   m = n \mod 8
+   \]
+   
+3. **Determine x and y using the following table based on m**:
+
+| m | x | y |
+|---|---|---|
+| 0 | 0 | 0 |
+| 1 | 1 | 0 |
+| 2 | 2 | 0 |
+| 3 | 0 | 1 |
+| 4 | 2 | 1 |
+| 5 | 0 | 2 |
+| 6 | 1 | 2 |
+| 7 | 2 | 2 |
+
+**Answer**: The coordinates for index `n` are \((x, y, z)\) where \(z = \left\lfloor \frac{n}{8} \right\rfloor\) and \(m = n \mod 8\) determines \(x\) and \(y\) from the table.

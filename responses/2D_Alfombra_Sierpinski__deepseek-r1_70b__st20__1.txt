@@ -1,0 +1,50 @@
+To solve this problem, we need to determine the coordinates (x, y) based on a given integer input n. The solution involves breaking down the problem into manageable steps by recognizing patterns in how x and y change with respect to n.
+
+### Approach
+The approach is based on observing that the sequence of numbers can be divided into blocks of 8 numbers each. Within each block, the values of x and y follow a specific pattern:
+
+1. **Blocks**: Each block consists of 8 consecutive numbers. For example, Block 0 contains numbers 0-7, Block 1 contains numbers 8-15, and so on.
+2. **Groups within Blocks**: Each block is further divided into three groups:
+   - Group 1 (y=0) with 3 numbers where x increases by 1 for each increment in n.
+   - Group 2 (y=1) with 2 numbers where x increases by 2 for each increment in n.
+   - Group 3 (y=2) with another 3 numbers where x increases by 1 for each increment in n.
+
+By determining which block and group the number n falls into, we can compute the corresponding x and y coordinates.
+
+### Solution Code
+```python
+def get_coordinates(n):
+    m = n // 8
+    p = n % 8
+    
+    if p < 3:
+        y = 0
+    elif p < 5:
+        y = 1
+    else:
+        y = 2
+    
+    if y == 0:
+        x = m * 3 + p
+    elif y == 1:
+        offset = (p - 3)
+        x = m * 3 + 2 * offset
+    else:  # y == 2
+        x = m * 3 + (p - 5)
+    
+    return (x, y)
+```
+
+### Explanation
+1. **Block Identification**: The integer division `n // 8` gives the block number `m`, which helps in determining the base value for x.
+2. **Position within Block**: The modulus operation `n % 8` gives the position `p` within the current block, ranging from 0 to 7.
+3. **Group Determination**:
+   - If `p < 3`, y is set to 0.
+   - If `3 ≤ p < 5`, y is set to 1.
+   - Otherwise, y is set to 2.
+4. **x Calculation**:
+   - For y=0, x is calculated as `m * 3 + p`.
+   - For y=1, the offset within the group is used with a step of 2 for x calculation.
+   - For y=2, the position within the group starts from 0 and increments by 1.
+
+This approach efficiently maps each integer n to its corresponding (x, y) coordinates by leveraging the observed patterns in the sequence.

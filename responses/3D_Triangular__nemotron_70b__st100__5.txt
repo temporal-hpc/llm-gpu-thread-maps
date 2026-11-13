@@ -1,0 +1,15 @@
+```python
+def map_to_coordinates(n):
+    z = int((3 * (n ** 2) + n) ** 0.5) // 3 + min(1, n)
+    x = y = 0
+    while True:
+        if z * (z + 1) // 2 <= n:
+            n -= z * (z + 1) // 2
+            x += 1
+            if x > z:
+                x, y, z = 0, x, y + 1
+        else:
+            break
+        z += 1
+    return (x + min(y, z), min(y, z), max(y, z))
+```

@@ -1,0 +1,12 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer")
+    dimensions = 3
+    base = dimensions ** 2
+    z = n // base
+    remainder = n % base
+    y = remainder // dimensions
+    x = remainder % dimensions
+    return (x, y, z)
+```

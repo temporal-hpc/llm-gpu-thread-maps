@@ -1,0 +1,42 @@
+To solve this problem, we need to reverse the pairing function that maps two non-negative integers (i, j) to a single non-negative integer n. The pairing function used here is the Cantor pairing function, which uniquely encodes two non-negative integers into a single non-negative integer. The reverse process, known as unpairing, involves deriving the original integers (i, j) from the given integer n.
+
+### Approach
+1. **Problem Analysis**: The Cantor pairing function is defined as \( n = \frac{(i + j)(i + j + 1)}{2} + j \). To reverse this, we need to find integers \( i \) and \( j \) such that when plugged into this formula, they yield the given \( n \).
+
+2. **Key Insight**: The sum \( s = i + j \) can be derived by solving the quadratic equation \( s(s + 1)/2 \leq n < (s + 1)(s + 2)/2 \). This translates to finding \( s \) such that \( s \) is the largest integer satisfying \( s(s + 1)/2 \leq n \).
+
+3. **Mathematical Derivation**: 
+   - Compute \( k = \lfloor \sqrt{1 + 8n} \rfloor \).
+   - The sum \( s \) is then \( (k - 1) // 2 \).
+   - The total numbers before sum \( s \) is \( T = s(s + 1)/2 \).
+   - The index \( i \) is \( n - T \), and \( j \) is \( s - i \).
+
+4. **Algorithm Selection**: 
+   - Use integer square root to compute \( k \) efficiently.
+   - Derive \( s \) from \( k \).
+   - Calculate \( T \) (the triangular number for \( s \)).
+   - Determine \( i \) and \( j \) from \( n \) and \( T \).
+
+### Solution Code
+```python
+import math
+
+def unpair(n):
+    if n < 0:
+        raise ValueError("n must be non-negative")
+    k = math.isqrt(1 + 8 * n)
+    s = (k - 1) // 2
+    T = s * (s + 1) // 2
+    i = n - T
+    j = s - i
+    return (i, j)
+```
+
+### Explanation
+1. **Input Validation**: The function first checks if the input \( n \) is non-negative. If not, it raises a `ValueError`.
+2. **Compute \( k \)**: The integer square root of \( 1 + 8n \) is computed. This helps in determining the sum \( s = i + j \).
+3. **Determine \( s \)**: The sum \( s \) is derived as \( (k - 1) // 2 \). This step efficiently finds the largest integer \( s \) such that the triangular number \( T = s(s + 1)/2 \) is less than or equal to \( n \).
+4. **Calculate \( T \)**: The triangular number \( T \) for \( s \) is computed, representing the count of all pairs before the current sum \( s \).
+5. **Find \( i \) and \( j \)**: The index \( i \) is obtained by subtracting \( T \) from \( n \). The index \( j \) is then \( s - i \), ensuring \( i + j = s \).
+
+This approach efficiently reverses the Cantor pairing function by leveraging mathematical insights and integer arithmetic, ensuring correctness and optimal performance even for large values of \( n \).

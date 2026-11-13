@@ -1,0 +1,98 @@
+To determine the position of the **n-th term** in a sequence that enumerates all elements of the upper triangular part of matrices in increasing size (i.e., 1×1, 2×2, 3×3, etc.), we follow a structured approach rooted in combinatorial mathematics.
+
+---
+
+### 📌 Problem Overview
+
+We want to find the coordinates **(row, column)** of the **n-th element** in the sequence that lists all elements of the upper triangular part of matrices of increasing size, row-wise.
+
+Each **m × m** matrix contributes $ \frac{m(m+1)}{2} $ elements to the sequence (the number of elements in the upper triangle, including the diagonal).
+
+The **cumulative number of elements** up to the m × m matrix is:
+
+$$
+T(m) = \frac{m(m+1)(m+2)}{6}
+$$
+
+This is known as the **tetrahedral number**.
+
+---
+
+### ✅ Step-by-Step Solution
+
+#### **Step 1: Determine Matrix Size m**
+
+Find the smallest integer $ m $ such that:
+
+$$
+T(m-1) \leq n < T(m)
+$$
+
+That is,
+
+$$
+\frac{(m-1)m(m+1)}{6} \leq n < \frac{m(m+1)(m+2)}{6}
+$$
+
+This tells us that the n-th term lies within the **m × m matrix**.
+
+#### **Step 2: Calculate Offset Within the m × m Matrix**
+
+Let:
+
+$$
+\text{offset} = n - T(m-1)
+$$
+
+This gives the position of the term **within** the upper triangle of the m × m matrix.
+
+#### **Step 3: Determine Row and Column**
+
+Now, we need to find the row $ r $ and column $ c $ such that the element at position `offset` corresponds to the element at (r, c) in the upper triangle of the m × m matrix.
+
+To do this, we iterate over rows 0 to m-1 and sum the number of elements per row until we exceed the offset.
+
+- The number of elements in row $ r $ is $ m - r $
+- So, the cumulative count up to row $ r $ is:
+
+$$
+\text{sum} = \sum_{i=0}^{r} (m - i) = \frac{(m + r + 1)(m - r)}{2}
+$$
+
+Use binary search or a simple loop to find the smallest $ r $ such that the cumulative sum is greater than the offset.
+
+Let $ r $ be the row such that the sum up to row $ r-1 $ is less than or equal to the offset, and the sum up to row $ r $ is greater than the offset.
+
+Then, the column is:
+
+$$
+c = \text{offset} - \sum_{i=0}^{r-1} (m - i)
+$$
+
+---
+
+### 🧠 Example: Find the 10th Term
+
+- $ T(3) = 10 $, $ T(2) = 4 $, so $ m = 3 $
+- $ \text{offset} = 10 - 4 = 6 $
+- Row 0: 3 elements → cumulative = 3
+- Row 1: 2 elements → cumulative = 5
+- Row 2: 1 element → cumulative = 6
+
+So, row = 2, column = 0 → element is at (2, 2)
+
+---
+
+### ✅ Final Answer
+
+To find the position of the **n-th term**, compute:
+
+- Find $ m $ such that $ T(m-1) \leq n < T(m) $
+- Compute $ \text{offset} = n - T(m-1) $
+- Determine the row $ r $ and column $ c $ within the m × m matrix using the cumulative row sums
+
+The final coordinates are:
+
+$$
+\boxed{(r, c)}
+$$

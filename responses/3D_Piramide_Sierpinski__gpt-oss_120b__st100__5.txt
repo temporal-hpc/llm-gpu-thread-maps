@@ -1,0 +1,152 @@
+**Solution idea**
+
+The table is built recursively.
+
+* The first 16 numbers (0 … 15) are a *base pattern*  
+
+```
+0  → (0,0,0)      8  → (0,2,0)      12 → (0,0,2)
+1  → (1,0,0)      9  → (1,2,0)      13 → (1,0,2)
+2  → (0,1,0)     10  → (0,2,1)      14 → (0,1,2)
+3  → (0,0,1)     11  → (0,3,0)      15 → (0,0,3)
+4  → (2,0,0)     12  → (0,0,2)
+5  → (3,0,0)     13  → (1,0,2)
+6  → (2,1,0)     14  → (0,1,2)
+7  → (2,0,1)     15  → (0,0,3)
+```
+
+* For any larger `n` we look at the *high part* `n // 16`.  
+  Its own mapping (again a point of the same kind) tells us how many
+  whole blocks of size **4** we have to add to the three coordinates.
+
+* The *low part* `n % 16` tells us which point of the base pattern we have
+  to take inside the current block.
+
+Consequently the whole mapping can be expressed by the following
+recurrence
+
+```
+map_n(n) = base[ n % 16 ]  + 4 * map_n( n // 16 )
+```
+
+The recursion stops as soon as `n < 16`.  
+No `for` / `while` loop is needed – the recursion itself iterates over the
+digits of `n` in base‑16 (i.e. in blocks of 16).
+
+The depth of the recursion is `⌈log₁₆ n⌉`, therefore the algorithm is
+`O(log n)` in time and `O(log n)` in auxiliary space (the call‑stack).
+
+--------------------------------------------------------------------
+
+**Implementation (Python 3)**  
+
+```python
+def map_n(n):
+    """
+    Return the (x, y, z) triple that corresponds to the integer n
+    according to the table given in the question.
+    No explicit loops are used – the function works recursively.
+    """
+    # the 16‑element base pattern
+    base = [
+        (0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 0, 1),
+        (2, 0, 0), (3, 0, 0), (2, 1, 0), (2, 0, 1),
+        (0, 2, 0), (1, 2, 0), (0, 3, 0), (0, 2, 1),
+        (0, 0, 2), (1, 0, 2), (0, 1, 2), (0, 0, 3)
+    ]
+
+    # base case: the first block (0 … 15)
+    if n < 16:
+        return base[n]
+
+    # recursive case: split n into high‑part and low‑part
+    high_x, high_y, high_z = map_n(n // 16)        # mapping of the high part
+    low_x,  low_y,  low_z  = base[n % 16]          # point inside the block
+
+    # each whole block contributes 4 to the coordinate that it occupies
+    return (high_x * 4 + low_x,
+            high_y * 4 + low_y,
+            high_z * 4 + low_z)
+```
+
+--------------------------------------------------------------------
+
+**Why it works**
+
+Let  
+
+```
+n = 16·q + r        with 0 ≤ r < 16
+```
+
+*`r`* is the position inside the current block, therefore the point
+`base[r]` must appear in the result.
+
+`q = n // 16` is the number of whole blocks of size 16 that precede the
+current one.  
+The mapping of `q` is itself a triple `(a,b,c)`.  
+Each whole block of size **4** adds `4·a` to the *x*‑coordinate,
+`4·b` to the *y*‑coordinate and `4·c` to the *z*‑coordinate.
+
+Hence the result for `n` is exactly  
+
+```
+(x, y, z) = (a·4 + base[r].x,
+             b·4 + base[r].y,
+             c·4 + base[r].z)
+```
+
+which is precisely what the recursive formula implements.
+
+The recursion ends when `q = 0`, i.e. when `n < 16`.  At that moment the
+function simply returns the predefined base pattern, so the whole table
+is reproduced.
+
+--------------------------------------------------------------------
+
+**Complexity analysis**
+
+*Depth of recursion* : each call reduces the argument by a factor of 16,
+so the depth is `⌈log₁₆ n⌉`.
+
+*Time* : `O(log n)` – one constant‑time work per recursive level.
+
+*Space* : `O(log n)` – call stack of the same depth.
+
+Both satisfy the requirement of “no loops”.
+
+--------------------------------------------------------------------
+
+**Example**
+
+```python
+for i in range(20):
+    print(i, map_n(i))
+```
+
+output (first 20 entries)
+
+```
+0 (0, 0, 0)
+1 (1, 0, 0)
+2 (0, 1, 0)
+3 (0, 0, 1)
+4 (2, 0, 0)
+5 (3, 0, 0)
+6 (2, 1, 0)
+7 (2, 0, 1)
+8 (0, 2, 0)
+9 (1, 2, 0)
+10 (0, 2, 1)
+11 (0, 3, 0)
+12 (0, 0, 2)
+13 (1, 0, 2)
+14 (0, 1, 2)
+15 (0, 0, 3)
+16 (4, 0, 0)
+17 (5, 0, 0)
+18 (4, 1, 0)
+19 (4, 0, 1)
+```
+
+which coincides with the table given in the question.

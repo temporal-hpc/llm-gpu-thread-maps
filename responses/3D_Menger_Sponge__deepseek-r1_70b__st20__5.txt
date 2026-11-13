@@ -1,0 +1,26 @@
+To determine the coordinates (x, y) for each value of `m` (where `m` ranges from 0 to 7), we observe that there is no immediately apparent arithmetic or bitwise pattern. Therefore, we can create a direct mapping based on the observed data:
+
+- For `m = 0`, the coordinates are `(0, 0)`
+- For `m = 1`, the coordinates are `(1, 0)`
+- For `m = 2`, the coordinates are `(2, 0)`
+- For `m = 3`, the coordinates are `(0, 1)`
+- For `m = 4`, the coordinates are `(2, 1)`
+- For `m = 5`, the coordinates are `(0, 2)`
+- For `m = 6`, the coordinates are `(1, 2)`
+- For `m = 7`, the coordinates are `(2, 2)`
+
+Since a direct formula isn't evident, using a lookup table or switch-case structure is appropriate for mapping each `m` to its corresponding (x, y) pair.
+
+**Answer:**  
+For each value of `m` from 0 to 7, use a predefined lookup to find the corresponding (x, y) coordinates as follows:
+
+- m=0 → (0, 0)
+- m=1 → (1, 0)
+- m=2 → (2, 0)
+- m=3 → (0, 1)
+- m=4 → (2, 1)
+- m=5 → (0, 2)
+- m=6 → (1, 2)
+- m=7 → (2, 2)
+
+Implement this mapping in your code using a lookup table or similar structure.

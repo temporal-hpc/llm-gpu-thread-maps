@@ -1,0 +1,18 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError
+    offs = [(0,0),(1,0),(2,0),(0,1),(2,1),(0,2),(1,2),(2,2)]
+    x = y = 0
+    scale = 1
+    while True:
+        d = n % 8
+        dx, dy = offs[d]
+        x += dx * scale
+        y += dy * scale
+        n //= 8
+        if n == 0:
+            break
+        scale *= 3
+    return (x, y)
+```

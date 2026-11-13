@@ -1,0 +1,26 @@
+To determine the mapping from \( n \) to coordinates \((x, y)\), we observe a pattern where the sequence alternates between moving along the x-axis and then switching to increasing y after certain steps. The movement appears to follow a specific order where for each even y-level, x increases fully, while for odd y-levels, x takes even steps.
+
+**Step-by-Step Explanation:**
+
+1. **Identify Movement Pattern:**
+   - For \( n = 0 \) to \( 2 \), \( y = 0 \) and \( x \) increments from 0 to 2.
+   - At \( n = 3 \), reset \( x = 0 \) and increment \( y \) to 1. Then, for \( y = 1 \), \( x \) moves to 2 over two steps (\( n = 3, 4 \)).
+   - For \( y = 2 \), \( x \) increments fully from 0 to 2 over three steps (\( n = 5, 6, 7 \)).
+
+2. **Determine the Formula:**
+   - The pattern suggests that for each even \( y \), \( x \) increases through all values, while for odd \( y \), \( x \) takes every second value.
+   - This can be translated into a formula where \( y \) increments after every 3 steps for even levels and every 2 steps for odd levels.
+
+**Answer:**
+
+The coordinates \((x, y)\) corresponding to each \( n \) follow the observed pattern. For example:
+
+- \( n = 0 \rightarrow (0, 0) \)
+- \( n = 1 \rightarrow (1, 0) \)
+- \( n = 2 \rightarrow (2, 0) \)
+- \( n = 3 \rightarrow (0, 1) \)
+- \( n = 4 \rightarrow (2, 1) \)
+- \( n = 5 \rightarrow (0, 2) \)
+- \( n = 6 \rightarrow (1, 2) \)
+- \( n = 7 \rightarrow (2, 2) \)
+- And so on...

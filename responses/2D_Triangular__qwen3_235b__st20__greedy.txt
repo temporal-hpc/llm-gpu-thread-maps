@@ -1,0 +1,47 @@
+To solve this problem, we need to convert a given non-negative integer index `n` into a pair of integers `(k, y)` that represents the position of the `n`-th element in a specific sequence of pairs. The sequence is structured such that for each diagonal `y` (starting from 0), the pairs `(k, y)` range from `k = 0` to `k = y`. 
+
+### Approach
+1. **Problem Analysis**: The sequence of pairs is organized such that:
+   - For `y = 0`, the pair is `(0, 0)`.
+   - For `y = 1`, the pairs are `(0, 1)` and `(1, 1)`.
+   - For `y = 2`, the pairs are `(0, 2)`, `(1, 2)`, and `(2, 2)`, and so on.
+   The starting index of each diagonal `y` is given by the triangular number \( T(y) = \frac{y(y + 1)}{2} \). The element at index `n` in diagonal `y` is determined by \( k = n - T(y) \), where \( 0 \leq k \leq y \).
+
+2. **Key Insight**: To find the diagonal `y` for a given `n`, we solve the inequality \( T(y) \leq n < T(y + 1) \). This translates to:
+   \[
+   \frac{y(y + 1)}{2} \leq n < \frac{(y + 1)(y + 2)}{2}
+   \]
+   Multiplying by 8 and adding 1, we derive:
+   \[
+   (2y + 1)^2 \leq 8n + 1 < (2y + 3)^2
+   \]
+   Taking the integer square root of \( 8n + 1 \) gives \( r = \lfloor \sqrt{8n + 1} \rfloor \). The diagonal `y` is then computed as \( y = \left\lfloor \frac{r - 1}{2} \right\rfloor \).
+
+3. **Algorithm Selection**:
+   - Compute \( r = \text{isqrt}(8n + 1) \), where `isqrt` is the integer square root function.
+   - Calculate \( y = (r - 1) // 2 \).
+   - Determine \( k = n - \frac{y(y + 1)}{2} \).
+
+4. **Complexity Analysis**: The operations involve basic arithmetic and an integer square root computation, which runs in \( O(1) \) time for fixed-size integers. Thus, the overall time complexity is \( O(1) \).
+
+### Solution Code
+```python
+import math
+
+def convert_index(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError
+    r = math.isqrt(1 + 8 * n)
+    y = (r - 1) // 2
+    k = n - (y * (y + 1)) // 2
+    return (k, y)
+```
+
+### Explanation
+1. **Input Validation**: The function first checks if the input `n` is a non-negative integer. If not, it raises a `ValueError`.
+2. **Integer Square Root Calculation**: The value \( r \) is computed as the integer square root of \( 8n + 1 \). This helps in determining the diagonal `y`.
+3. **Diagonal Calculation**: Using \( r \), the diagonal `y` is derived as \( (r - 1) // 2 \). This formula effectively isolates `y` from the inequality involving the triangular numbers.
+4. **Position Calculation**: The position `k` within the diagonal `y` is found by subtracting the starting index of diagonal `y` (i.e., \( \frac{y(y + 1)}{2} \)) from `n`.
+5. **Result**: The function returns the pair `(k, y)`, which represents the position of the `n`-th element in the sequence.
+
+This approach efficiently maps the index `n` to the corresponding pair `(k, y)` by leveraging mathematical insights about triangular numbers and integer square roots, ensuring optimal performance.

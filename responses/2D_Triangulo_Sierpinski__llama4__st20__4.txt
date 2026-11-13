@@ -1,0 +1,25 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer.")
+    x = 0
+    y = 0
+    layer = 0
+    while n >= (layer * 2 + 1):
+        n -= layer * 2 + 1
+        layer += 1
+        x = layer
+        y = layer
+    if n < layer:
+        x = layer - n
+        y = 0
+    elif n < layer * 2:
+        diff = n - layer
+        x = 0
+        y = layer - diff
+    else:
+        diff = n - layer * 2
+        x = diff - layer
+        y = layer
+    return (x, y)
+```

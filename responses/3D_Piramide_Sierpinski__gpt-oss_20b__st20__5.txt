@@ -1,0 +1,38 @@
+**Answer**
+
+The matrix has only two non‑zero columns: the 3rd column (index 2) is the vector \((1,1,1,1,1,1)^T\) and the 6th column (index 5) is five times that vector.  Hence the rows of the matrix are all equal and the only linear relation imposed by \(Mx=0\) is
+
+\[
+x_2+5\,x_5=0 .
+\]
+
+Thus the nullspace consists of all vectors
+
+\[
+x=(x_0,\;x_1,\;x_2,\;x_3,\;x_4,\;x_5)
+\quad\text{with}\quad x_2=-5\,x_5,
+\]
+
+so that \(x\) can be written as
+
+\[
+x=(x_0,\;x_1,\;-5x_5,\;x_3,\;x_4,\;x_5)
+\]
+
+with the five scalars \(x_0,x_1,x_3,x_4,x_5\) free.
+
+A convenient basis is therefore
+
+\[
+\boxed{
+\begin{aligned}
+v_1 &= (1,0,0,0,0,0),\\
+v_2 &= (0,1,0,0,0,0),\\
+v_3 &= (0,0,0,1,0,0),\\
+v_4 &= (0,0,0,0,1,0),\\
+v_5 &= (0,0,-5,0,0,1).
+\end{aligned}
+}
+\]
+
+These five vectors are linearly independent and span the nullspace, so the nullity is 5.  (Any other set of five independent vectors satisfying \(x_2=-5x_5\) would also serve as a basis.)

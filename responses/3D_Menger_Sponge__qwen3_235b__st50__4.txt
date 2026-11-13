@@ -1,0 +1,43 @@
+To solve this problem, we need to count the number of triples (x, y, z) such that 0 ≤ x ≤ X, 0 ≤ y ≤ Y, 0 ≤ z ≤ Z, and (x + y + z) is divisible by 3. Given the constraints where X, Y, and Z can be as large as 10^6, a brute-force approach is infeasible. Instead, we leverage modular arithmetic and combinatorial mathematics to efficiently compute the result.
+
+### Approach
+1. **Residue Analysis**: For each of the variables x, y, and z, we determine how many numbers in their respective ranges (0 to X, 0 to Y, 0 to Z) leave residues 0, 1, or 2 when divided by 3. This is done using integer division:
+   - Count of numbers ≡ 0 mod 3: `(n + 3) // 3`
+   - Count of numbers ≡ 1 mod 3: `(n + 2) // 3`
+   - Count of numbers ≡ 2 mod 3: `(n + 1) // 3`
+   
+2. **Combination Check**: For the sum (x + y + z) to be divisible by 3, the sum of their residues modulo 3 must be 0. This means for residues `i` (from x), `j` (from y), and `k` (from z), we need `(i + j + k) % 3 = 0`. Equivalently, `k` must be `(3 - (i + j) % 3) % 3`.
+
+3. **Count Valid Triples**: For each possible residue pair `(i, j)` from x and y, compute the required residue `k` for z. Multiply the counts of residues `i`, `j`, and `k` from their respective ranges and accumulate the total.
+
+### Solution Code
+```python
+def main():
+    X, Y, Z = map(int, input().split())
+    
+    def get_counts(n):
+        return [(n + 3) // 3, (n + 2) // 3, (n + 1) // 3]
+    
+    A = get_counts(X)
+    B = get_counts(Y)
+    C = get_counts(Z)
+    
+    total = 0
+    for i in range(3):
+        for j in range(3):
+            k = (3 - i - j) % 3
+            total += A[i] * B[j] * C[k]
+    
+    print(total)
+
+if __name__ == "__main__":
+    main()
+```
+
+### Explanation
+1. **Reading Input**: The values of X, Y, and Z are read from standard input.
+2. **Residue Count Calculation**: The helper function `get_counts(n)` computes the number of integers in the range [0, n] that leave residues 0, 1, or 2 when divided by 3. This is efficiently done using integer division.
+3. **Triple Validation**: For each possible residue pair `(i, j)` from the ranges of x and y, the required residue `k` for z is calculated such that `(i + j + k) % 3 = 0`. The total valid triples is the sum of the products of the counts of residues `i`, `j`, and `k` from their respective ranges.
+4. **Output Result**: The accumulated total of valid triples is printed as the result.
+
+This approach efficiently reduces the problem to combinatorial counting based on residues, leveraging modular arithmetic to avoid brute-force checks, thus optimizing the solution to handle large input sizes within feasible time complexity. The algorithm operates in constant time O(1) per test case, making it highly efficient.

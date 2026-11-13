@@ -1,0 +1,48 @@
+The provided data indicates a specific pattern for mapping an integer $ n $ to 3D coordinates $ (x, y, z) $. Here's the step-by-step breakdown:
+
+### **1. Determine $ z $:**
+- **Formula:**  
+  $ z = \left\lfloor \frac{n}{8} \right\rfloor $  
+  (This partitions $ n $ into 8-point segments for each $ z $-level.)
+
+### **2. Determine $ r $:**
+- **Formula:**  
+  $ r = n \mod 8 $  
+  (This gives the position within the current $ z $-level.)
+
+### **3. Determine $ x $ and $ y $:**
+- **For $ r = 0 $ to $ 7 $, the coordinates $ (x, y) $ follow the pattern below:**
+
+| $ r $ | $ x $ | $ y $ |
+|--------|--------|--------|
+| 0      | 0      | 0      |
+| 1      | 1      | 0      |
+| 2      | 2      | 0      |
+| 3      | 0      | 1      |
+| 4      | 2      | 1      |
+| 5      | 0      | 2      |
+| 6      | 1      | 2      |
+| 7      | 2      | 2      |
+
+### **Final Formula:**
+For any integer $ n \geq 0 $, the 3D coordinates $ (x, y, z) $ are computed as:
+
+- **$ z = \left\lfloor \frac{n}{8} \right\rfloor $**  
+- **$ r = n \mod 8 $**  
+- **$ x $ and $ y $ are determined from the table above based on $ r $.**
+
+---
+
+### **Example Calculations:**
+- **For $ n = 0 $:**  
+  $ z = 0, r = 0 \Rightarrow (x, y, z) = (0, 0, 0) $  
+- **For $ n = 5 $:**  
+  $ z = 0, r = 5 \Rightarrow (x, y, z) = (0, 2, 0) $  
+- **For $ n = 10 $:**  
+  $ z = 1, r = 2 \Rightarrow (x, y, z) = (2, 0, 1) $
+
+---
+
+### **Key Notes:**
+- The pattern for $ (x, y) $ is consistent for $ r = 0 $ to $ 7 $, but higher $ z $-levels may exhibit different behaviors not observed in the given data.
+- This mapping aligns with a specific 3D traversal pattern, possibly resembling a 3D Hilbert curve, though further data would confirm this.

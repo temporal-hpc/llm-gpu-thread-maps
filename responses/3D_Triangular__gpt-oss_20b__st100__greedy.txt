@@ -1,0 +1,23 @@
+```python
+import math
+
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non‑negative integer")
+    # Find c such that C(c+3,3) > n
+    c = int((6 * n) ** (1/3))
+    while (c + 1) * (c + 2) * (c + 3) // 6 <= n:
+        c += 1
+    while c > 0 and c * (c + 1) * (c + 2) // 6 > n:
+        c -= 1
+    # offset within the block for this c
+    prev_total = c * (c + 1) * (c + 2) // 6
+    offset = n - prev_total
+    # Find b such that (b+1)(b+2)/2 > offset
+    b = int(math.floor((-3 + math.sqrt(1 + 8 * offset)) / 2))
+    if (b + 1) * (b + 2) // 2 <= offset:
+        b += 1
+    # a is the remaining offset after subtracting full blocks of a
+    a = offset - b * (b + 1) // 2
+    return (a, b, c)
+```

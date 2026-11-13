@@ -1,0 +1,92 @@
+To compute the 3D coordinates $(x, y, z)$ from a 1D index $n$, we follow a structured approach based on alternating layers of different sizes and internal patterns. Here's a clear and concise breakdown of the method:
+
+---
+
+### **Step 1: Determine the Layer Group**
+Each group of layers consists of:
+- **Even layers** with 8 elements.
+- **Odd layers** with 4 elements.
+
+Each pair (even + odd) contributes a total of 12 elements. We define:
+$$
+k = \left\lfloor \frac{n}{12} \right\rfloor
+$$
+This gives the number of full 12-element groups in $n$.
+
+---
+
+### **Step 2: Identify the Sublayer (Even or Odd)**
+Within group $k$, the index $n$ can fall in:
+- **Even sublayer** (e.g., $z = 2k$) if $n < 12k + 8$
+- **Odd sublayer** (e.g., $z = 2k + 1$) if $n \geq 12k + 8$
+
+Compute the **offset within the sublayer**:
+- **Even sublayer**:
+  $$
+  \text{offset\_even} = n - 12k
+  $$
+- **Odd sublayer**:
+  $$
+  \text{offset\_odd} = n - 12k - 8
+  $$
+
+---
+
+### **Step 3: Compute Coordinates Based on Sublayer**
+
+#### **For Even Sublayers (8 elements)**
+Given $\text{offset\_even} \in [0,7]$:
+- If $ \text{offset\_even} < 3 $:
+  $$
+  x = \text{offset\_even}, \quad y = 0
+  $$
+- Else if $ \text{offset\_even} < 5 $:
+  $$
+  x = 2 \times (\text{offset\_even} - 3), \quad y = 1
+  $$
+- Else:
+  $$
+  x = \text{offset\_even} - 5, \quad y = 2
+  $$
+
+#### **For Odd Sublayers (4 elements)**
+Given $\text{offset\_odd} \in [0,3]$:
+- $$
+  y = \left\lfloor \frac{\text{offset\_odd}}{2} \right\rfloor, \quad
+  x = 2 \times (\text{offset\_odd} \mod 2)
+  $$
+
+---
+
+### **Step 4: Compute $z$**
+- For even sublayers:
+  $$
+  z = 2k
+  $$
+- For odd sublayers:
+  $$
+  z = 2k + 1
+  $$
+
+---
+
+### **Final Answer Summary**
+
+$$
+\boxed{
+\begin{aligned}
+&k = \left\lfloor \frac{n}{12} \right\rfloor \\
+&\text{if } n < 12k + 8: \\
+&\quad \text{offset\_even} = n - 12k \\
+&\quad \text{if } \text{offset\_even} < 3: \\
+&\quad\quad x = \text{offset\_even},\quad y = 0,\quad z = 2k \\
+&\quad \text{elif } \text{offset\_even} < 5: \\
+&\quad\quad x = 2 \times (\text{offset\_even} - 3),\quad y = 1,\quad z = 2k \\
+&\quad \text{else}: \\
+&\quad\quad x = \text{offset\_even} - 5,\quad y = 2,\quad z = 2k \\
+&\text{else}: \\
+&\quad \text{offset\_odd} = n - 12k - 8 \\
+&\quad y = \left\lfloor \frac{\text{offset\_odd}}{2} \right\rfloor,\quad x = 2 \times (\text{offset\_odd} \mod 2),\quad z = 2k + 1
+\end{aligned}
+}
+$$

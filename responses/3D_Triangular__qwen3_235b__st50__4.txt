@@ -1,0 +1,30 @@
+To solve this problem, we need to determine the largest integer \( m \) such that the sum of the first \( m \) natural numbers (triangular number) is less than or equal to a given integer \( n \). The solution involves leveraging mathematical insights to efficiently compute \( m \) for each test case.
+
+### Approach
+1. **Problem Analysis**: The problem requires finding the maximum \( m \) where \( \frac{m(m + 1)}{2} \leq n \). This is a standard problem that can be transformed into solving the quadratic inequality \( m^2 + m - 2n \leq 0 \).
+2. **Mathematical Insight**: The solution to the quadratic equation \( m^2 + m - 2n = 0 \) is \( m = \frac{-1 + \sqrt{1 + 8n}}{2} \). Since \( m \) must be a positive integer, we take the floor of this value.
+3. **Efficient Calculation**: For each test case, compute the discriminant \( 1 + 8n \). The integer square root of this discriminant gives \( \text{root} = \lfloor \sqrt{1 + 8n} \rfloor \). The value \( m \) is then derived as \( \left\lfloor \frac{\text{root} - 1}{2} \right\rfloor \).
+4. **Optimization**: Using Python's `math.isqrt` function ensures efficient computation of the integer square root, which is optimal for large values of \( n \) (up to \( 10^9 \)).
+
+### Solution Code
+```python
+import math
+
+t = int(input())
+for _ in range(t):
+    n = int(input())
+    disc = 1 + 8 * n
+    root = math.isqrt(disc)
+    m = (root - 1) // 2
+    print(m)
+```
+
+### Explanation
+1. **Reading Input**: The first line reads the number of test cases \( t \).
+2. **Processing Each Test Case**: For each test case:
+   - **Compute Discriminant**: Calculate \( \text{disc} = 1 + 8n \), which is the discriminant of the quadratic equation derived from the problem.
+   - **Integer Square Root**: Use `math.isqrt` to compute the largest integer \( \text{root} \) such that \( \text{root}^2 \leq \text{disc} \).
+   - **Calculate \( m \)**: The value \( m \) is obtained by \( (\text{root} - 1) // 2 \), which effectively computes the floor of \( \frac{\sqrt{1 + 8n} - 1}{2} \).
+3. **Output Result**: Print the computed value of \( m \) for each test case.
+
+This approach efficiently solves the problem by leveraging mathematical insights and optimized integer operations, ensuring correctness and performance even for the upper constraint limits. The complexity is \( O(1) \) per test case, making it highly scalable.

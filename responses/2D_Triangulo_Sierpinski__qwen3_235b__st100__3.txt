@@ -1,0 +1,38 @@
+To solve this problem, we need to generate all possible subsets of a given set of distinct integers. Each subset must have its elements in non-descending order (sorted), and the solution set must not contain duplicate subsets. Additionally, the subsets should be sorted lexicographically in the output.
+
+### Approach
+1. **Sort the Input**: Since the elements in each subset must be in non-descending order, we first sort the input array. This ensures that any subset we generate will inherently have its elements in the correct order.
+2. **Depth-First Search (DFS)**: We use a recursive DFS approach to generate all subsets. The idea is to explore each possible element in the sorted array, adding it to the current subset and then recursively processing the remaining elements.
+3. **Backtracking**: After processing a particular element, we backtrack by removing it from the current subset to explore other possibilities. This ensures that all combinations are systematically generated without duplicates.
+4. **Lexicographical Order**: The DFS naturally generates subsets in lexicographical order because we process elements in the sorted order of the input array. The empty subset is generated first, followed by subsets starting with the smallest element, and so on.
+
+### Solution Code
+```python
+class Solution:
+    def subsets(self, S: List[int]) -> List[List[int]]:
+        S_sorted = sorted(S)
+        n = len(S_sorted)
+        result = []
+        path = []
+        
+        def dfs(start):
+            result.append(path[:])
+            for i in range(start, n):
+                path.append(S_sorted[i])
+                dfs(i + 1)
+                path.pop()
+        
+        dfs(0)
+        return result
+```
+
+### Explanation
+1. **Sorting the Input**: The input array `S` is sorted to ensure that every subset we generate will have its elements in ascending order. This step is crucial to meet the problem's requirement that elements in each subset must be in non-descending order.
+2. **DFS with Backtracking**: The `dfs` function starts from a given index `start` and iterates over the remaining elements. For each element, it:
+   - Adds the element to the current subset (`path`).
+   - Recursively calls `dfs` with the next index to process subsequent elements.
+   - Removes the last added element (backtracking) to explore other subsets.
+3. **Generating Subsets**: The initial call to `dfs(0)` starts the process. Each recursive call appends the current subset (a copy of `path`) to the result list before processing further elements. This ensures that all subsets, including the empty set, are captured.
+4. **Lexicographical Order**: By processing elements in the sorted order and using DFS, the subsets are generated in lexicographical order. For example, with input `[1, 2, 3]`, the subsets are generated as `[]`, `[1]`, `[1, 2]`, `[1, 2, 3]`, `[1, 3]`, `[2]`, `[2, 3]`, `[3]`.
+
+This approach efficiently generates all subsets in the required order while ensuring no duplicates and correct element ordering within each subset. The time complexity is \(O(2^N)\) where \(N\) is the number of elements in the input array, as each element can either be included or excluded from a subset. The space complexity is \(O(N)\) for the recursion stack and storing the current subset.

@@ -1,0 +1,22 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError
+    cumulative = 0
+    y = 0
+    while True:
+        cnt = 1 << y.bit_count()
+        if n < cumulative + cnt:
+            idx = n - cumulative
+            res = 0
+            temp = y
+            while temp:
+                low = temp & -temp
+                if idx & 1:
+                    res |= low
+                idx >>= 1
+                temp ^= low
+            return (res, y)
+        cumulative += cnt
+        y += 1
+```

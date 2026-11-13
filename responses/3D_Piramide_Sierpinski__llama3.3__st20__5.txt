@@ -1,0 +1,14 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input must be a non-negative integer")
+    dims = [0, 0, 0]
+    dim_index = 0
+    while n >= 0:
+        dims[dim_index] += 1
+        n -= (1 << dim_index)
+        dim_index = (dim_index + 1) % 3
+        if n < 0:
+            break
+    return tuple(dims[i] - 1 for i in range(3))
+```

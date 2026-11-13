@@ -1,0 +1,9 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non‑negative integer")
+    block, i = divmod(n, 8)
+    j = i if i < 4 else i + 1
+    row, col = divmod(j, 3)
+    return block * 3 + col, row
+```

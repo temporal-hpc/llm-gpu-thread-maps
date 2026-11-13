@@ -1,0 +1,23 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer.")
+    x = n // 3
+    y = (n % 3) // 1
+    z = n % 3
+    # adjusting to fit observed pattern more accurately
+    return (x, y, z)
+``` 
+
+However, after reevaluating the pattern and the requirement for a general algorithm, here is a more suitable implementation:
+
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer.")
+    z = n // 9
+    remaining = n % 9
+    y = remaining // 3
+    x = remaining % 3
+    return (x, y, z)
+```

@@ -1,0 +1,30 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non‑negative integer")
+    # find layer m such that S(m) > n, where S(m) = C(m+3,3)
+    low, high = 0, 1
+    while (high + 1) * (high + 2) * (high + 3) // 6 <= n:
+        high <<= 1
+    while low < high:
+        mid = (low + high) // 2
+        if (mid + 1) * (mid + 2) * (mid + 3) // 6 <= n:
+            low = mid + 1
+        else:
+            high = mid
+    m = low
+    prev_total = m * (m + 1) * (m + 2) // 6
+    offset = n - prev_total
+    # find y within layer m
+    y_low, y_high = 0, m
+    while y_low < y_high:
+        y_mid = (y_low + y_high) // 2
+        if (y_mid + 1) * (y_mid + 2) // 2 > offset:
+            y_high = y_mid
+        else:
+            y_low = y_mid + 1
+    y = y_low
+    prev_y = y * (y + 1) // 2
+    x = offset - prev_y
+    return (x, y, m)
+```

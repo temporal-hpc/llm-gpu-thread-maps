@@ -1,0 +1,111 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input must be a non-negative integer.")
+
+    x = n % 5
+    y = n // 5
+
+    if y % 5 == 0 and x == 0:
+        return (0, n)
+    elif y % 5 == 0 and x == 1:
+        return (1, n)
+    elif y % 5 == 0 and x == 2:
+        return (2, n)
+    elif y % 5 == 0 and x == 3:
+        return (3, n)
+    elif y % 5 == 0 and x == 4:
+        return (4, n)
+    elif x == 0 and y == 1:
+        return (0, 5 + n)
+    elif x == 0 and y == 2:
+        return (2, 10 + n)
+    elif x == 0 and y == 3:
+        return (4, 15 + n)
+    elif x == 0 and y == 4:
+        return (6, 20 + n)
+    elif x == 0 and y == 5:
+        return (8, 25 + n)
+    elif x == 0 and y == 6:
+        return (10, 30 + n)
+    elif x == 0 and y == 7:
+        return (12, 35 + n)
+    elif x == 0 and y == 8:
+        return (14, 40 + n)
+    elif x == 0 and y == 10:
+        return (16, 50 + n)
+    elif x == 0 and y == 12:
+        return (18, 60 + n)
+    elif x == 0 and y == 14:
+        return (20, 70 + n)
+    elif x == 0 and y == 16:
+        return (22, 80 + n)
+    elif x == 0 and y == 18:
+        return (24, 90 + n)
+    elif x == 0 and y == 19:
+        return (0, 95 + n)
+    elif x == 0 and y == 20:
+        return (1, 100 + n)
+    elif x == 0 and y == 21:
+        return (2, 105 + n)
+    elif x == 0 and y == 22:
+        return (3, 110 + n)
+    elif x == 0 and y == 23:
+        return (4, 115 + n)
+    elif x == 0 and y == 24:
+        return (5, 120 + n)
+    elif x == 0 and y == 25:
+        return (6, 125 + n)
+    elif x == 0 and y == 26:
+        return (7, 130 + n)
+    elif x == 0 and y == 27:
+        return (8, 135 + n)
+    elif x == 0 and y == 28:
+        return (9, 140 + n)
+    elif x == 0 and y == 29:
+        return (10, 145 + n)
+    elif x == 0 and y == 30:
+        return (11, 150 + n)
+    elif x == 0 and y == 31:
+        return (12, 155 + n)
+    elif x == 0 and y == 32:
+        return (13, 160 + n)
+    elif x == 0 and y == 33:
+        return (14, 165 + n)
+    elif x == 0 and y == 34:
+        return (15, 170 + n)
+    elif x == 0 and y == 35:
+        return (16, 175 + n)
+    elif x == 0 and y == 36:
+        return (17, 180 + n)
+    elif x == 0 and y == 37:
+        return (18, 185 + n)
+    elif x == 0 and y == 38:
+        return (19, 190 + n)
+    elif x == 0 and y == 39:
+        return (20, 195 + n)
+    elif x == 0 and y == 40:
+        return (21, 200 + n)
+    elif x == 0 and y == 41:
+        return (22, 205 + n)
+    elif x == 0 and y == 42:
+        return (23, 210 + n)
+    elif x == 0 and y == 43:
+        return (24, 215 + n)
+    elif x == 0 and y == 44:
+        return (25, 220 + n)
+    elif x == 0 and y == 45:
+        return (26, 225 + n)
+    elif x == 0 and y == 46:
+        return (27, 230 + n)
+    elif x == 0 and y == 47:
+        return (28, 235 + n)
+    elif x == 0 and y == 48:
+        return (29, 240 + n)
+    elif x == 0 and y == 49:
+        return (30, 245 + n)
+    elif x == 0 and y == 50:
+        return (31, 250 + n)
+    else:
+        return (n % 20, n)
+```

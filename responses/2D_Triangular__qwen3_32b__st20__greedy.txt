@@ -1,0 +1,57 @@
+To map each non-negative integer $ n $ to a coordinate in a 2D grid, we can use a triangular number-based approach. This method ensures a unique and systematic mapping from $ n \in \mathbb{N}_0 $ to a coordinate $ (x, y) \in \mathbb{N}_0^2 $.
+
+---
+
+### **Step-by-Step Explanation**
+
+1. **Triangular Number Insight**:
+   - The triangular number $ T_y = \frac{y(y+1)}{2} $ represents the total number of integers that can be mapped to coordinates with $ y $-coordinate less than or equal to $ y $.
+   - For a given $ n $, we want to find the largest $ y $ such that $ T_y \leq n $. This $ y $ determines the row in the grid.
+
+2. **Compute $ y $**:
+   - Solve the inequality $ \frac{y(y+1)}{2} \leq n $.
+   - This leads to the formula:
+     $$
+     y = \left\lfloor \frac{\sqrt{8n + 1} - 1}{2} \right\rfloor
+     $$
+   - This gives the largest integer $ y $ such that the triangular number $ T_y $ is less than or equal to $ n $.
+
+3. **Compute $ x $**:
+   - Once $ y $ is determined, the remaining value $ x $ is:
+     $$
+     x = n - \frac{y(y+1)}{2}
+     $$
+   - This gives the position within the row corresponding to $ y $.
+
+---
+
+### **Final Mapping Formula**
+
+Given a non-negative integer $ n $, the corresponding coordinate $ (x, y) $ is:
+
+$$
+\boxed{
+\left( n - \frac{y(y+1)}{2},\ y \right)
+}
+$$
+
+where
+
+$$
+y = \left\lfloor \frac{\sqrt{8n + 1} - 1}{2} \right\rfloor
+$$
+
+---
+
+### **Example**
+
+Let’s compute the coordinate for $ n = 5 $:
+
+- $ \sqrt{8 \cdot 5 + 1} = \sqrt{41} \approx 6.4 $
+- $ y = \left\lfloor \frac{6.4 - 1}{2} \right\rfloor = \left\lfloor 2.7 \right\rfloor = 2 $
+- $ x = 5 - \frac{2 \cdot 3}{2} = 5 - 3 = 2 $
+- So, the coordinate is $ (2, 2) $
+
+---
+
+This method ensures a one-to-one mapping from non-negative integers to 2D coordinates in a triangular grid.

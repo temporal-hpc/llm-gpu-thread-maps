@@ -1,0 +1,334 @@
+**Solution Explanation**
+
+The sequence of points is generated in *blocks* of 20 elements.
+
+```
+block 0  :  (0,0,0) (1,0,0) … (2,2,0)
+block 1  :  (3,0,0) (4,0,0) … (5,2,0)
+block 2  :  (6,0,0) (7,0,0) … (8,2,0)
+block 3  :  (0,3,0) (1,3,0) … (2,5,0)
+…         .
+```
+
+* **Block size** – always 20 points.  
+* **X‑offset** – the block index modulo 3, multiplied by 3  
+  (0, 3, 6, 9, 12, …).  
+* **Y‑offset** – the block index divided by 3 (integer division), multiplied by 3  
+  (0, 3, 6, 9, 12, …).  
+* Inside a block the points are produced by a *fixed* pattern that is repeated
+  for every block:
+
+```
+z = 0  or  z = 2 :  row 0  → (0,1,2)
+                    row 1  → (0,2)          (the middle element is omitted)
+                    row 2  → (0,1,2)
+z = 1  :  (0,0) → (0,0,1)
+          (1,0) → (2,0,1)
+          (2,0) → (0,2,1)
+          (3,0) → (2,2,1)
+```
+
+The mapping from the local index inside a block (0 … 19) to the global
+coordinates can be expressed by a small set of arithmetic formulas – no
+pre‑computation or hard coded tables are needed.
+
+--------------------------------------------------------------------
+
+#### Algorithm
+```
+1. Validate that n is a non‑negative integer.
+2. block_size = 20
+   block_index   = n // block_size          # integer division
+   local_index   = n %  block_size          # 0 … 19
+
+3. x_offset = (block_index % 3) * 3
+   y_offset = (block_index // 3) * 3
+
+4. Determine z and the offset inside the sub‑pattern:
+   if local_index < 8:            # z = 0 or 2
+        z      = 0
+        offset = local_index
+   elif local_index < 12:         # z = 1
+        z      = 1
+        offset = local_index - 8
+   else:                          # z = 2
+        z      = 2
+        offset = local_index - 12
+
+5. Map offset to (dx, dy) inside the 3×3 grid
+   * For z = 0 or 2:
+         rows have 3, 2 and 3 valid elements respectively.
+         r (row) = 0 if offset < 3
+                   1 if 3 ≤ offset < 5
+                   2 otherwise
+         c (column index inside the row) =
+                offset                      if r < 2
+                offset - 3                  if r == 1
+                offset - 5                  if r == 2
+         dx = c                 if r != 1
+             0 or 2             if r == 1  (c == 0 → 0, c == 1 → 2)
+         dy = r
+   * For z = 1:
+         offset = 0 → (0,0)
+         offset = 1 → (2,0)
+         offset = 2 → (0,2)
+         offset = 3 → (2,2)
+
+6. Global coordinates:
+      X = x_offset + dx
+      Y = y_offset + dy
+      Z = z
+   return (X, Y, Z)
+```
+
+--------------------------------------------------------------------
+
+#### Correctness Proof  
+
+We prove that the algorithm returns the correct point for every
+non‑negative integer `n`.
+
+---
+
+##### Lemma 1  
+For every block index `b` the algorithm computes the correct block origin:
+```
+x_offset = (b mod 3) * 3
+y_offset = (b // 3) * 3
+```
+
+**Proof.**  
+Blocks are laid out row‑wise in the (x, y) plane, each block spanning
+3 units in the x‑direction and 3 units in the y‑direction.
+The block number increases first along x, then along y.
+
+* `b mod 3` gives the column of the block in the current row.  
+  Multiplying by 3 gives the x‑coordinate of the block’s leftmost point.
+* `b // 3` gives the row number of the block.  
+  Multiplying by 3 gives the y‑coordinate of the block’s bottommost point.
+
+∎
+
+
+
+##### Lemma 2  
+For a fixed block and a local index `l` (0 ≤ l < 20) the algorithm
+produces the correct `z` and `offset` inside the sub‑pattern.
+
+**Proof.**
+
+* If `l < 8` the point belongs to the `z = 0` or `z = 2` sub‑pattern,
+  and `offset = l`.  
+  The algorithm sets `z = 0` and `offset = l`. Correct.
+* If `8 ≤ l < 12` the point belongs to the `z = 1` sub‑pattern,
+  and `offset = l − 8`.  
+  The algorithm sets `z = 1` and `offset = l − 8`. Correct.
+* If `l ≥ 12` the point belongs to the `z = 2` sub‑pattern,
+  and `offset = l − 12`.  
+  The algorithm sets `z = 2` and `offset = l − 12`. Correct.
+
+∎
+
+
+
+##### Lemma 3  
+For `z = 0` or `z = 2` the algorithm maps `offset` (0 ≤ offset < 8)
+to the correct pair `(dx, dy)` inside the 3×3 grid.
+
+**Proof.**
+
+The 3×3 grid, scanned row‑wise while skipping the centre,
+contains the following valid positions in order:
+
+```
+index 0 : (0,0)
+index 1 : (1,0)
+index 2 : (2,0)
+index 3 : (0,1)
+index 4 : (2,1)
+index 5 : (0,2)
+index 6 : (1,2)
+index 7 : (2,2)
+```
+
+Row lengths are (3, 2, 3).  
+The algorithm distinguishes the three ranges:
+
+1. `offset < 3` → row 0, column `offset`  
+   → `dx = column`, `dy = 0`. Matches indices 0–2.
+2. `3 ≤ offset < 5` → row 1, column `offset − 3`  
+   → `dx = 0` if column = 0 else `dx = 2`,  
+   `dy = 1`. Matches indices 3–4.
+3. `offset ≥ 5` → row 2, column `offset − 5`  
+   → `dx = column`, `dy = 2`. Matches indices 5–7.
+
+Thus each `offset` maps exactly to the pair shown above.
+∎
+
+
+
+##### Lemma 4  
+For `z = 1` the algorithm maps `offset` (0 ≤ offset < 4)
+to the correct pair `(dx, dy)` inside the 3×3 grid.
+
+**Proof.**
+
+The 3×3 grid, scanned row‑wise while picking the four outer corners,
+produces the positions in order:
+
+```
+offset 0 : (0,0)
+offset 1 : (2,0)
+offset 2 : (0,2)
+offset 3 : (2,2)
+```
+
+The algorithm uses the formulas  
+`dx = (offset mod 2) * 2`, `dy = (offset // 2) * 2`.  
+Plugging the four values of `offset` gives exactly the four pairs above.
+∎
+
+
+
+##### Lemma 5  
+For every block index `b` and local index `l` the algorithm returns
+the correct global coordinates.
+
+**Proof.**  
+
+Let `(dx, dy)` be the local coordinates inside the block produced by
+the algorithm (Lemma&nbsp;3 or Lemma&nbsp;4).  
+The block origin is `(x_offset, y_offset)` (Lemma&nbsp;1).  
+Adding the local offset gives the global coordinates:
+
+```
+X = x_offset + dx
+Y = y_offset + dy
+Z = z
+```
+
+By construction of the sequence the point with global coordinates
+`(X, Y, Z)` is exactly the point at position `n` in the list.
+∎
+
+
+
+##### Theorem  
+`map_to_coordinates(n)` returns the exact point that appears at index `n`
+in the given list for every non‑negative integer `n`.
+
+**Proof.**  
+For a given `n` the algorithm
+
+1. identifies the correct block (Lemma&nbsp;1),
+2. finds the correct `z` and local offset inside the block
+   (Lemma&nbsp;2),
+3. translates this offset to local grid coordinates
+   (Lemma&nbsp;3 and Lemma&nbsp;4),
+4. adds the block origin to obtain the global coordinates
+   (Lemma&nbsp;5).
+
+All steps are mathematically justified and deterministic,
+therefore the returned point is precisely the one at index `n`. ∎
+
+
+
+--------------------------------------------------------------------
+
+#### Complexity Analysis  
+
+All operations are simple integer arithmetic;
+no loops over the size of `n` are performed.
+
+```
+Time   :  O(1)
+Memory :  O(1)
+```
+
+--------------------------------------------------------------------
+
+#### Reference Implementation  (Python 3)
+
+```python
+def map_to_coordinates(n):
+    """
+    Return the (x, y, z) coordinates of the point at index ``n`` in the
+    infinite sequence described in the statement.
+
+    The sequence is built in blocks of 20 points; the pattern of the
+    20 points repeats in every 3×3 sub‑grid, with the x and y
+    coordinates of each block shifted by multiples of 3.
+
+    Parameters
+    ----------
+    n : int
+        Non‑negative index of the desired point.
+
+    Returns
+    -------
+    tuple[int, int, int]
+        The global (X, Y, Z) coordinates of the point.
+
+    Raises
+    ------
+    TypeError
+        If ``n`` is not an integer.
+    ValueError
+        If ``n`` is negative.
+    """
+    # ---- 1. input validation -------------------------------------------
+    if not isinstance(n, int):
+        raise TypeError("Input must be an integer.")
+    if n < 0:
+        raise ValueError("Input must be a non‑negative integer.")
+
+    # ---- 2. split index into block and local part ----------------------
+    BLOCK_SIZE = 20
+    block_index = n // BLOCK_SIZE          # block number (0, 1, 2, …)
+    local_index = n % BLOCK_SIZE           # 0 … 19 inside the block
+
+    # ---- 3. block origin (x_offset, y_offset) -------------------------
+    x_offset = (block_index % 3) * 3
+    y_offset = (block_index // 3) * 3
+
+    # ---- 4. determine z and offset inside the sub‑pattern --------------
+    if local_index < 8:           # z = 0 or z = 2
+        z = 0
+        offset = local_index
+    elif local_index < 12:        # z = 1
+        z = 1
+        offset = local_index - 8
+    else:                         # z = 2
+        z = 2
+        offset = local_index - 12
+
+    # ---- 5. map offset to (dx, dy) inside the 3×3 grid ----------------
+    if z == 1:  # outer‑corner pattern
+        dx = (offset % 2) * 2
+        dy = (offset // 2) * 2
+    else:  # z == 0 or z == 2  → rows of lengths 3, 2, 3
+        # offset ∈ {0,…,7}
+        if offset < 3:
+            r = 0
+            c = offset                # 0,1,2
+        elif offset < 5:
+            r = 1
+            c = offset - 3            # 0 or 1
+        else:
+            r = 2
+            c = offset - 5            # 0,1,2
+
+        dy = r
+        if r == 1:
+            dx = 0 if c == 0 else 2  # (c==0 → 0, c==1 → 2)
+        else:
+            dx = c
+
+    # ---- 6. return global coordinates ---------------------------------
+    X = x_offset + dx
+    Y = y_offset + dy
+    return (X, Y, z)
+```
+
+The code follows exactly the algorithm proven correct above and
+conforms to the required time and memory bounds.

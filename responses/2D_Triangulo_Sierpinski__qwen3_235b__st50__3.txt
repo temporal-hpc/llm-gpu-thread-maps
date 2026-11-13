@@ -1,0 +1,30 @@
+To solve this problem, we need to compute the sum of XOR totals for all subsets of a given array. The XOR total of a subset is defined as the bitwise XOR of all elements in the subset, or 0 if the subset is empty. 
+
+### Approach
+1. **Problem Analysis**: The key observation here is recognizing that each bit position in the numbers contributes independently to the final sum. For any bit position \( b \), if at least one number in the array has this bit set, then exactly half of all possible subsets (i.e., \( 2^{n-1} \) subsets) will have an XOR result where this bit is set. This is because the presence of the bit in the XOR result depends on whether an odd number of elements in the subset have this bit set, which occurs in exactly half of all subsets when there's at least one such element.
+
+2. **Insight**: The total contribution of each bit \( b \) (if present in any element) to the sum is \( 2^{n-1} \times 2^b \). Summing these contributions for all bits that appear in any element of the array gives the total sum. This sum can be simplified to \( \text{OR\_of\_all\_elements} \times 2^{n-1} \), where \( \text{OR\_of\_all\_elements} \) is the bitwise OR of all elements in the array.
+
+3. **Algorithm Selection**: 
+   - Compute the bitwise OR of all elements in the array. This captures all bits that are set in at least one element.
+   - Multiply this OR result by \( 2^{n-1} \), where \( n \) is the number of elements in the array. This multiplication effectively shifts the OR result left by \( n-1 \) positions.
+   - Return the result modulo \( 10^9 + 7 \) to handle large numbers as specified.
+
+### Solution Code
+```python
+class Solution:
+    def subsetXORSum(self, nums: List[int]) -> int:
+        total_or = 0
+        n = len(nums)
+        for num in nums:
+            total_or |= num
+        return (total_or << (n - 1)) % (10**9 + 7)
+```
+
+### Explanation
+1. **Initialization**: We start by initializing `total_or` to 0. This variable will hold the bitwise OR of all elements in the array.
+2. **Compute OR**: Iterate through each number in the array, updating `total_or` to include all bits set in any of the numbers. For example, if the array is `[1, 3]`, the OR result is `1 | 3 = 3` (binary `11`).
+3. **Calculate Result**: The result is derived by left-shifting `total_or` by \( n-1 \) positions (equivalent to multiplying by \( 2^{n-1} \)). For the array `[1, 3]` (length 2), this is `3 << 1 = 6`.
+4. **Modulo Operation**: The result is taken modulo \( 10^9 + 7 \) to ensure it fits within standard integer limits and meets the problem requirements.
+
+This approach efficiently leverages bit manipulation properties to compute the desired sum without explicitly enumerating all subsets, thus optimizing both time and space complexity. The algorithm runs in \( O(n) \) time, where \( n \) is the number of elements in the array, making it highly efficient even for the upper constraint \( n = 12 \). The space complexity is \( O(1) \) as only a few variables are used.

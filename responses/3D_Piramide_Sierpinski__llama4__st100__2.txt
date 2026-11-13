@@ -1,0 +1,17 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer.")
+    
+    coordinates = []
+    i = 0
+    while n > 0:
+        coordinate = n % 4
+        coordinates.append(coordinate)
+        n //= 4
+        i += 1
+    
+    coordinates.reverse()
+    
+    return tuple(coordinates)
+```

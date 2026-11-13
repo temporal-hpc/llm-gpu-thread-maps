@@ -1,0 +1,42 @@
+To determine the coordinates $(x, y, z)$ for a given $n$, we observe that the traversal of points follows a specific pattern across different $z$-layers. Here's a structured approach to compute the coordinates for any $n$ up to $19$:
+
+### Step 1: Determine the $z$-coordinate
+- **$z = 0$** for $n \in [0, 7]$
+- **$z = 1$** for $n \in [8, 11]$
+- **$z = 2$** for $n \in [12, 19]$
+
+### Step 2: Compute $x$ and $y$ Based on $z$
+For each $z$-layer, the $x$ and $y$ coordinates follow a predefined sequence:
+
+#### **Case 1: $z = 0$ (n = 0 to 7)**
+- **$n = 0$**: $x = 0, y = 0$
+- **$n = 1$**: $x = 1, y = 0$
+- **$n = 2$**: $x = 2, y = 0$
+- **$n = 3$**: $x = 0, y = 1$
+- **$n = 4$**: $x = 2, y = 1$
+- **$n = 5$**: $x = 0, y = 2$
+- **$n = 6$**: $x = 1, y = 2$
+- **$n = 7$**: $x = 2, y = 2$
+
+#### **Case 2: $z = 1$ (n = 8 to 11)**
+- **$n = 8$**: $x = 0, y = 0$
+- **$n = 9$**: $x = 2, y = 0$
+- **$n = 10$**: $x = 0, y = 2$
+- **$n = 11$**: $x = 2, y = 2$
+
+#### **Case 3: $z = 2$ (n = 12 to 19)**
+- **$n = 12$**: $x = 0, y = 1$
+- **$n = 13$**: $x = 2, y = 1$
+- **$n = 14$**: $x = 0, y = 0$
+- **$n = 15$**: $x = 2, y = 0$
+- **$n = 16$**: $x = 1, y = 0$
+- **$n = 17$**: $x = 0, y = 2$
+- **$n = 18$**: $x = 1, y = 2$
+- **$n = 19$**: $x = 2, y = 2$
+
+---
+
+### Final Answer for $n = 19$:
+$$
+\boxed{(2, 2, 2)}
+$$

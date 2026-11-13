@@ -1,0 +1,33 @@
+To solve this problem, we need to determine a mathematical algorithm that maps a non-negative integer `n` to its corresponding coordinates in a 2D grid based on a specific pattern observed from given examples. The goal is to implement this algorithm in a Python function without using hardcoded values or long conditional chains.
+
+### Approach
+The key insight is to recognize the pattern in how each number `n` maps to its coordinates (x, y). By analyzing the examples, we observe that the numbers can be grouped by their y-coordinates such that each group contains one more element than the previous. This grouping resembles triangular numbers, where the k-th triangular number is given by T(k) = k*(k+1)/2.
+
+To find the coordinates for a given `n`:
+1. Compute the largest integer `y` such that the triangular number T(y) ≤ n.
+2. The x-coordinate is then determined as `n - T(y)`.
+
+Using mathematical operations, we can efficiently compute these values without iterating through all possibilities, ensuring optimal performance even for large numbers.
+
+### Solution Code
+```python
+import math
+
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Invalid non-negative integer")
+    if n == 0:
+        return (0, 0)
+    sqrt_val = math.isqrt(8 * n + 1)
+    y = (sqrt_val - 1) // 2
+    x = n - y * (y + 1) // 2
+    return (x, y)
+```
+
+### Explanation
+1. **Input Validation**: The function first checks if the input `n` is a non-negative integer and raises a ValueError if it's not.
+2. **Special Case Handling**: If `n` is 0, it directly returns the coordinates (0, 0).
+3. **Compute y**: Using the integer square root of `8n + 1`, we determine the largest possible y such that T(y) ≤ n. This avoids floating-point inaccuracies.
+4. **Compute x**: The x-coordinate is found by subtracting the triangular number T(y) from `n`.
+
+This approach efficiently maps any non-negative integer to its corresponding coordinates in O(1) time complexity, ensuring scalability and performance for large values of `n`.

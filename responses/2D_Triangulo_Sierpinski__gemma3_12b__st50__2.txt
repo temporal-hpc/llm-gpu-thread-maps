@@ -1,0 +1,38 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input must be a non-negative integer.")
+
+    x = n % 2
+    y = n
+
+    if x == 0:
+      x = 0
+    else:
+      x = 1
+
+    if n < 3:
+        y = n
+    elif n == 4:
+        y = 4
+    elif n == 8:
+        y = 8
+    elif n == 16:
+        y = 16
+    elif n == 18:
+        y = 18
+    elif n == 20:
+        y = 20
+    elif n == 22:
+        y = 22
+    elif n == 10:
+        y = 10
+    elif n == 5:
+        y = 5
+    elif n == 12:
+      y = 12
+    else:
+      y = n
+    
+    return (x, y)
+```

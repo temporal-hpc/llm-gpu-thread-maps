@@ -1,0 +1,17 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError
+    block_index, p = divmod(n, 8)
+    cycle, rem = divmod(block_index, 5)
+    if rem < 3:
+        by = cycle * 2
+        bx = rem
+    else:
+        by = cycle * 2 + 1
+        bx = (rem - 3) * 2
+    base_x, base_y = bx * 3, by * 3
+    offsets = [(0, 0), (1, 0), (2, 0), (0, 1), (2, 1), (0, 2), (1, 2), (2, 2)]
+    ox, oy = offsets[p]
+    return base_x + ox, base_y + oy
+```

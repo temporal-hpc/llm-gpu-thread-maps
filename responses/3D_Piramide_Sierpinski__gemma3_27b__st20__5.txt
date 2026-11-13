@@ -1,0 +1,118 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input must be a non-negative integer.")
+
+    z = n // 4
+    rem = n % 4
+
+    if rem == 0:
+        x = 0
+        y = 0
+    elif rem == 1:
+        x = 1
+        y = 0
+    elif rem == 2:
+        x = 0
+        y = 1
+    else:
+        x = 0
+        y = 0
+
+    if z % 2 == 0:
+        x_final = x
+        y_final = y
+        z_final = z // 2
+    else:
+        x_final = y
+        y_final = x
+        z_final = z // 2
+        
+    if z == 0 and n < 4:
+        if n == 0:
+          x_final = 0
+          y_final = 0
+          z_final = 0
+        elif n == 1:
+          x_final = 1
+          y_final = 0
+          z_final = 0
+        elif n == 2:
+          x_final = 0
+          y_final = 1
+          z_final = 0
+        else:
+          x_final = 0
+          y_final = 0
+          z_final = 1
+    elif z == 1 and n < 8:
+        if n == 4:
+            x_final = 2
+            y_final = 0
+            z_final = 0
+        elif n == 5:
+            x_final = 3
+            y_final = 0
+            z_final = 0
+        elif n == 6:
+            x_final = 2
+            y_final = 1
+            z_final = 0
+        else:
+            x_final = 2
+            y_final = 0
+            z_final = 1
+    elif z == 2 and n < 12:
+        if n == 8:
+            x_final = 0
+            y_final = 2
+            z_final = 0
+        elif n == 9:
+            x_final = 1
+            y_final = 2
+            z_final = 0
+        elif n == 10:
+            x_final = 0
+            y_final = 3
+            z_final = 0
+        else:
+            x_final = 0
+            y_final = 2
+            z_final = 1
+    elif z == 3 and n < 16:
+        if n == 12:
+            x_final = 0
+            y_final = 0
+            z_final = 2
+        elif n == 13:
+            x_final = 1
+            y_final = 0
+            z_final = 2
+        elif n == 14:
+            x_final = 0
+            y_final = 1
+            z_final = 2
+        else:
+            x_final = 0
+            y_final = 0
+            z_final = 3
+    elif z == 4 and n < 20:
+        if n == 16:
+            x_final = 4
+            y_final = 0
+            z_final = 0
+        elif n == 17:
+            x_final = 5
+            y_final = 0
+            z_final = 0
+        elif n == 18:
+            x_final = 4
+            y_final = 1
+            z_final = 0
+        else:
+            x_final = 4
+            y_final = 0
+            z_final = 1
+
+    return (x_final, y_final, z_final)
+```

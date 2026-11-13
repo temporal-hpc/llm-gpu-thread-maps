@@ -1,0 +1,14 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer")
+    y = 0
+    while True:
+        count = (y + 1) * (y + 2) // 2
+        if n < count:
+            break
+        y += 1
+    offset = ((y + 1) * (y + 2) // 2) - 1 - n
+    x = y - offset
+    return x, y
+```

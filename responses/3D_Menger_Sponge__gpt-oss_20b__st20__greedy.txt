@@ -1,0 +1,29 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non-negative integer")
+    m = n // 12
+    offset = n % 12
+    if offset < 8:
+        z = 2 * m
+        idx = offset
+        if idx < 3:
+            y = 0
+            x = idx
+        elif idx < 5:
+            y = 1
+            x = 0 if idx == 3 else 2
+        else:
+            y = 2
+            x = idx - 5
+    else:
+        z = 2 * m + 1
+        idx = offset - 8
+        if idx < 2:
+            y = 0
+            x = 0 if idx == 0 else 2
+        else:
+            y = 2
+            x = 0 if idx == 2 else 2
+    return (x, y, z)
+```

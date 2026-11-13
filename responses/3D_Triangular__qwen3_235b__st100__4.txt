@@ -1,0 +1,42 @@
+To solve this problem, we need to determine the minimum number of steps required to reduce a given integer \( n \) to zero by repeatedly subtracting the largest triangular number less than or equal to the current value of \( n \). A triangular number is of the form \( T_k = \frac{k(k+1)}{2} \), where \( k \) is a positive integer.
+
+### Approach
+1. **Problem Analysis**: The problem involves reducing \( n \) to zero in steps where each step subtracts the largest possible triangular number \( T_k \) (i.e., \( \frac{k(k+1)}{2} \)) from the current value of \( n \). The challenge is to compute \( k \) efficiently for each step.
+2. **Key Insight**: For any current value \( n \), the largest \( k \) such that \( T_k \leq n \) can be derived using the formula \( k = \left\lfloor \frac{\sqrt{8n + 1} - 1}{2} \right\rfloor \). This formula comes from solving the quadratic inequality \( k(k+1)/2 \leq n \).
+3. **Algorithm Selection**: 
+   - For each step, compute \( k \) using the derived formula.
+   - Subtract \( T_k \) from \( n \).
+   - Repeat the process until \( n \) becomes zero, counting each subtraction as a step.
+4. **Complexity Analysis**: Each iteration reduces \( n \) significantly (since \( T_k \) is roughly \( O(\sqrt{n}) \)), leading to a logarithmic number of steps. Specifically, for \( n \) up to \( 10^6 \), the number of steps is at most 8, making the algorithm efficient with \( O(\log n) \) time complexity per test case.
+
+### Solution Code
+```python
+import math
+
+def main():
+    n = int(input().strip())
+    steps = 0
+    while n:
+        root = math.isqrt(1 + 8 * n)
+        k = (root - 1) // 2
+        T = k * (k + 1) // 2
+        n -= T
+        steps += 1
+    print(steps)
+
+if __name__ == "__main__":
+    main()
+```
+
+### Explanation
+1. **Reading Input**: The integer \( n \) is read from standard input.
+2. **Initialization**: The variable `steps` is initialized to zero to count the number of steps taken.
+3. **Loop Until \( n \) is Zero**:
+   - **Compute Root**: Calculate \( \sqrt{8n + 1} \) using integer square root (`math.isqrt`).
+   - **Determine \( k \)**: The largest integer \( k \) such that \( T_k \leq n \) is found using \( k = \left\lfloor \frac{\text{root} - 1}{2} \right\rfloor \).
+   - **Triangular Number \( T_k \)**: Compute \( T_k = \frac{k(k+1)}{2} \).
+   - **Update \( n \)**: Subtract \( T_k \) from \( n \).
+   - **Increment Steps**: Each subtraction counts as one step.
+4. **Output Result**: Print the total number of steps taken to reduce \( n \) to zero.
+
+This approach efficiently computes the solution by leveraging mathematical insights to minimize the number of operations, ensuring optimal performance even for the upper constraint \( n = 10^6 \).

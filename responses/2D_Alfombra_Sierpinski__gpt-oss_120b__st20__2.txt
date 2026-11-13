@@ -1,0 +1,217 @@
+**Solution Explanation**
+
+For every non‑negative integer `n` we have to output a pair of
+coordinates `(x , y)`.
+The pairs are produced by the following rule:
+
+* the possible `y` values are `0 , 1 , 2`;
+* for a fixed `x` we list the admissible `y` in the order `0 , 1 , 2`;
+* a pair `(x , y)` is **admissible** iff  
+
+```
+y == 0                                 (always admissible)
+or  (y == 1 and x <= 6 and x % 3 != 1)
+or  (y == 2 and x <= 5)
+```
+
+The whole infinite list of admissible points, ordered by increasing `x`
+and, inside the same `x`, by increasing `y`, is
+
+```
+(0,0) (0,1) (0,2) (1,0) (1,2) (2,0) (2,1) (2,2)
+(3,0) (3,1) (3,2) (4,0) (4,2) (5,0) (5,1) (5,2)
+(6,0) (6,1) (7,0) (8,0) …
+```
+
+The index of a point in this list is exactly the required `n`.
+Consequently, to obtain the coordinates belonging to a given `n`
+we can simply walk through the list until we have seen `n+1` admissible
+points.
+
+Because the test for admissibility is a short arithmetic expression,
+no explicit table of already‑known points is needed – the algorithm works
+for every non‑negative integer `n`.
+
+--------------------------------------------------------------------
+
+#### Algorithm
+```
+read n
+cnt = 0                         # how many admissible points have been seen
+x   = 0
+while True:
+        # y = 0
+        if cnt == n: output (x,0) and stop
+        cnt += 1
+
+        # y = 1
+        if x <= 6 and x % 3 != 1:          # admissible ?
+                if cnt == n: output (x,1) and stop
+                cnt += 1
+
+        # y = 2
+        if x <= 5:                         # admissible ?
+                if cnt == n: output (x,2) and stop
+                cnt += 1
+
+        x += 1
+```
+
+The loop is guaranteed to terminate because for each `x` at least the
+pair `(x,0)` is admissible, therefore the number of generated points grows
+without bound.
+
+--------------------------------------------------------------------
+
+#### Correctness Proof  
+
+We prove that the algorithm prints the correct coordinates for every
+input `n ≥ 0`.
+
+---
+
+##### Lemma 1  
+For a fixed `x` the algorithm generates exactly the admissible pairs
+`(x,0) , (x,1) , (x,2)` in this order and no other pair with the same
+`x`.
+
+**Proof.**  
+The three `if` blocks correspond to `y = 0, 1, 2` respectively.
+
+* `y = 0` – the condition is unconditional, therefore `(x,0)` is always
+  generated.
+* `y = 1` – the condition `x ≤ 6 and x % 3 != 1` is precisely the
+  definition of admissibility for `y = 1`.  
+  If it holds, the algorithm emits `(x,1)`; otherwise it skips it.
+* `y = 2` – the condition `x ≤ 5` is exactly the definition of
+  admissibility for `y = 2`.  
+  If it holds, the algorithm emits `(x,2)`; otherwise it skips it.
+
+No other statements produce a pair with the same `x`. ∎
+
+
+
+##### Lemma 2  
+The sequence of pairs produced by the algorithm, in the order they are
+generated, is exactly the sequence required in the statement
+(`n = 0,1,2,…`).
+
+**Proof.**  
+From Lemma&nbsp;1, for each `x = 0,1,2,…` the algorithm outputs all
+admissible `(x, y)` with `y = 0,1,2` **in the order `y = 0,1,2`**.
+The outer loop increases `x` monotonically, therefore the global order
+is:
+
+```
+x = 0 : (0,0) (0,1) (0,2)
+x = 1 : (1,0) (1,2)
+x = 2 : (2,0) (2,1) (2,2)
+x = 3 : (3,0) (3,1) (3,2)
+...
+```
+
+which coincides with the given table of examples.
+Consequently the *k*-th pair produced (starting with `k = 0`) is the
+pair that has index `k` in the required mapping. ∎
+
+
+
+##### Lemma 3  
+When the algorithm stops (i.e. `cnt == n`) the printed pair is the
+pair with index `n`.
+
+**Proof.**  
+`cnt` counts how many admissible pairs have already been generated.
+By Lemma&nbsp;2 the *i*-th generated pair has index `i`.  
+Therefore, when `cnt` becomes equal to `n`, the current pair being
+examined is precisely the pair with index `n`. The algorithm prints it
+and terminates. ∎
+
+
+
+##### Theorem  
+For every integer `n ≥ 0` the algorithm outputs the coordinates
+`(x , y)` that correspond to `n` in the required mapping.
+
+**Proof.**  
+The algorithm iterates over the infinite list of admissible pairs.
+By Lemma&nbsp;2 this list is exactly the list defined by the problem.
+During the walk `cnt` always equals the number of already emitted pairs.
+When `cnt` reaches `n`, Lemma&nbsp;3 guarantees that the pair printed at
+that moment is the one whose index is `n`. Hence the algorithm is
+correct. ∎
+
+
+
+--------------------------------------------------------------------
+
+#### Complexity Analysis  
+
+Let `N = n + 1` be the number of points we have to skip before reaching the
+desired one.
+
+*Each iteration of the outer loop* processes at most three `y`‑values,
+therefore at most three points are examined.
+Consequently the number of loop iterations is `O(N)`.
+The running time is `O(N)` and the memory consumption is `O(1)`.
+
+
+
+--------------------------------------------------------------------
+
+#### Reference Implementation  (Python 3)
+
+```python
+import sys
+
+def admissible(x: int, y: int) -> bool:
+    """return True iff the pair (x, y) belongs to the infinite set
+       described in the solution."""
+    if y == 0:
+        return True
+    if y == 1:
+        # y = 1 exists for x ≤ 6 and x % 3 != 1
+        return x <= 6 and (x % 3) != 1
+    if y == 2:
+        # y = 2 exists only for x ≤ 5
+        return x <= 5
+    return False          # never reached, y is only 0..2
+
+def map_index_to_coord(n: int):
+    """return (x, y) that has index n in the ordering described above."""
+    cnt = 0          # how many admissible points have already been seen
+    x = 0
+    while True:
+        # y = 0 (always admissible)
+        if cnt == n:
+            return x, 0
+        cnt += 1
+
+        # y = 1
+        if admissible(x, 1):
+            if cnt == n:
+                return x, 1
+            cnt += 1
+
+        # y = 2
+        if admissible(x, 2):
+            if cnt == n:
+                return x, 2
+            cnt += 1
+
+        x += 1
+
+def solve() -> None:
+    data = sys.stdin.read().strip()
+    if not data:
+        return
+    n = int(data)
+    x, y = map_index_to_coord(n)
+    print(f"{x} {y}")
+
+if __name__ == "__main__":
+    solve()
+```
+
+The program follows exactly the algorithm proven correct above and
+conforms to the required input / output format.

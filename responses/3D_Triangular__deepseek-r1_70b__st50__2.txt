@@ -1,0 +1,38 @@
+To determine the coordinates of a given number \( N \) in an infinite grid where numbers are arranged diagonally starting from 1 at (0,0), we can follow these steps:
+
+### Approach
+1. **Identify Anti-diagonal**: Determine which anti-diagonal \( k \) the number \( N \) belongs to. The anti-diagonals are such that each starts immediately after the previous one ends.
+2. **Check End of Anti-diagonal**: If \( N \) is exactly at the end of an anti-diagonal, it will be positioned at \( (k, 0) \).
+3. **Calculate Position within Anti-diagonal**: If \( N \) is not at the end, compute its position within the anti-diagonal by finding how far \( N \) is from the start of that anti-diagonal.
+
+### Solution Code
+```python
+def get_coordinates(N):
+    if N == 1:
+        return (0, 0)
+    
+    k = 1
+    while True:
+        T_k = k * (k + 1) // 2
+        T_prev = (k - 1) * k // 2
+        if T_prev < N <= T_k:
+            break
+        else:
+            k += 1
+    
+    if N == T_k:
+        return (k, 0)
+    else:
+        m = N - T_prev - 1
+        x = m
+        y = (k - 1) - m
+        return (x, y)
+```
+
+### Explanation
+1. **Initial Check**: If \( N \) is 1, it's at the origin (0,0).
+2. **Finding Anti-diagonal**: We incrementally find the smallest \( k \) such that \( T(k-1) < N \leq T(k) \), where \( T(n) = n(n+1)/2 \) is the nth triangular number.
+3. **End Check**: If \( N \) equals \( T(k) \), it's at position \( (k, 0) \).
+4. **Position Calculation**: Otherwise, calculate how far \( N \) is from the start of the anti-diagonal and determine its coordinates based on this offset.
+
+This approach efficiently determines the grid coordinates by leveraging triangular numbers and properties of anti-diagonal arrangement.

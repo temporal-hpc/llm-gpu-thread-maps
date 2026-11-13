@@ -1,0 +1,40 @@
+To determine the function mapping \( n \) to the triplet \( (x, y, z) \), we analyze the given sequence:
+
+\[
+\begin{array}{c|ccc}
+n & x & y & z \\
+\hline
+0 & 0 & 0 & 0 \\
+1 & 1 & 0 & 0 \\
+2 & 0 & 1 & 0 \\
+3 & 0 & 0 & 1 \\
+4 & 2 & 0 & 0 \\
+5 & 3 & 0 & 0 \\
+6 & 2 & 1 & 0 \\
+7 & 2 & 0 & 1 \\
+8 & 0 & 2 & 0 \\
+9 & 1 & 2 & 0 \\
+10 & 0 & 3 & 0 \\
+11 & 0 & 2 & 1 \\
+12 & 0 & 0 & 2 \\
+13 & 1 & 0 & 2 \\
+14 & 0 & 1 & 2 \\
+15 & 0 & 0 & 3 \\
+\end{array}
+\]
+
+### Observations:
+1. **x increments by 1 at \( n = 1, 5 \)**
+   - At \( n = 4 \), x jumps to 2, suggesting a possible relation to even numbers or multiples.
+   
+2. **y increments at \( n = 2, 6, 8, 9, 10, 14 \)**
+   - The pattern is less clear but may relate to specific intervals.
+
+3. **z increments at \( n = 3, 7, 11, 12, 15 \)**
+   - z increases every 4 or 5 steps, possibly tied to multiples of a certain number.
+
+### Conclusion:
+After analyzing the sequence and considering various mathematical patterns without finding a clear rule, it's evident that the mapping isn't based on a straightforward arithmetic or number-theoretic function. The increments in \( x \), \( y \), and \( z \) don't follow an obvious progression related to prime factors, binary representations, or common number sequences.
+
+**Final Answer:**
+\boxed{(x, y, z)} corresponds to the coordinates derived from a non-trivial, undefined pattern.

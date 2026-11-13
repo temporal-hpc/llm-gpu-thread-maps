@@ -1,0 +1,68 @@
+```python
+from functools import lru_cache
+
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non‑negative integer")
+
+    @lru_cache(maxsize=None)
+    def sum_f(y):
+        bits = []
+        t = y
+        while t:
+            bits.append(t & 1)
+            t >>= 1
+        bits = bits[::-1]  # most significant bit first
+        m = len(bits)
+
+        def dfs(pos, tight):
+            if pos == m:
+                return 1
+            key = (pos, tight)
+            if key in memo:
+                return memo[key]
+            limit = bits[pos] if tight else 1
+            total = 0
+            for b in (0, 1):
+                if b > limit:
+                    break
+                factor = 1 if b == 0 else 2
+                total += factor * dfs(pos + 1, tight and b == limit)
+            memo[key] = total
+            return total
+
+        memo = {}
+        return dfs(0, True)
+
+    # Find y such that sum_f(y-1) <= n < sum_f(y)
+    low, high = 0, 1
+    while sum_f(high) <= n:
+        high <<= 1
+    while low < high:
+        mid = (low + high) // 2
+        if sum_f(mid) > n:
+            high = mid
+        else:
+            low = mid + 1
+    y = low
+
+    prev_sum = sum_f(y - 1) if y > 0 else 0
+    k = n - prev_sum
+
+    # Compute the k‑th subset of y in ascending numeric order
+    def kth_subset(y_val, k_val):
+        positions = [i for i in range(y_val.bit_length()) if (y_val >> i) & 1]
+        positions.sort(reverse=True)
+        remaining = len(positions)
+        x = 0
+        for pos in positions:
+            remaining -= 1
+            count_without = 1 << remaining
+            if k_val >= count_without:
+                x |= 1 << pos
+                k_val -= count_without
+        return x
+
+    x = kth_subset(y, k)
+    return (x, y)
+```

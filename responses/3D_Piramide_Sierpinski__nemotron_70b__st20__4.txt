@@ -1,0 +1,20 @@
+```python
+def map_to_coordinates(n):
+    def cantor_pairing(x, y):
+        return ((x + y) * (x + y + 1)) // 2 + y
+
+    z = 0
+    while True:
+        max_cantor = ((3 * n) * (3 * n + 1)) // 2 - 1
+        if max_cantor < 0 or (max_cantor == 0 and n > 0):
+            raise ValueError("Internal calculation error")
+        xy_from_n = cantor_pairing(n, z)
+        x_from_xy = int(((8 * xy_from_n + 1) ** 0.5 - 1) / 2)
+        y_from_xy = cantor_pairing(x_from_xy, 0) + (xy_from_n - cantor_pairing(x_from_xy, 0)) - x_from_xy
+        if x_from_xy >= 0 and y_from_xy >= 0:
+            return (x_from_xy, y_from_xy, z)
+        z += 1
+
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer")
+```

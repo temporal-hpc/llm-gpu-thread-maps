@@ -1,0 +1,38 @@
+To solve this problem, we need to map a given non-negative integer `n` to its corresponding coordinates `(x, y)` in a specific grid pattern. The grid is structured such that:
+- The first point `(0, 0)` corresponds to `n = 0`.
+- The next two points `(0, 1)` and `(1, 1)` correspond to `n = 1` and `n = 2`.
+- The following three points `(0, 2)`, `(1, 2)`, and `(2, 2)` correspond to `n = 3`, `n = 4`, and `n = 5`, and so on.
+
+### Approach
+1. **Problem Analysis**: The grid is organized such that for each diagonal `y = k` (where `k` starts from 0), there are `k + 1` points ranging from `(0, k)` to `(k, k)`. The total number of points before the diagonal `y = k` is the sum of the first `k` natural numbers, given by the triangular number formula \( T_k = \frac{k(k + 1)}{2} \).
+
+2. **Key Insight**: For a given `n`, we need to find the largest integer `k` such that \( T_k \leq n \). The value of `k` can be derived by solving the quadratic equation \( k^2 + k - 2n \leq 0 \), which yields \( k = \left\lfloor \frac{-1 + \sqrt{1 + 8n}}{2} \right\rfloor \).
+
+3. **Algorithm Selection**: 
+   - Compute `m = 8 * n + 1` to form the discriminant of the quadratic equation.
+   - Calculate the integer square root of `m` using `math.isqrt` for precision.
+   - Derive `k` as `(s - 1) // 2`, where `s` is the integer square root of `m`.
+   - The x-coordinate is then `n - T_k`, where \( T_k = \frac{k(k + 1)}{2} \).
+
+4. **Complexity Analysis**: The operations involve basic arithmetic and a square root computation. The square root operation is typically \( O(1) \) for fixed-size integers, but for very large integers, it can be \( O(\log n) \). However, given the constraints, this approach is efficient.
+
+### Solution Code
+```python
+import math
+
+def map_to_coordinates(n):
+    m = 8 * n + 1
+    s = math.isqrt(m)
+    k = (s - 1) // 2
+    x = n - k * (k + 1) // 2
+    return (x, k)
+```
+
+### Explanation
+1. **Initialization**: The variable `m` is set to `8 * n + 1`, which forms the discriminant of the quadratic equation used to determine `k`.
+2. **Square Root Calculation**: The integer square root `s` of `m` is computed to avoid floating-point precision issues, especially important for large values of `n`.
+3. **Finding `k`**: The value `k` is derived from `s` using the formula `(s - 1) // 2`, which effectively solves the quadratic equation \( k^2 + k - 2n \leq 0 \) for the largest integer `k`.
+4. **Calculating `x`**: The x-coordinate is obtained by subtracting the triangular number \( T_k \) (computed as `k * (k + 1) // 2`) from `n`, giving the position within the current diagonal.
+5. **Result**: The function returns the tuple `(x, k)`, representing the coordinates corresponding to the input `n`.
+
+This approach efficiently maps the integer `n` to its grid coordinates by leveraging mathematical insights and precise integer arithmetic, ensuring correctness for all non-negative integers `n`.

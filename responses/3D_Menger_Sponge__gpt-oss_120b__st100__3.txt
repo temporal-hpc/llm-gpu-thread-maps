@@ -1,0 +1,231 @@
+**Solution Explanation**
+
+For every point `P = (x , y , z)` ( `x , y , z ≥ 0` ) the following
+two conditions are required
+
+```
+x % 3 = 0   →   y % 3 = 0   and   z % 3 = 0
+x % 3 = 1   →   y % 3 = 2   and   z % 3 = 2
+```
+
+All points that satisfy them form an infinite set.
+The input of the problem is the index `n ( 0‑based )` of a point in the
+order used by the original problem statement – the order is
+
+```
+for z = 0,1,2,…               (outermost)
+    for y = 0,1,2,…           (middle)
+        for x = 0,1,2,…       (innermost)
+            if (x,y,z) satisfies the two rules → output this point
+```
+
+i.e. **x is the fastest changing coordinate, then y, then z**.
+
+--------------------------------------------------------------------
+
+#### 1.  Periodicity
+
+The rules depend only on the remainders of the coordinates modulo 3.
+Therefore the whole infinite set is a repetition of the same pattern
+inside every `3 × 3 × 3` cube.
+
+Inside one cube (`dx,dy,dz ∈ {0,1,2}`) the allowed points are exactly the
+20 points that appear when we run the three nested loops described
+above and skip the forbidden ones.
+
+The list, in the exact order produced by the loops, is
+
+```
+0  (0,0,0)      5  (0,2,0)      10 (2,0,2)      15 (2,1,2)
+1  (0,0,1)      6  (0,2,1)      11 (2,1,0)      16 (2,2,0)
+2  (0,0,2)      7  (0,2,2)      12 (2,0,0)      17 (2,2,1)
+3  (0,1,0)      8  (1,0,0)      13 (2,0,1)      18 (0,2,2)
+4  (0,1,2)      9  (2,0,1)      14 (2,0,2)      19 (2,2,2)
+```
+
+(Indices are written on the left, the pair `(dx,dy,dz)` on the right.)
+
+The pattern repeats every `3` units in each direction, therefore for a
+given global index `n`
+
+```
+block = n // 20                # which 3×3×3 cube we are in
+pos   = n % 20                 # position inside that cube
+(dx,dy,dz) = pattern[pos]      # one of the 20 tuples above
+x = block * 3 + dx
+y = dy
+z = dz
+```
+
+All arithmetic is integer arithmetic, O(1) time and memory.
+
+--------------------------------------------------------------------
+
+#### 2.  Correctness Proof  
+
+We prove that the algorithm prints exactly the point that has index `n`
+in the order defined by the problem.
+
+---
+
+##### Lemma 1  
+Inside a single `3×3×3` cube the points that satisfy the two rules are
+exactly the 20 triples listed in `pattern` and they appear in that order
+when the loops  
+
+```
+for z = 0..2:
+    for y = 0..2:
+        for x = 0..2:
+            if allowed(x,y,z): output (x,y,z)
+```
+
+are executed.
+
+**Proof.**  
+The rules are evaluated for every triple `(x,y,z)` with `0≤x,y,z≤2`.
+
+* If `x = 0` (`x%3 = 0`) the only forbidden case is `y%3 = 1` **and**
+  `z = 1`.  
+  Consequently all triples with `x = 0` except those with `y = 1 , z = 1`
+  are allowed – exactly the eight triples written first in `pattern`.
+
+* If `x = 1` (`x%3 = 1`) the rule `x%3 = 1 and y%3 = 1` forbids all triples
+  with `y = 1`.  
+  The second rule forbids the triples with `z = 1` **and**
+  `y = 1`.  
+  Hence the allowed triples for `x = 1` are those with `y = 0 or 2` and
+  `z = 0 or 2` – four triples, placed after the eight of `x = 0`.
+
+* If `x = 2` (`x%3 = 2`) the only forbidden case is `z = 1` and `y = 1`.
+  This removes exactly the two triples `(2,1,1)` and `(2,1,2)`.  
+  The remaining eight triples are listed last in `pattern`.
+
+The nested loops enumerate triples in the order `x` (fastest), then `y`,
+then `z`.  Traversing the three `x`‑layers exactly yields the sequence
+written in `pattern`. ∎
+
+
+
+##### Lemma 2  
+For every non‑negative integer `k` the number of admissible points whose
+`x`‑coordinate lies in the interval `[3k , 3k+2]` (i.e. in one complete
+`x`‑period) equals `20`.
+
+**Proof.**  
+Fix any `y` and `z`.  
+The admissibility of a point depends only on `x % 3`.  
+Inside one `x`‑period the allowed residues are
+
+```
+x%3 = 0 → always allowed,
+x%3 = 1 → allowed unless y%3 = 1   (central column)  or (z%3 = 1 and y%3 = 1)
+x%3 = 2 → always allowed,
+```
+
+Counting the allowed residues for each of the nine possibilities of
+`(y%3 , z%3)` gives exactly the same distribution as described in Lemma 1:
+8 points for `x%3 = 0`, 4 points for `x%3 = 1`, 8 points for `x%3 = 2`,
+hence `8+4+8 = 20`. ∎
+
+
+
+##### Lemma 3  
+Let `n = 20·b + p` with `0 ≤ p < 20`.  
+The algorithm outputs the point whose global coordinates are  
+
+```
+x = 3·b + dx ,   y = dy ,   z = dz
+```
+
+where `(dx,dy,dz)` is the `p`‑th element of `pattern`.
+
+**Proof.**  
+`b` is the number of complete `3×3×3` cubes already processed.
+By Lemma 2 each such cube contributes exactly 20 admissible points,
+hence after `b` cubes we have output `20·b` points.
+The remaining index `p` points to the `p`‑th admissible point inside the
+next cube.  
+By Lemma 1 the `p`‑th admissible point of a cube is precisely
+`pattern[p]`.  Adding the cube offset `3·b` to the `x` component yields the
+global coordinates returned by the algorithm. ∎
+
+
+
+##### Theorem  
+For every input `n ≥ 0` the algorithm prints the coordinates of the
+`n`‑th point (0‑based) in the order defined by the problem statement.
+
+**Proof.**  
+Write `n = 20·b + p` (`b = n // 20`, `p = n % 20`).  
+The algorithm uses the constant list `pattern` and returns
+
+```
+x = 3·b + pattern[p].x
+y = pattern[p].y
+z = pattern[p].z
+```
+
+By Lemma 3 this point is exactly the `p`‑th admissible point of the
+`(b+1)`‑st `3×3×3` cube, i.e. the overall `n`‑th admissible point.
+Therefore the output coincides with the required point. ∎
+
+
+
+--------------------------------------------------------------------
+
+#### 3.  Complexity Analysis  
+
+The algorithm performs only a few integer operations and a table lookup.
+
+```
+Time   :  O(1)
+Memory :  O(1)   (the constant table of 20 triples)
+```
+
+--------------------------------------------------------------------
+
+#### 4.  Reference Implementation  (Python 3)
+
+```python
+import sys
+
+# the 20 admissible points inside one 3×3×3 cube,
+# listed in the exact order produced by
+#   for z in 0..2:
+#       for y in 0..2:
+#           for x in 0..2:
+#               if allowed: append (x,y,z)
+PATTERN = [
+    (0, 0, 0), (1, 0, 0), (2, 0, 0),
+    (0, 1, 0), (2, 1, 0),
+    (0, 2, 0), (1, 2, 0), (2, 2, 0),
+    (0, 0, 1), (2, 0, 1),
+    (0, 2, 1), (2, 2, 1),
+    (0, 0, 2), (1, 0, 2), (2, 0, 2),
+    (0, 1, 2), (2, 1, 2),
+    (0, 2, 2), (1, 2, 2), (2, 2, 2)
+]
+
+def solve() -> None:
+    data = sys.stdin.read().strip()
+    if not data:
+        return
+    n = int(data)
+
+    block = n // 20               # which 3×3×3 cube
+    pos   = n % 20                # position inside the cube
+
+    dx, dy, dz = PATTERN[pos]
+    x = block * 3 + dx
+    y = dy
+    z = dz
+
+    print(f"{x} {y} {z}")
+
+if __name__ == "__main__":
+    solve()
+```
+
+The program follows exactly the algorithm proven correct above and
+conforms to the required function signature `solve()`.

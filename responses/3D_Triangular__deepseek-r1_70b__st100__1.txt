@@ -1,0 +1,58 @@
+To determine the coordinates (x, y) for a given n in the Ulam spiral, follow these steps:
+
+1. **Identify the layer (m):**
+   Compute m such that \( T(m) \leq n < T(m+1) \), where \( T(k) = k \times (k + 1)/2 \). This can be found using:
+   \[
+   m = \left\lfloor \frac{\sqrt{8n + 1} - 1}{2} \right\rfloor
+   \]
+
+2. **Calculate t:**
+   Determine the position within the layer:
+   \[
+   t = n - T(m)
+   \]
+
+3. **Find l':**
+   Compute \( l' \) as the integer part of the solution to the triangular number equation for t:
+   \[
+   l' = \left\lfloor \frac{\sqrt{8t + 1} - 1}{2} \right\rfloor
+   \]
+
+4. **Determine k:**
+   Calculate \( k \) using:
+   \[
+   k = t - T(l')
+   \]
+   where \( T(l') = l' \times (l' + 1)/2 \)
+
+5. **Assign coordinates:**
+   The coordinates are \( (k, l') \).
+
+**Example for n=4:**
+
+- Compute m:
+  \[
+  m = \left\lfloor \frac{\sqrt{33} - 1}{2} \right\rfloor = 2
+  \]
+
+- Calculate t:
+  \[
+  t = 4 - 3 = 1
+  \]
+
+- Find l':
+  \[
+  l' = \left\lfloor \frac{\sqrt(9) - 1}{2} \right\rfloor = 1
+  \]
+
+- Determine k:
+  \[
+  k = 1 - 1 = 0
+  \]
+
+**Coordinates:** (0, 1)
+
+---
+
+**Final Answer:**
+The coordinates for n=4 are \(\boxed{(0, 1)}\).

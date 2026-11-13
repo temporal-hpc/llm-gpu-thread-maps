@@ -1,0 +1,31 @@
+To map each thread's global index `m` within a 3×3 tile to its corresponding `(x, y)` coordinates, follow these steps:
+
+1. **Identify the Grid Size**: Assume each tile is a 3×3 grid, meaning both `x` and `y` range from 0 to 2.
+
+2. **Create a Lookup Table**: Precompute the `(x, y)` mappings for each `m` value from 0 to 8 based on the observed pattern.
+
+3. **Implement the Mapping**: Use the lookup table in your code to determine the `(x, y)` coordinates for each thread based on its global index `m`.
+
+Here is a Python representation of the lookup table:
+
+```python
+# Lookup table mapping m (0-8) to (x, y)
+lookup = [
+    (0, 0),  # m=0 → x=0, y=0
+    (1, 0),  # m=1 → x=1, y=0
+    (2, 0),  # m=2 → x=2, y=0
+    (0, 1),  # m=3 → x=0, y=1
+    (2, 1),  # m=4 → x=2, y=1
+    (0, 2),  # m=5 → x=0, y=2
+    (1, 2),  # m=6 → x=1, y=2
+    (2, 2)   # m=7 → x=2, y=2
+]
+```
+
+**Answer**: Use a precomputed lookup table to map each global index `m` within the tile to its `(x, y)` coordinates as follows:
+
+```python
+lookup = [(0,0), (1,0), (2,0), (0,1), (2,1), (0,2), (1,2), (2,2)]
+```
+
+This table directly assigns each `m` value to the corresponding `(x, y)` pair within the 3×3 tile.

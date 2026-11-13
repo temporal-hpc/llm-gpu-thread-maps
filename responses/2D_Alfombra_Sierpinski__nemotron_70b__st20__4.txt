@@ -1,0 +1,10 @@
+```python
+def map_to_coordinates(n):
+    x = n % 3
+    y = n // 3
+    while (n - (x + y*3)) > 2:
+        x += 3
+        n -= 3 * (y+1)
+        y += 1
+    return (x, y)
+```

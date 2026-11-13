@@ -1,0 +1,47 @@
+To solve this problem, we need to determine the triplet (x, y, z) corresponding to a given integer n. The triplet follows a specific pattern based on triangular numbers and their cumulative sums. 
+
+### Approach
+1. **Identify Layer (k):** Determine the layer `k` such that the cumulative sum of triangular numbers up to layer `k-1` is less than or equal to `n`, and the cumulative sum up to layer `k` exceeds `n`.
+2. **Calculate Position within Layer:** Compute the position `pos` within the identified layer by subtracting the cumulative sum up to layer `k-1` from `n`.
+3. **Determine y within Layer:** Find the largest integer `y` such that the triangular number for `y` is less than or equal to `pos`.
+4. **Calculate x:** Compute `x` as the difference between `pos` and the triangular number corresponding to `y`.
+
+### Solution Code
+```python
+def find_xyz(n):
+    if n == 0:
+        return (0, 0, 0)
+    
+    # Find the layer k where C(k-1) <= n < C(k)
+    k = 0
+    while True:
+        c = (k + 1) * (k + 2) * (k + 3) // 6
+        if c > n:
+            break
+        k += 1
+    
+    # Calculate the position within layer k
+    c_prev = k * (k + 1) * (k + 2) // 6
+    pos = n - c_prev
+    
+    # Find y such that T(y) <= pos < T(y+1)
+    y = 0
+    while True:
+        t = y * (y + 1) // 2
+        if t > pos:
+            break
+        y += 1
+    y -= 1  # Adjust to the last valid y
+    
+    x = pos - (y * (y + 1) // 2)
+    
+    return (x, y, k)
+```
+
+### Explanation
+1. **Layer Identification:** The code starts by identifying the layer `k` where the cumulative sum of triangular numbers up to `k-1` is less than or equal to `n`, and the cumulative sum up to `k` exceeds `n`. This is done using a while loop that increments `k` until the condition is met.
+2. **Position Calculation:** Once the layer `k` is identified, the position within this layer (`pos`) is calculated by subtracting the cumulative sum up to layer `k-1` from `n`.
+3. **Determine y:** The code then finds the largest integer `y` such that the triangular number for `y` (i.e., `T(y) = y*(y+1)/2`) is less than or equal to `pos`. This is done using another while loop.
+4. **Calculate x:** Finally, `x` is computed as the difference between `pos` and the triangular number corresponding to `y`.
+
+This approach efficiently narrows down the layer and position within that layer, ensuring that we correctly determine the triplet (x, y, z) for any given integer `n`.

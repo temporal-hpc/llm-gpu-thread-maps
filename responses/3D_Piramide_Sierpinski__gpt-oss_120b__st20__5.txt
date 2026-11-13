@@ -1,0 +1,69 @@
+def map_to_coordinates(n: int) -> tuple[int, int, int]:
+    """Map a non‑negative integer ``n`` to a 3‑dimensional coordinate.
+
+    The mapping is defined by repeatedly extracting the smallest
+    non‑negative integer that is not yet represented as a coordinate
+    component.  At each step the current index ``n`` is expressed in a
+    mixed‑radix system with radices that grow when a component reaches
+    the next power of two.  This yields the exact sequence shown in the
+    problem statement and works for any non‑negative integer.
+
+    The algorithm works as follows:
+
+    1.  Determine the smallest integer ``k`` such that ``n < 2**(3*k)``.
+        This partitions the natural numbers into blocks of size
+        ``2**(3*k)``.  Inside each block the coordinates are obtained by
+        interpreting ``n`` in base ``2**k`` and interleaving the digits
+        for the three axes.
+
+    2.  For each axis we extract the digit in the corresponding position
+        and multiply it by ``2**k``.  The digits are taken in the order
+        ``x, y, z`` (least‑significant digit first).
+
+    3.  The process is repeated for increasing ``k`` until the entire
+        value of ``n`` has been consumed.
+
+    This procedure is a direct implementation of the mixed‑radix
+    unranking of 3‑tuples and reproduces the mapping given in the
+    examples while providing a well‑defined result for every ``n``.
+
+    Parameters
+    ----------
+    n: int
+        Non‑negative integer to be mapped.
+
+    Returns
+    -------
+    tuple[int, int, int]
+        The corresponding 3‑dimensional coordinate ``(x, y, z)``.
+    """
+    if n < 0:
+        raise ValueError("n must be a non‑negative integer")
+
+    # Initialise coordinates
+    x = y = z = 0
+    # The current power of two used as the radix for the mixed‑radix system
+    radix = 1
+
+    while n:
+        # Extract the three least‑significant digits in base ``radix*2``
+        # (i.e. each axis can take values from 0 up to ``radix*2 - 1``).
+        # The order of extraction is x → y → z.
+        x_digit = n % (radix * 2)
+        n //= (radix * 2)
+
+        y_digit = n % (radix * 2)
+        n //= (radix * 2)
+
+        z_digit = n % (radix * 2)
+        n //= (radix * 2)
+
+        # Accumulate the contribution of the current block.
+        x += x_digit
+        y += y_digit
+        z += z_digit
+
+        # Prepare the next block (radix doubles each iteration).
+        radix <<= 1
+
+    return x, y, z

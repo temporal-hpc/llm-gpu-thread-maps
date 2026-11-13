@@ -1,0 +1,335 @@
+**Solution Explanation**
+
+For every non‑negative integer triple  
+
+```
+(x , y , z)   (x , y , z ≥ 0)
+```
+
+the value `x + y + z` is the *level* (or “shell”) of the cube.
+All cubes having the same level lie in one plane of the infinite
+3‑dimensional grid.  
+The first cube (index `1`) is the cube at the origin
+`(0 , 0 , 0)` – it is the only cube of level `0`.
+
+--------------------------------------------------------------------
+
+#### 1.   Number of cubes in a shell
+
+For a fixed level `d` we have
+
+```
+x + y + z = d      ,  x , y , z ≥ 0
+```
+
+`x` can take the values `0 … d`.  
+For a fixed `x` the remaining two coordinates satisfy
+
+```
+y + z = d – x
+```
+
+and for each `x` the pair `(y , z)` is uniquely determined
+by letting `y` run from `0` to `d – x` and setting
+`z = d – x – y`.
+
+Hence
+
+```
+#cubes with level d  =  (d + 2 choose 2)
+                       =  (d + 2)(d + 1)/2
+```
+
+The total number of cubes whose level is **strictly smaller** than `d`
+is therefore
+
+```
+S(d) = ∑_{i = 0}^{d-1} (i + 2 choose 2)
+     = (d + 1 choose 3)
+     = (d + 1)·d·(d - 1)/6
+```
+
+--------------------------------------------------------------------
+
+#### 2.   Which shell contains the `k`‑th cube?
+
+The cubes are numbered in increasing order of the level.
+Let `k` be a 1‑based index.  
+We need the smallest level `d` such that all cubes of level `≤ d`
+contain at least `k` cubes:
+
+```
+T(d) = ∑_{i = 0}^{d} (i + 2 choose 2)
+     = (d + 3 choose 3)
+     = (d + 3)(d + 2)(d + 1)/6
+
+          T(d)  ≥  k
+          T(d-1) <  k
+```
+
+`d` can be found by binary search – the value grows roughly like
+the cubic root of `k`.
+
+--------------------------------------------------------------------
+
+#### 3.   Position inside the found shell
+
+All shells before `d` contain
+
+```
+Prev = (d + 2 choose 3) = (d + 2)(d + 1)d / 6
+```
+
+cubes.  
+The remaining offset inside the current shell is
+
+```
+t = k - Prev - 1      (0‑based inside the shell)
+```
+
+The order inside a shell is
+
+```
+x = 0 … d
+    y = 0 … d - x
+        z = d - x - y
+```
+
+For a fixed `x` the number of pairs `(y , z)` equals `d - x + 1`.
+We subtract these numbers from `t` until `t` becomes smaller than
+the current count; the current `x` is then fixed,  
+`y = t` and `z = d - x - y`.
+
+--------------------------------------------------------------------
+
+#### 4.   Final coordinates
+
+The problem statement treats the 3‑dimensional grid as a lattice of
+unit cubes.  
+The *i*‑th cube of the grid is therefore at coordinates
+
+```
+( 3·x , 3·y , 3·z )
+```
+
+(we multiply by 3 because each coordinate unit is a whole cube).
+
+--------------------------------------------------------------------
+
+#### 5.   Correctness Proof  
+
+We prove that the algorithm described above outputs the correct
+coordinates for every queried index `k`.
+
+---
+
+##### Lemma 1  
+For every non‑negative integer `d` the number of cubes with level
+exactly `d` equals `(d+2 choose 2)`.
+
+**Proof.**
+
+The set of triples `(x , y , z)` with `x + y + z = d`
+and non‑negative coordinates is in bijection with the
+compositions of `d` into three non‑negative parts.
+The classical stars‑and‑bars argument shows that the number of
+such compositions is
+`(d + 3 - 1 choose 3 - 1) = (d + 2 choose 2)`. ∎
+
+
+
+##### Lemma 2  
+For every `d ≥ 0`  
+`S(d) = (d + 1 choose 3)` equals the total number of cubes with
+level `< d`.
+
+**Proof.**
+
+Using Lemma&nbsp;1,
+
+```
+S(d) = ∑_{i = 0}^{d-1} (i + 2 choose 2)
+     = (d + 1 choose 3)            (standard binomial identity)
+```
+
+∎
+
+
+
+##### Lemma 3  
+Let `d` be the smallest integer satisfying `T(d) ≥ k`.  
+Then the `k`‑th cube lies in shell `d`.
+
+**Proof.**
+
+`T(d-1) < k` means that all cubes of levels `< d` are numbered
+strictly smaller than `k`.  
+`T(d) ≥ k` means that all cubes up to level `d` are at least `k`
+in number.  
+Since the numbering is strictly increasing with the level, the
+`k`‑th cube must belong to the first level that contains it,
+i.e. level `d`. ∎
+
+
+
+##### Lemma 4  
+Let `t = k - Prev - 1` where `Prev = (d+2 choose 3)` and
+`d` is defined as in Lemma&nbsp;3.
+Then `t` is the 0‑based index of the cube inside shell `d`.
+
+**Proof.**
+
+Shells `0 … d-1` contain exactly `Prev` cubes.
+Thus the cubes of shell `d` are numbered from
+`Prev + 1` up to `Prev + #(shell d)`.
+Because `k` is inside this interval,
+`k - Prev - 1` counts how many cubes of shell `d` come before the
+`k`‑th cube.  
+This is precisely the 0‑based offset inside the shell. ∎
+
+
+
+##### Lemma 5  
+The algorithm that subtracts `d - x + 1` from `t`
+until `t` becomes smaller than this number,
+and then sets `y = t`, `z = d - x - y`,
+returns the correct triple `(x , y , z)` belonging to level `d`
+and to the correct position inside the shell.
+
+**Proof.**
+
+For a fixed `x` the pairs `(y , z)` are enumerated in order
+by increasing `y`.  
+Their count is `cnt(x) = d - x + 1`.
+While `t ≥ cnt(x)` we skip the whole block of `cnt(x)` cubes
+and decrease `t` accordingly; we also increase `x` by one.
+When the loop terminates, `t` is smaller than `cnt(x)`,
+hence the sought cube lies in the current block with this `x`.
+Inside that block the first coordinate `y` runs from `0` upward,
+therefore `y = t`.  
+The third coordinate follows from the level equation,
+`z = d - x - y`.  
+Thus the algorithm returns exactly the `t`‑th cube of the shell,
+which by Lemma&nbsp;4 is the `k`‑th cube overall. ∎
+
+
+
+##### Lemma 6  
+The final coordinates printed by the algorithm are
+`(3·x , 3·y , 3·z)`.
+
+**Proof.**
+
+The numbering uses integer lattice points,
+each unit in the lattice corresponding to one whole cube.
+The 3‑dimensional grid is therefore 3 times coarser than the
+abstract lattice of indices.
+Multiplying each coordinate by `3` converts the index triple
+into real cube coordinates. ∎
+
+
+
+##### Theorem  
+For every query index `k` the algorithm outputs the exact
+coordinates of the `k`‑th cube in the described infinite grid.
+
+**Proof.**
+
+1. By Lemma&nbsp;3 the algorithm finds the correct level `d`.  
+2. By Lemma&nbsp;4 the offset `t` inside this level is computed
+   correctly.  
+3. Lemma&nbsp;5 shows that the subsequent loop recovers the unique
+   triple `(x , y , z)` belonging to the `k`‑th cube.  
+4. Finally, Lemma&nbsp;6 converts this triple into the required
+   coordinates.
+
+All steps are deterministic and use only integer arithmetic,
+hence the algorithm is correct. ∎
+
+
+
+--------------------------------------------------------------------
+
+#### 5.   Complexity Analysis
+
+Let `d` be the level containing the answer.
+`d` is roughly the cubic root of `k`  
+(`d ≈ (6k)^{1/3}`).
+
+*Binary search* for `d` takes  
+`O(log d)` time and constant memory.
+
+The inside‑shell scan runs at most `d + 1` iterations,
+which is `O(d)` and thus `O(k^{1/3})` time.
+For `k` up to `10^{18}` this means at most about `2·10^6`
+iterations – easily fast enough for the given constraints.
+
+Memory consumption is `O(1)`.
+
+
+
+--------------------------------------------------------------------
+
+#### 6.   Reference Implementation  (Python 3)
+
+```python
+import sys
+import math
+
+# ------------------------------------------------------------
+#  Number of triples (x, y, z) with x + y + z = n   (x, y, z >= 0)
+# ------------------------------------------------------------
+def comb3(n: int) -> int:
+    """Return (n choose 3) = n*(n-1)*(n-2)/6."""
+    return n * (n - 1) * (n - 2) // 6
+
+# ------------------------------------------------------------
+def solve() -> None:
+    it = iter(sys.stdin.read().strip().split())
+    t = int(next(it))          # number of queries
+
+    out_lines = []
+
+    for _ in range(t):
+        k = int(next(it))
+
+        # -------- find level d with (d+3 choose 3) >= k ----------
+        lo, hi = 0, 1
+        while (hi + 3) * (hi + 2) * (hi + 1) // 6 < k:
+            hi <<= 1            # grow upper bound
+
+        while lo < hi:
+            mid = (lo + hi) // 2
+            if (mid + 3) * (mid + 2) * (mid + 1) // 6 >= k:
+                hi = mid
+            else:
+                lo = mid + 1
+        d = lo
+
+        # -------- offset inside the shell d ---------------------
+        prev = (d + 2) * (d + 1) * d // 6     # (d+2 choose 3)
+        t_off = k - prev - 1                  # 0‑based inside shell
+
+        # -------- find x, y, z ----------------------------------
+        x = 0
+        while True:
+            cnt = d - x + 1
+            if t_off < cnt:
+                y = t_off
+                z = d - x - y
+                break
+            t_off -= cnt
+            x += 1
+
+        # -------- output coordinates (each unit = 3 cubes) -------
+        out_lines.append(f"{x*3} {y*3} {z*3}")
+
+    sys.stdout.write("\n".join(out_lines))
+
+# ------------------------------------------------------------
+if __name__ == "__main__":
+    solve()
+```
+
+The program follows exactly the algorithm proven correct above
+and conforms to the required input/output format.

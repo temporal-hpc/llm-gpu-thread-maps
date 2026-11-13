@@ -1,0 +1,287 @@
+**Solution Explanation**
+
+For three non‑negative integers `x , y , z` we define  
+
+```
+s = x + y + z                # the total “level”
+t = y + z
+rank(x,y,z) = C(s+2, 3) + C(t+1, 2) + z          (1)
+```
+
+`C(n,k)` is the binomial coefficient *n choose k* ( `C(n,k)=0` for `n<k` ).
+Formula (1) is the well known *combinatorial number system* (a
+3‑dimensional Cantor tuple).  
+It gives a bijection  
+
+```
+      (x , y , z)  →  rank   (0,1,2,…)
+```
+
+The problem asks for the inverse mapping – from a given natural number
+`n` we have to recover the unique triple `(x,y,z)` that satisfies (1).
+
+--------------------------------------------------------------------
+
+#### 1.  Recover `s`
+
+`C(s+2,3)` grows strictly with `s`.  
+We need the largest `s` with  
+
+```
+C(s+2,3) ≤ n .
+```
+
+Because `C(s+2,3) = (s+2)(s+1)s / 6` is monotone,
+` s ` can be found by binary search in `O(log n)` time
+(the value of `s` is at most `⌈(6n)^{1/3}⌉`).
+
+Let  
+
+```
+base = C(s+2,3)
+rest = n - base                # = C(t+1,2) + z
+```
+
+--------------------------------------------------------------------
+
+#### 2.  Recover `t` and `z`
+
+Now `rest = C(t+1,2) + z` with `0 ≤ z ≤ t`.
+Again `C(t+1,2) = (t+1)·t / 2` is monotone in `t`,
+so we binary‑search the greatest `t` with  
+
+```
+C(t+1,2) ≤ rest .
+```
+
+Set  
+
+```
+base2 = C(t+1,2)
+z     = rest - base2
+```
+
+--------------------------------------------------------------------
+
+#### 3.  Recover `y` and `x`
+
+We already know `t = y + z`, therefore  
+
+```
+y = t - z
+x = s - t               # because s = x + t
+```
+
+All three numbers are non‑negative integers and satisfy (1), i.e. they
+are the unique required coordinates.
+
+--------------------------------------------------------------------
+
+#### 4.  Correctness Proof  
+
+We prove that the algorithm returns exactly the triple
+`(x,y,z)` that is mapped to `n` by (1).
+
+---
+
+##### Lemma 1  
+For any `s ≥ 0` the function `f(s)=C(s+2,3)` is strictly increasing.
+
+**Proof.**  
+`C(s+2,3) = (s+2)(s+1)s / 6`.  
+All three factors increase when `s` increases, therefore the product
+(and the division by the constant 6) increases. ∎
+
+
+
+##### Lemma 2  
+For any `t ≥ 0` the function `g(t)=C(t+1,2)` is strictly increasing.
+
+**Proof.**  
+`C(t+1,2) = (t+1)t / 2`, again a product of two increasing factors. ∎
+
+
+
+##### Lemma 3  
+For every triple `(x,y,z)` the value `n = rank(x,y,z)` defined by (1)
+satisfies  
+
+```
+C(s+2,3) ≤ n < C(s+3,3)          (2)
+C(t+1,2) ≤ n - C(s+2,3) < C(t+2,2)   (3)
+```
+
+where `s = x+y+z` and `t = y+z`.
+
+**Proof.**  
+From (1)
+
+```
+n = C(s+2,3) + C(t+1,2) + z .
+```
+
+Because `0 ≤ z ≤ t`, we have `C(t+1,2) ≤ C(t+1,2)+z < C(t+1,2)+t+1 = C(t+2,2)`,
+which gives (3). Adding `C(s+2,3)` to all parts yields (2). ∎
+
+
+
+##### Lemma 4  
+The algorithm finds the unique `s` that satisfies (2).
+
+**Proof.**  
+By Lemma&nbsp;1 `C(s+2,3)` is strictly increasing, therefore the set  
+
+```
+{ s | C(s+2,3) ≤ n }
+```
+
+has a greatest element, and binary search returns exactly this `s`. ∎
+
+
+
+##### Lemma 5  
+After step&nbsp;1 (`rest = n - C(s+2,3)`) we have  
+
+```
+rest = C(t+1,2) + z
+```
+
+for the original `t = y+z` and `z`.
+
+**Proof.**  
+Directly from (1) and the definition of `rest`. ∎
+
+
+
+##### Lemma 6  
+The algorithm finds the unique `t` that satisfies (3).
+
+**Proof.**  
+From Lemma&nbsp;5 `rest = C(t+1,2)+z` with `0 ≤ z ≤ t`.  
+Because of Lemma&nbsp;2, `C(t+1,2)` is strictly increasing,
+hence the greatest `t` with `C(t+1,2) ≤ rest` is exactly the original
+`y+z`. Binary search returns it. ∎
+
+
+
+##### Lemma 7  
+After step&nbsp;2 (`z = rest - C(t+1,2)`) the computed `z` equals the
+original `z`.
+
+**Proof.**  
+From Lemma&nbsp;5 and Lemma&nbsp;6,
+`rest = C(t+1,2) + z`. Rearranging gives `z = rest - C(t+1,2)`. ∎
+
+
+
+##### Lemma 8  
+The values `y = t - z` and `x = s - t` equal the original coordinates.
+
+**Proof.**  
+By definition `t = y + z`, therefore `y = t - z`.  
+Also `s = x + y + z = x + t`, thus `x = s - t`. ∎
+
+
+
+##### Theorem  
+`map_thread(n)` (the algorithm described above) returns the unique
+triple `(x,y,z)` such that  
+
+```
+n = (x+y+z)(x+y+z+1)(x+y+z+2)/6 + (y+z)(y+z+1)/2 + z .
+```
+
+Consequently it reproduces exactly the mapping shown in the statement
+for all given thread numbers and for every natural number.
+
+**Proof.**  
+Lemmas&nbsp;4–8 show that the algorithm reconstructs the three
+coordinates that satisfy (1).  Because (1) is a bijection
+(the combinatorial number system), the recovered triple is the only one
+mapped to `n`. ∎
+
+
+
+--------------------------------------------------------------------
+
+#### 5.  Complexity Analysis  
+
+*Finding `s`* – binary search over `0 … ⌈(6n)^{1/3}⌉` → `O(log n)`  
+*Finding `t`* – binary search over `0 … ⌈√(2n)⌉` → `O(log n)`  
+
+All remaining operations are O(1).  
+Therefore the whole algorithm runs in `O(log n)` time and `O(1)` memory.
+
+--------------------------------------------------------------------
+
+#### 6.  Reference Implementation  (Python 3)
+
+```python
+import sys
+import math
+
+def comb(n: int, k: int) -> int:
+    """binomial coefficient, 0 when n < k."""
+    if n < k or k < 0:
+        return 0
+    return math.comb(n, k)
+
+
+def rank_to_coord(n: int):
+    """
+    Inverse of the 3‑dimensional Cantor tuple (combinatorial number system).
+    Returns the unique (x, y, z) such that
+        n = C(s+2,3) + C(t+1,2) + z,
+    where s = x+y+z, t = y+z.
+    """
+    # ---- 1. find s  -------------------------------------------------
+    # s is the smallest integer with C(s+3,3) > n,
+    # i.e. the largest with C(s+2,3) <= n
+    lo, hi = 0, 1
+    while comb(hi + 2, 3) <= n:
+        hi <<= 1
+    while lo < hi:
+        mid = (lo + hi + 1) // 2
+        if comb(mid + 2, 3) <= n:
+            lo = mid
+        else:
+            hi = mid - 1
+    s = lo                     # s = x + y + z
+    base = comb(s + 2, 3)
+    rest = n - base            # rest = C(t+1,2) + z
+
+    # ---- 2. find t = y + z  -----------------------------------------
+    lo, hi = 0, 1
+    while comb(hi + 1, 2) <= rest:
+        hi <<= 1
+    while lo < hi:
+        mid = (lo + hi + 1) // 2
+        if comb(mid + 1, 2) <= rest:
+            lo = mid
+        else:
+            hi = mid - 1
+    t = lo                     # t = y + z
+    base2 = comb(t + 1, 2)
+    z = rest - base2
+
+    # ---- 3. recover y and x ------------------------------------------
+    y = t - z
+    x = s - t
+    return x, y, z
+
+
+def solve() -> None:
+    data = sys.stdin.read().strip()
+    if not data:
+        return
+    n = int(data)
+    x, y, z = rank_to_coord(n)
+    print(x, y, z)
+
+
+if __name__ == "__main__":
+    solve()
+```
+
+The program follows exactly the algorithm proven correct above and
+conforms to the required function signature `solve()`.

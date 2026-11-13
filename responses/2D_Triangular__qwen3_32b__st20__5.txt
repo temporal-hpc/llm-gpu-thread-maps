@@ -1,0 +1,70 @@
+To determine the coordinates $(x, y)$ for a given integer $n$ in a triangular numbering system (where elements are arranged in rows of increasing length: row 0 has 1 element, row 1 has 2 elements, row 2 has 3, and so on), we follow a mathematical derivation based on the properties of triangular numbers.
+
+---
+
+### **Step 1: Understanding the Pattern**
+
+In a triangular layout, the number of elements up to and including row $y$ is given by the triangular number:
+
+$$
+T_y = \frac{y(y+1)}{2}
+$$
+
+This means that all elements from row 0 to row $y$ are contained in the first $T_y$ elements. So, to find the row $y$ in which the $n$-th element is located, we need to find the largest $y$ such that:
+
+$$
+\frac{y(y+1)}{2} \leq n
+$$
+
+---
+
+### **Step 2: Solving for $y$**
+
+We solve the inequality:
+
+$$
+\frac{y(y+1)}{2} \leq n
+$$
+
+Multiply both sides by 2:
+
+$$
+y^2 + y \leq 2n
+$$
+
+Solving the quadratic equation $y^2 + y - 2n = 0$ using the quadratic formula:
+
+$$
+y = \frac{-1 + \sqrt{1 + 8n}}{2}
+$$
+
+Since we want the largest integer $y$ such that the inequality holds, we take the **floor** of this expression:
+
+$$
+y = \left\lfloor \frac{\sqrt{8n + 1} - 1}{2} \right\rfloor
+$$
+
+---
+
+### **Step 3: Solving for $x$**
+
+Once $y$ is determined, the index within the row is:
+
+$$
+x = n - \frac{y(y+1)}{2}
+$$
+
+---
+
+### **Final Answer**
+
+$$
+\boxed{
+\begin{aligned}
+y &= \left\lfloor \frac{\sqrt{8n + 1} - 1}{2} \right\rfloor \\
+x &= n - \frac{y(y+1)}{2}
+\end{aligned}
+}
+$$
+
+This pair $(x, y)$ gives the coordinates of the $n$-th element in a triangular grid.

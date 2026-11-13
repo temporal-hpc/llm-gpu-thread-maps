@@ -1,0 +1,50 @@
+To solve this problem, we need to compute the sum of \(2^{\text{popcount}(x)}\) for all integers \(x\) from 1 to \(n\), where \(\text{popcount}(x)\) is the number of 1s in the binary representation of \(x\). Given the constraints where \(n\) can be as large as \(10^{18}\), a brute-force approach is infeasible. Instead, we use a dynamic programming approach that efficiently processes the binary representation of \(n+1\) to compute the desired sum.
+
+### Approach
+1. **Problem Analysis**: The problem requires summing \(2^{\text{popcount}(x)}\) for each \(x\) from 1 to \(n\). Direct computation for each \(x\) is impractical for large \(n\) due to the high time complexity \(O(n \log n)\).
+
+2. **Key Insight**: The sum \(S(n) = \sum_{x=1}^{n} 2^{\text{popcount}(x)}\) can be derived from the function \(F(y) = \sum_{x=0}^{y-1} 2^{\text{popcount}(x)}\). Specifically, \(S(n) = F(n+1) - 1\) because \(F(n+1)\) includes \(x=0\) (which contributes \(2^0 = 1\)).
+
+3. **Dynamic Programming**: We compute \(F(y)\) where \(y = n + 1\) by processing each bit of \(y\) from the most significant to the least significant. We maintain two state variables:
+   - **dp0**: Accumulates the sum of \(2^{\text{popcount}(x)}\) for numbers \(x\) that are less than the current prefix of \(y\).
+   - **dp1**: Tracks the contribution of numbers that exactly match the current prefix of \(y\) up to the processed bits.
+
+4. **State Transitions**:
+   - For each bit \(b\) in \(y\)'s binary representation (from left to right):
+     - If \(b = 1\), updating `dp0` as \(3 \times \text{dp0} + \text{dp1}\) and `dp1` as \(2 \times \text{dp1}\).
+     - If \(b = 0\), updating `dp0` as \(3 \times \text{dp0}\) while `dp1` remains unchanged.
+
+5. **Result Calculation**: After processing all bits, \(F(y) = \text{dp0}\). The desired result is \(S(n) = \text{dp0} - 1\).
+
+### Solution Code
+```python
+def main():
+    n = int(input().strip())
+    y = n + 1
+    if y == 1:
+        print(0)
+        return
+    nbits = y.bit_length()
+    dp0 = 0
+    dp1 = 1
+    for i in range(nbits - 1, -1, -1):
+        if (y >> i) & 1:
+            dp0 = 3 * dp0 + dp1
+            dp1 = 2 * dp1
+        else:
+            dp0 = 3 * dp0
+    print(dp0 - 1)
+
+if __name__ == "__main__":
+    main()
+```
+
+### Explanation
+1. **Initialization**: Read the input \(n\) and set \(y = n + 1\). If \(y = 1\) (i.e., \(n = 0\)), output 0 immediately since the sum from 1 to 0 is empty.
+2. **Bit Processing**: Determine the number of bits \(nbits\) in \(y\)'s binary representation. Initialize `dp0` (sum for numbers less than current prefix) and `dp1` (contribution from numbers matching the current prefix).
+3. **Dynamic Programming Loop**: For each bit from the most significant to the least significant:
+   - **If the bit is 1**: Update `dp0` to include contributions from numbers where the current bit is 0 (using `3 * dp0`) plus numbers where the current bit matches (using `dp1`). Update `dp1` to reflect numbers where the current bit is 1 (doubling the contribution).
+   - **If the bit is 0**: Only update `dp0` to account for numbers where the current bit is 0 (tripling the contribution since each bit position can be 0 or 1, but here it must be 0 to stay less than \(y\)).
+4. **Result Calculation**: After processing all bits, the result is `dp0 - 1` (subtracting the contribution from \(x = 0\)).
+
+This approach efficiently computes the sum in \(O(\log n)\) time by leveraging dynamic programming on the binary representation of \(n + 1\), making it suitable for very large \(n\).

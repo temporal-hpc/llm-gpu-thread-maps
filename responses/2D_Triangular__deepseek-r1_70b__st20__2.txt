@@ -1,0 +1,36 @@
+To solve this problem, we need to determine the coordinates (x, y) corresponding to a given integer n in a specific grid pattern. The grid pattern follows a triangular number sequence where each group of numbers corresponds to a diagonal line on the grid.
+
+### Approach
+1. **Identify the Group (y-coordinate)**: Each group of numbers is identified by its y-coordinate. The starting index for each group can be determined using the formula involving triangular numbers.
+2. **Determine the Starting Index**: For a given number n, we need to find the largest integer m such that the sum of integers from 1 to m (triangular number) is less than or equal to n. This determines the y-coordinate.
+3. **Calculate the x-coordinate**: Once the y-coordinate is determined, the x-coordinate can be found by subtracting the triangular number corresponding to y from n.
+
+### Solution Code
+```python
+import math
+
+def get_coordinates(n):
+    if n < 0:
+        raise ValueError("n must be a non-negative integer")
+    
+    # Calculate the y coordinate using the formula derived from solving the quadratic equation.
+    sqrt_val = math.sqrt(8 * n + 1)
+    y = int((sqrt_val - 1) // 2)
+    
+    # Calculate x by subtracting the triangular number up to y from n
+    x = n - (y * (y + 1)) // 2
+    
+    return (x, y)
+
+# Example usage:
+n = 19
+coordinates = get_coordinates(n)
+print(f"For n = {n}, coordinates are ({coordinates[0]}, {coordinates[1]})")
+```
+
+### Explanation
+- **Triangular Numbers**: The sum of integers from 1 to m is given by the formula \( T_m = \frac{m(m+1)}{2} \). This helps in determining the group (y-coordinate) where a number n falls.
+- **Quadratic Solution**: By solving the quadratic equation derived from the triangular number formula, we can efficiently find the y-coordinate using integer division and square root calculations.
+- **x-coordinate Calculation**: Once the correct group is identified, the x-coordinate is simply the offset of n within that group.
+
+This approach ensures that each number n is mapped to its correct (x, y) coordinates in an efficient manner with a time complexity of O(1).

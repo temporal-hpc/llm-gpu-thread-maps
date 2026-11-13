@@ -1,0 +1,10 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError
+    tile, pos = divmod(n, 8)
+    tx, ty = tile % 3, tile // 3
+    xs = (0, 1, 2, 0, 2, 0, 1, 2)
+    ys = (0, 0, 0, 1, 1, 2, 2, 2)
+    return tx * 3 + xs[pos], ty * 3 + ys[pos]
+```

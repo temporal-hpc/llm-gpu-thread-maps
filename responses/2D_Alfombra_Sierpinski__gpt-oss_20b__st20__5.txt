@@ -1,0 +1,10 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non-negative integer")
+    block = n // 8
+    idx = n % 8
+    mapping = [(0, 0), (1, 0), (2, 0), (0, 1), (2, 1), (0, 2), (1, 2), (2, 2)]
+    dx, dy = mapping[idx]
+    return (block * 3 + dx, dy)
+```

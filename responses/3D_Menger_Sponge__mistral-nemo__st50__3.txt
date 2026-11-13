@@ -1,0 +1,7 @@
+def map_to_coordinates(n):
+    x = n % 6
+    y = ((n // 6) * 3) % 3
+    z = (n // 18) * 2
+    if n >= 42:
+        raise ValueError("Input exceeds maximum value")
+    return (x, y, z)

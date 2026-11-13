@@ -1,0 +1,43 @@
+The grid is traversed in a specific order, and the sequence of points follows a repeating block pattern every 8 points. Each block corresponds to a set of x-coordinates in increasing order, with y-coordinates cycling through specific values.
+
+For the $n$-th point (with $n$ starting at 0 for the first point), the position is determined as follows:
+- Let $k = n // 8$ (integer division).
+- Let $i = n \mod 8$.
+- The y-coordinate is:
+  - $0$ if $i < 3$,
+  - $1$ if $3 \leq i < 5$,
+  - $2$ if $i \geq 5$.
+- The x-coordinate is $3k + r$, where $r$ is:
+  - $i$ if $i < 3$,
+  - $0$ if $i = 3$, $2$ if $i = 4$,
+  - $i - 5$ if $i \geq 5$.
+
+The $10^{18}$-th point corresponds to $n = 10^{18} - 1$ (since indexing starts at 0).  
+Compute $i = (10^{18} - 1) \mod 8$:  
+- $10^{18} \equiv 0 \mod 8$ (since $10^3 = 1000$ is divisible by 8, and $10^{18} = (10^3)^6$),  
+- so $10^{18} - 1 \equiv -1 \equiv 7 \mod 8$.  
+Thus, $i = 7$.  
+
+Since $i = 7 \geq 5$:  
+- $y = 2$,  
+- $r = i - 5 = 7 - 5 = 2$.  
+
+Now compute $k = (10^{18} - 1) // 8$:  
+- $10^{18} - 1 = 999\ldots999$ (18 nines),  
+- but equivalently, $10^{18} - 1 = 8k + 7$, so $8k = 10^{18} - 8$,  
+- $k = (10^{18} - 8) / 8 = 10^{18}/8 - 1 = 125\ldots000 - 1$ (where $10^{18}/8 = 125 \times 10^{15}$).  
+Specifically, $10^{18} / 8 = 125000000000000000$, so $k = 125000000000000000 - 1 = 124999999999999999$.  
+
+Then $x = 3k + r = 3 \times 124999999999999999 + 2 = 374999999999999997 + 2 = 374999999999999999$.  
+
+Thus, the grid point is $(374999999999999999, 2)$.  
+
+Verification:  
+- $8 \times 374999999999999999 = 2999999999999999992$,  
+- $3 \times 10^{18} = 3000000000000000000$,  
+- $3000000000000000000 - 8 = 2999999999999999992$,  
+- so $x = (3 \times 10^{18} - 8) / 8 = 374999999999999999$, which matches.  
+
+The $10^{18}$-th point is $(374999999999999999, 2)$.
+
+\boxed{(374999999999999999,\ 2)}

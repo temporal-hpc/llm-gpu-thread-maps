@@ -1,0 +1,20 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer")
+    dim = 3
+    result = [0] * dim
+    temp_n = n
+    base = 1
+    while True:
+        layer_size = (base ** dim)
+        if temp_n < layer_size:
+            break
+        temp_n -= layer_size
+        base += 1
+    for i in range(dim):
+        layer_size //= (base - i)
+        result[i] = temp_n // layer_size
+        temp_n %= layer_size
+    return tuple(result)
+```

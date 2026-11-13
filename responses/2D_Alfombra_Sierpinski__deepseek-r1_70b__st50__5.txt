@@ -1,0 +1,48 @@
+To determine the coordinates (x, y) for a given index `n` based on the described pattern:
+
+1. **Determine the Section**: Calculate which section `s` the index `n` falls into by dividing `n` by 8 (`s = n // 8`).
+
+2. **Determine Position within Section**: Find the position within the current section using `within_section_n = n % 8`.
+
+3. **First Part of Section (y=0)**: If `within_section_n` is 0, 1, or 2:
+   - Set `y` to 0.
+   - Calculate `x` as `3 * s + within_section_n`.
+
+4. **Second Part of Section (y=1 and y=2)**: If `within_section_n` is 3, 4, 5, 6, or 7:
+   - Compute the offset as `offset = within_section_n - 3`.
+   - For `offset` values:
+     - 0 or 1: Set `y` to 1 and determine `x` based on whether the offset is 0 or 1.
+     - 2, 3, or 4: Set `y` to 2 and calculate `x` accordingly.
+
+Here's the Python function implementing this logic:
+
+```python
+def get_coordinates(n):
+    s = n // 8
+    within = n % 8
+    
+    if within <= 2:
+        y = 0
+        x = 3 * s + within
+    else:
+        offset = within - 3
+        
+        if offset == 0 or offset == 1:
+            y = 1
+            if offset == 0:
+                x = 3 * s + 0
+            else:
+                x = 3 * s + 2
+        else:  # offset is 2, 3, or 4
+            y = 2
+            if offset == 2:
+                x = 3 * s + 0
+            elif offset == 3:
+                x = 3 * s + 1
+            else:  # offset ==4
+                x = 3 * s + 2
+                
+    return (x, y)
+```
+
+This function efficiently computes the coordinates by leveraging integer division and modulo operations to break down the problem into manageable parts.

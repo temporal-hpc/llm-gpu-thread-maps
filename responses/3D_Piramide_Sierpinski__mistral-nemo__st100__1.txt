@@ -1,0 +1,7 @@
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input must be a non-negative integer.")
+    x = min(n % 16, 8)
+    y = min(n // 4 - (n % 4), 7)
+    z = n // 64
+    return (x, y, z)

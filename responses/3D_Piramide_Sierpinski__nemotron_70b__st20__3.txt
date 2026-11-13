@@ -1,0 +1,16 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer")
+    
+    dimensions = []
+    while n >= 0 and (dimensions == [] or max(dimensions) > 0):
+        n, remainder = divmod(n, len(dimensions) + 1)
+        dimensions.insert(0, remainder)
+    
+    # Remove trailing zeros if any (to match the provided context's output style)
+    while dimensions and dimensions[0] == 0:
+        dimensions.pop(0)
+    
+    return tuple(dimensions)
+```

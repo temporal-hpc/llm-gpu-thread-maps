@@ -1,0 +1,104 @@
+To solve the problem of mapping a non-negative integer `n` to a coordinate `(x, y)` such that the sequence of coordinates follows a specific pattern, we can take advantage of the **triangular number** structure.
+
+---
+
+### 🔍 **Understanding the Pattern**
+
+We observe that the sequence of coordinates for `n` follows a **diagonal pattern** in a 2D grid:
+
+```
+n | (x, y)
+0 | (0, 0)
+1 | (0, 1)
+2 | (1, 1)
+3 | (0, 2)
+4 | (1, 2)
+5 | (2, 2)
+6 | (0, 3)
+7 | (1, 3)
+8 | (2, 3)
+9 | (3, 3)
+...
+```
+
+Each diagonal (row in the grid) corresponds to a **triangular number**. A triangular number is defined as:
+
+$$
+T(y) = \frac{y(y + 1)}{2}
+$$
+
+For a given `n`, we want to find the **largest** triangular number `T(y)` such that `T(y) ≤ n`. This gives us the `y` coordinate. The `x` coordinate is then:
+
+$$
+x = n - T(y)
+$$
+
+---
+
+### ✅ **Algorithm Steps**
+
+1. **Compute the approximate value of `y`** using the inverse of the triangular number formula:
+   $$
+   y = \left\lfloor \frac{\sqrt{8n + 1} - 1}{2} \right\rfloor
+   $$
+
+2. **Compute the triangular number** at `y`:  
+   $$
+   T(y) = \frac{y(y + 1)}{2}
+   $$
+
+3. **Compute the x-coordinate**:
+   $$
+   x = n - T(y)
+   $$
+
+---
+
+### 🧠 **Why This Works**
+
+- The triangular number formula gives us a way to partition the natural numbers into "diagonals" in the coordinate grid.
+- Each diagonal corresponds to a fixed `y` value, and `x` increases as we move along the diagonal.
+- This method is efficient and mathematically sound for all non-negative integers.
+
+---
+
+### 🧪 **Edge Case Handling**
+
+- The function should **raise an error** if `n < 0` since the problem is defined for non-negative integers.
+- Floating-point precision is not a concern here because the formula is exact for triangular numbers and safe for nearby integers due to the use of `math.floor`.
+
+---
+
+### 🧾 **Final Implementation**
+
+```python
+import math
+
+def map_to_coordinates(n):
+    if n < 0:
+        raise ValueError("n must be a non-negative integer")
+    
+    y_float = (math.sqrt(1 + 8 * n) - 1) / 2
+    y = int(math.floor(y_float))
+    
+    triangular_y = y * (y + 1) // 2
+    x = n - triangular_y
+    
+    return (x, y)
+```
+
+---
+
+### 🧪 **Example Usage**
+
+```python
+print(map_to_coordinates(0))  # (0, 0)
+print(map_to_coordinates(1))  # (0, 1)
+print(map_to_coordinates(2))  # (1, 1)
+print(map_to_coordinates(6))  # (0, 3)
+print(map_to_coordinates(9))  # (3, 3)
+```
+
+---
+
+This function is efficient, accurate, and directly leverages the properties of triangular numbers to solve the problem.

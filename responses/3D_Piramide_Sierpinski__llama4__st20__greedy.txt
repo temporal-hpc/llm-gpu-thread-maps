@@ -1,0 +1,39 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer.")
+    x, y, z = 0, 0, 0
+    while n >= 6:
+        x += 1
+        n -= 6
+    if n >= 3:
+        y += 1
+        n -= 3
+    if n >= 1:
+        z += 1
+        n -= 1
+    if n == 0:
+        return (x, y, z)
+    elif n == 1:
+        return (x, y, z + 1)
+    elif n == 2:
+        return (x, y + 1, z)
+    elif n == 3:
+        return (x + 1, y, z + 1)
+    elif n == 4:
+        return (x + 1, y + 1, z)
+    elif n == 5:
+        return (x + 1, y, z + 1)
+``` 
+However, a more optimal solution exists. Here is a more optimal solution:
+
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer.")
+    x = n // 6
+    remainder = n % 6
+    y = remainder // 3
+    z = remainder % 3
+    return (x, y, z)
+```

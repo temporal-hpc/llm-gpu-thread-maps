@@ -1,0 +1,29 @@
+To solve this problem, we need to determine the coordinates (x, y) from a given non-negative integer index `n`. The challenge is to map each integer `n` to specific coordinates following a particular pattern.
+
+### Approach
+The problem can be approached by understanding the distribution of integers in a grid where each row contains an increasing number of elements. Specifically, the first row (y=0) has 1 element, the second row (y=1) has 2 elements, and so on. Each subsequent row `y` will have `y+1` elements.
+
+To find the coordinates (x, y) for a given `n`, we can use mathematical insights:
+1. **Determine Row (y):** The row number `y` can be determined by solving the quadratic equation derived from the sum of integers up to `y`. This is computed using the formula \( y = \left\lfloor \frac{\sqrt{8n + 1} - 1}{2} \right\rfloor \), where \( \lfloor x \rfloor \) denotes the floor function.
+2. **Determine Column (x):** Once `y` is determined, the column number `x` can be found by subtracting the sum of all previous rows from `n`. This is calculated as \( x = n - \frac{y(y + 1)}{2} \).
+
+### Solution Code
+```python
+import math
+
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be a non-negative integer")
+    
+    y = (math.sqrt(8 * n + 1) - 1) / 2
+    y_floor = int(math.floor(y))
+    x = n - (y_floor * (y_floor + 1)) // 2
+    return (x, y_floor)
+```
+
+### Explanation
+- **Validation:** The function first checks if `n` is a non-negative integer. If not, it raises a ValueError.
+- **Row Calculation (y):** Using the formula \( y = \left\lfloor \frac{\sqrt{8n + 1} - 1}{2} \right\rfloor \), we determine the row where `n` is located. This formula efficiently finds the largest integer `y` such that the sum of the first `y+1` integers is just less than or equal to `n`.
+- **Column Calculation (x):** The column within the determined row is found by subtracting the total number of elements in all previous rows from `n`. This gives the position within the current row.
+
+This approach efficiently maps each integer `n` to its corresponding coordinates using mathematical properties, ensuring optimal performance even for large values of `n`.

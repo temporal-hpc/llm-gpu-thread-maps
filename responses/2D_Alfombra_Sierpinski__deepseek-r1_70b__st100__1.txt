@@ -1,0 +1,18 @@
+To determine the coordinates (x, y) from a given n in this specific grid traversal pattern:
+
+1. **Identify Cycles**: Each cycle consists of 9 steps covering x values in increments of 3 for y=0 and y=2, and x values alternating between even numbers for y=1.
+   
+2. **Determine Cycle Number (k)**: Calculate the number of complete cycles passed with \( k = \left\lfloor \frac{n}{9} \right\rfloor \). This gives the base x value as \( 3k \).
+
+3. **Calculate Position in Cycle (m)**: Find the position within the current cycle using \( m = n - 9k \).
+
+4. **Assign y and Adjust x**:
+   - If \( m < 3 \): y=0, x = base_x + m.
+   - If \( 3 \leq m <5 \): y=1, x alternates between even numbers starting from base_x.
+   - If \( m \geq5 \): y=2, x continues incrementing by 1 from the last x in y=0.
+
+**Example Calculation for n=8**:
+- \( k = 0 \) (since 8 <9), so base_x=0.
+- \( m=8 \). Since this is beyond the initial cycle, it's part of the next cycle with k=1, leading to x=3, y=0.
+
+Thus, for n=8, the coordinates are **(3, 0)**.

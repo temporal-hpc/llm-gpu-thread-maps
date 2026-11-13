@@ -1,0 +1,54 @@
+The pattern in the coordinates $(x, y)$ for the given values of $ n $ follows a **repeating cycle of 8 steps**, with each cycle increasing the base $ x $-value by 3 for the $ y = 0 $ row. The coordinates are determined based on the position within the cycle and the cycle number. Here's the detailed breakdown:
+
+---
+
+### **Cycle-Based Pattern**
+
+- **Cycle Length:** 8
+- **Cycle Number:** $ \text{cycle} = \left\lfloor \frac{n}{8} \right\rfloor $
+- **Position in Cycle:** $ \text{position} = n \mod 8 $
+
+---
+
+### **Mapping Position to Coordinates**
+
+Given the `cycle` and `position`, the coordinates are computed as follows:
+
+1. **If position is 0, 1, or 2 (i.e., 0 ≤ position ≤ 2):**
+   - $ y = 0 $
+   - $ x = 3 \cdot \text{cycle} + \text{position} $
+
+2. **If position is 3 or 4 (i.e., 3 ≤ position ≤ 4):**
+   - $ y = 1 $
+   - $ x = 3 \cdot \text{cycle} + 2 \cdot (\text{position} - 3) $
+
+3. **If position is 5, 6, or 7 (i.e., 5 ≤ position ≤ 7):**
+   - $ y = 2 $
+   - $ x = 3 \cdot \text{cycle} + (\text{position} - 5) $
+
+---
+
+### **Example Calculations**
+
+- **$ n = 3 $:**
+  - $ \text{cycle} = 0 $, $ \text{position} = 3 $
+  - $ y = 1 $, $ x = 0 + 2 \cdot (3 - 3) = 0 $
+  - Result: $ (x, y) = (0, 1) $
+
+- **$ n = 8 $:**
+  - $ \text{cycle} = 1 $, $ \text{position} = 0 $
+  - $ y = 0 $, $ x = 3 \cdot 1 + 0 = 3 $
+  - Result: $ (x, y) = (3, 0) $
+
+- **$ n = 13 $:**
+  - $ \text{cycle} = 1 $, $ \text{position} = 5 $
+  - $ y = 2 $, $ x = 3 \cdot 1 + (5 - 5) = 3 $
+  - Result: $ (x, y) = (3, 2) $
+
+---
+
+### **Summary**
+
+The pattern is based on **repeating 8-step cycles**, with each cycle shifting the base $ x $-value by 3 for the $ y = 0 $ row. The $ y $-coordinate is determined by the position within the cycle, and the $ x $-coordinate is calculated accordingly. This creates a spiral-like movement on the grid.
+
+Thus, the coordinates $(x, y)$ for a given $ n $ can be computed using the above rules.

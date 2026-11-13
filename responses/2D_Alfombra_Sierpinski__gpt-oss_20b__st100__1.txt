@@ -1,0 +1,22 @@
+The list is nothing mysterious at all – it is just a row‑major scan of a rectangular grid that repeats every three columns and every three rows, but with a fixed “hole” in each 3×3 block.  
+
+If we look at the coordinates modulo 3 we see that the only pair that never occurs is
+
+```
+(x mod 3 , y mod 3) = (1,1)
+```
+
+All other pairs do appear.  In other words, every point (x,y) is present in the list **unless** it satisfies
+
+```
+x ≡ 1 (mod 3)  and  y ≡ 1 (mod 3) .
+```
+
+So the mapping is
+
+* Enumerate all points in row‑major order (y increasing, then x increasing).  
+* Skip any point for which both x and y are congruent to 1 modulo 3.  
+* Assign consecutive integers n starting from 0 to the remaining points.
+
+Thus the rule that produces the mapping is:  
+“List all grid points (x,y) in row‑major order, but omit those where x % 3 = 1 and y % 3 = 1.”  This 3‑by‑3 repeating pattern is what underlies every entry in the table.

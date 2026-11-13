@@ -1,0 +1,13 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer")
+    
+    coord_y = int(((8 * n + 1)**0.5 - 1) / 2)
+    coord_x = n - (coord_y * (coord_y + 1)) // 2
+    
+    if coord_x > coord_y:
+        coord_x, coord_y = coord_y, coord_x
+    
+    return (coord_x, coord_y)
+```

@@ -1,0 +1,14 @@
+```python
+def map_to_coordinates(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("Input 'n' must be a non-negative integer.")
+    x = n // 3
+    y = (n % 3) // 1
+    z = n % 3
+    # adjusting to fit observed pattern 
+    z = (n % 3)
+    y = ((n - z) // 3) % 3
+    x = (n - y * 3 - z * 9) // 27 if n >= 9 else n // 3
+    x, y, z = x, y, z
+    return x, y, z
+```
