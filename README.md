@@ -67,6 +67,7 @@ place of `__MAPPING_DATA_HERE__`.
 | `data/sr_baseline_results.json` | output of the symbolic-regression baseline |
 | `data/gpu_benchmark_A100_raw.txt` | output of the block-level benchmark on the A100 |
 | `data/power_trace.csv` | power trace of the bounding box and the map, 2D triangular |
+| `data/carpet_benchmark_A100_raw.txt` | output of the 2D Sierpinski carpet benchmark on the A100 |
 
 `data/gpu_benchmark_A100_raw.txt` is the unmodified output of the run
 reported in the manuscript. Its `Tot Energy` column is the mean power times
@@ -180,9 +181,11 @@ python3 inference_energy/plot_efficiency.py    # figure from data/inference_ener
 cd gpu
 nvcc -O3 -std=c++14 -o gpu_benchmark gpu_benchmark.cu -lnvidia-ml -lpthread
 nvcc -O3 -std=c++14 -o power_trace power_trace.cu -lnvidia-ml -lpthread
+nvcc -O3 -std=c++14 -o carpet_benchmark carpet_benchmark.cu -lnvidia-ml
 ./gpu_benchmark        # writes gpu_benchmark_results.txt
 ./power_trace          # writes power_trace.csv
 python3 plot_power_trace.py power_trace.csv
+./carpet_benchmark     # 2D Sierpinski carpet
 ```
 
 `gpu_benchmark.cu` maps N = 5x10^8 points at block level (256 threads per
@@ -197,6 +200,11 @@ and energy is the energy of one launch.
 `power_trace.cu` runs the bounding box and the map of the 2D triangular
 domain 2,000 launches each, with idle intervals in between, sampling the
 power every 20 ms.
+
+`carpet_benchmark.cu` measures the 2D Sierpinski carpet with the same
+protocol, on 8^9 and 8^10 cells with blocks of 27 x 27 threads, since the
+carpet is a base-3 domain. It first checks that the map and the bounding box
+write exactly 8^L cells.
 
 Timings and power depend on the GPU. The values of the manuscript were
 measured on an A100 40 GB SXM4.
