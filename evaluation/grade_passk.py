@@ -1,4 +1,4 @@
-"""Ordered criterion: the response is correct only if map_to_coordinates(n)
+"""Correctness criterion: the response is correct only if map_to_coordinates(n)
 equals the ground truth for every n in [0, 10^6). Aborts at the first
 mismatch and records its index.
 

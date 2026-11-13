@@ -17,7 +17,7 @@ prompt_template.txt     prompt shared by all models and domains
 download_domains.sh     fetches the six ground-truth domains into domains/
 inference/              the 1,188 inferences (Ollama)
 responses/              the 1,188 model outputs, verbatim, failures included
-evaluation/             syntactic repair, Ordered and Domain Coverage graders,
+evaluation/             syntactic repair, Correctness and Domain Coverage graders,
                         pass@k, tables
 baselines/              symbolic-regression baseline (gplearn)
 inference_energy/       energy of the LLM inference and its figure
@@ -121,19 +121,19 @@ bash evaluation/grade_all.sh               # or: sbatch evaluation/evaluation.sb
 This grades every response three times and rewrites `data/passk_*.csv` and
 `data/coverage.csv`:
 
-- **Ordered**: `map_to_coordinates(n)` must equal the ground truth for every
+- **Correctness**: `map_to_coordinates(n)` must equal the ground truth for every
   `n` in [0, 10^6). The grader aborts at the first mismatch.
 - **Domain Coverage**: fraction of the distinct coordinates of the domain
   produced over [0, 10^5), regardless of order.
-- **Raw and repaired**: Ordered is computed on the code as emitted and after
+- **Raw and repaired**: Correctness is computed on the code as emitted and after
   the syntactic repair of `evaluation/repair.py`. The repair isolates the code
   from the surrounding prose, aliases the mapping function when it has another
   name and drops module-level test statements. It never alters an expression,
   a constant, an operator or the control flow.
 
-The Ordered grader stops a response after 20 minutes and the Domain Coverage
+The Correctness grader stops a response after 20 minutes and the Domain Coverage
 grader after 10 minutes, and a response that is stopped counts as a failure.
-Of the 1,188 responses, 13 reach the limit of the Ordered grader. Eleven of
+Of the 1,188 responses, 13 reach the limit of the Correctness grader. Eleven of
 them never return from one of the first two indices. The other two, both of
 the 2D Sierpinski gasket with 50 samples (`gpt-oss:120b` and `gpt-oss:20b`,
 sample 1), are correct but slow: in the run reported in the manuscript they
@@ -142,7 +142,7 @@ processor they finish and pass. A new run can therefore give 5/5 and 3/5 in
 those two cells, where the manuscript reports 4/5 and 2/5, and 160 exact
 responses instead of 158. Every other verdict is the same. The files
 `data/passk_*.csv` are the run reported in the manuscript; `TIME_LIMIT`
-(seconds, 0 for no limit) changes the limit of the Ordered grader. In the
+(seconds, 0 for no limit) changes the limit of the Correctness grader. In the
 Domain Coverage grader 20 responses do not finish within the limit and are
 recorded as `EVAL_TIMEOUT` with coverage 0 in `data/coverage.csv`. None of
 them is the best sample of its cell, so the tables are not affected.

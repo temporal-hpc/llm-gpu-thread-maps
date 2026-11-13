@@ -1,6 +1,6 @@
 """Prints the six per-domain accuracy tables and the pass@k summary in LaTeX.
 
-Each cell is "c/5" (correct samples under the Ordered criterion, with a
+Each cell is "c/5" (correct samples under the Correctness criterion, with a
 dagger when the greedy pass is also correct) followed by the Domain
 Coverage, taken as the best of the five samples of the cell.
 
@@ -50,7 +50,7 @@ for dom, lab, name, kind in DOMS:
     L = []
     L.append(r"\begin{table}[pos=htbp]")
     L.append(r"\centering")
-    L.append(r"\caption{%s (%s set). The \textit{Ordered} column gives the number" % (name[0].upper()+name[1:], kind))
+    L.append(r"\caption{%s (%s set). The \textit{Correctness} column gives the number" % (name[0].upper()+name[1:], kind))
     L.append(r"of the five sampled responses that reproduce the mapping exactly over $10^{6}$")
     L.append(r"indices, which is pass@1 of Section~\ref{subsec:passk}; $^{\dagger}$ marks a cell")
     L.append(r"whose greedy ($T=0$) pass also succeeds. \textit{Domain Coverage} is the percentage")
@@ -61,7 +61,7 @@ for dom, lab, name, kind in DOMS:
     L.append(r"\begin{tabular}{lcccccc}")
     L.append(r"\toprule")
     L.append(r"\multirow{2}{*}{\textbf{Model}} & \multicolumn{2}{c}{\textbf{20 pts}} & \multicolumn{2}{c}{\textbf{50 pts}} & \multicolumn{2}{c}{\textbf{100 pts}} \\ \cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}")
-    L.append(r" & \textbf{Ordered} & \textbf{Domain Coverage} & \textbf{Ordered} & \textbf{Domain Coverage} & \textbf{Ordered} & \textbf{Domain Coverage} \\ \midrule")
+    L.append(r" & \textbf{Correctness} & \textbf{Domain Coverage} & \textbf{Correctness} & \textbf{Domain Coverage} & \textbf{Correctness} & \textbf{Domain Coverage} \\ \midrule")
     for m, ab in MODELS:
         L.append("%s & %s & %s & %s \\\\" % (ab, cell(dom,m,20), cell(dom,m,50), cell(dom,m,100)))
     L.append(r"\bottomrule")
@@ -74,7 +74,7 @@ S = []
 S.append(r"\begin{table}[pos=htbp]")
 S.append(r"\centering")
 S.append(r"\caption{pass@$k$ by model, averaged over the 18 (domain, stage) cells.")
-S.append(r"$n=5$ samples per cell; greedy is a separate $T=0$ pass. Ordered criterion.}")
+S.append(r"$n=5$ samples per cell; greedy is a separate $T=0$ pass. Correctness criterion.}")
 S.append(r"\label{tab:passk_summary}")
 S.append(r"\small")
 S.append(r"\begin{tabular}{lrrrr}")
