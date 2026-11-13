@@ -171,37 +171,6 @@ __global__ void k_3d_Linear(int* vol, int SIDE, int n_blocks) {
     if (gx<=gy && gy<=gz) { size_t idx = ((size_t)gz * SIDE + gy) * SIDE + gx; vol[idx] = 1; }
 }
 
-// --- SIERPINSKI ---
-__global__ void k_sierp2d_BB(int* img, int SIDE) {
-    int bx = blockIdx.x; int by = blockIdx.y; if ((bx & by) != 0) return; 
-    int gx = bx * 16 + threadIdx.x; int gy = by * 16 + threadIdx.y;
-    if (gx >= SIDE || gy >= SIDE) return;
-    if ((gx & gy) == 0) { size_t idx = (size_t)gy * SIDE + gx; img[idx] = 1; }
-}
-__global__ void k_sierp2d_Bit(int* img, int SIDE, int n_blocks) {
-    int n = blockIdx.x; if (n >= n_blocks) return;
-    int bx=0; int by=0; int s=1;
-    while(n>0) { if(n&1) bx|=s; else by|=s; n>>=1; s<<=1; }
-    int gx = bx * 16 + threadIdx.x; int gy = by * 16 + threadIdx.y;
-    if (gx >= SIDE || gy >= SIDE) return;
-    if ((gx & gy) == 0) { size_t idx = (size_t)gy * SIDE + gx; img[idx] = 1; }
-}
-__global__ void k_sierp3d_BB(int* vol, int SIDE) {
-    int bx = blockIdx.x; int by = blockIdx.y; int bz = blockIdx.z;
-    if ((bx&by)!=0 || (bx&bz)!=0 || (by&bz)!=0) return;
-    int gx=bx*8+threadIdx.x; int gy=by*8+threadIdx.y; int gz=bz*4+threadIdx.z;
-    if (gx >= SIDE || gy >= SIDE || gz >= SIDE) return;
-    if ((gx&gy)==0 && (gx&gz)==0 && (gy&gz)==0) { size_t idx = ((size_t)gz * SIDE + gy) * SIDE + gx; vol[idx] = 1; }
-}
-__global__ void k_sierp3d_Bit(int* vol, int SIDE, int n_blocks) {
-    int n = blockIdx.x; if (n >= n_blocks) return;
-    int bx=0; int by=0; int bz=0; int s=1;
-    while(n>0) { int d=n&3; if(d==1) bx|=s; else if(d==2) by|=s; else if(d==3) bz|=s; n>>=2; s<<=1; }
-    int gx=bx*8+threadIdx.x; int gy=by*8+threadIdx.y; int gz=bz*4+threadIdx.z;
-    if (gx >= SIDE || gy >= SIDE || gz >= SIDE) return;
-    if ((gx&gy)==0 && (gx&gz)==0 && (gy&gz)==0) { size_t idx = ((size_t)gz * SIDE + gy) * SIDE + gx; vol[idx] = 1; }
-}
-
 // =================================================================================
 // MONITORING
 // =================================================================================
@@ -397,37 +366,7 @@ int main() {
     RUN_FULL("OSS:120b (20 Samples)", "Linear Search", "O(N^1/3)", k_3d_Linear<<<N_BLOCKS,blk3d>>>(d_grid3d, SIDE_3D, N_BLOCKS));
     RUN_FULL("OSS:20b (50 Samples)", "Linear Search", "O(N^1/3)", k_3d_Linear<<<N_BLOCKS,blk3d>>>(d_grid3d, SIDE_3D, N_BLOCKS));
 
-    // ===========================================================================
-    // DOMAIN 3: 2D SIERPINSKI
-    // ===========================================================================
-    dual_print(fp, "\n>>> DOMAIN: 2D SIERPINSKI FRACTAL\n");
-    print_header(fp);
-
-    int S2D = (int)pow(N_BLOCKS, 0.631) + 100; if(S2D > SIDE_2D) S2D = SIDE_2D;
-    dim3 grid2(S2D, S2D);
-    
-    RUN_FULL("Bounding Box (baseline)", "If(Fractal)", "O(1)", k_sierp2d_BB<<<grid2,blk>>>(d_grid2d, S2D));
-    RUN_FULL("Paper (Navarro 2017)", "Bitwise", "O(log N)", k_sierp2d_Bit<<<N_BLOCKS,blk>>>(d_grid2d, S2D, N_BLOCKS));
-    RUN_FULL("OSS:120b (100 Samples)", "Bitwise", "O(log N)", k_sierp2d_Bit<<<N_BLOCKS,blk>>>(d_grid2d, S2D, N_BLOCKS));
-
-    // ===========================================================================
-    // DOMAIN 4: 3D SIERPINSKI
-    // ===========================================================================
-    dual_print(fp, "\n>>> DOMAIN: 3D SIERPINSKI FRACTAL\n");
-    print_header(fp);
-
-    // S3D_blocks: side of the bounding box that encloses the fractal.
-    // SIDE_3D: stride of the array (bounded by VRAM).
-    // The BB launches grid(S3D_blocks/8, S3D_blocks/8, S3D_blocks/4) and writes
-    // only inside [0, SIDE_3D), so the full cost of discarding blocks is paid.
-    int S3D_blocks = (int)pow(N_BLOCKS, 0.5) * 2;
-    int TSIDE_S3D_XY = (S3D_blocks + 7) / 8;
-    int TSIDE_S3D_Z  = (S3D_blocks + 3) / 4;
-    dim3 grid3(TSIDE_S3D_XY, TSIDE_S3D_XY, TSIDE_S3D_Z);
-
-    RUN_FULL("Bounding Box (baseline)", "If(Fractal)", "O(1)", k_sierp3d_BB<<<grid3,blk3d>>>(d_grid3d, SIDE_3D));
-    RUN_FULL("This work (closed form)", "Bitwise", "O(log N)", k_sierp3d_Bit<<<N_BLOCKS,blk3d>>>(d_grid3d, SIDE_3D, N_BLOCKS));
-    RUN_FULL("OSS:120b (100 Samples)", "Bitwise", "O(log N)", k_sierp3d_Bit<<<N_BLOCKS,blk3d>>>(d_grid3d, SIDE_3D, N_BLOCKS));
+    // The fractal domains are measured by fractal_benchmark.cu.
 
     cudaFree(d_grid2d); cudaFree(d_grid3d);
     CHECK_NVML(nvmlShutdown());

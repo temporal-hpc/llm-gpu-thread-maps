@@ -67,15 +67,16 @@ place of `__MAPPING_DATA_HERE__`.
 | `data/sr_baseline_results.json` | output of the symbolic-regression baseline |
 | `data/gpu_benchmark_A100_raw.txt` | output of the block-level benchmark on the A100 |
 | `data/power_trace.csv` | power trace of the bounding box and the map, 2D triangular |
-| `data/carpet_benchmark_A100_raw.txt` | output of the 2D Sierpinski carpet benchmark on the A100 |
+| `data/fractal_benchmark_A100_raw.txt` | output of the block-level benchmark of the fractal domains on the A100 |
 
 `data/gpu_benchmark_A100_raw.txt` is the unmodified output of the run
 reported in the manuscript. Its `Tot Energy` column is the mean power times
 the time of 20 launches, in mJ; the energy of one launch, which is what the
 manuscript and the current `gpu/gpu_benchmark.cu` report, is that value
 divided by 20,000 (in J). Its row labels are the older ones (for instance
-`GPT-OSS:120b (100pts)` is `OSS:120b (100 Samples)`), and it has two rows of
-the 2D Sierpinski gasket that are not reported.
+`GPT-OSS:120b (100pts)` is `OSS:120b (100 Samples)`). Only its two dense
+domains are reported in the manuscript; its fractal sections are superseded
+by `data/fractal_benchmark_A100_raw.txt`.
 
 ## Requirements
 
@@ -181,14 +182,14 @@ python3 inference_energy/plot_efficiency.py    # figure from data/inference_ener
 cd gpu
 nvcc -O3 -std=c++14 -o gpu_benchmark gpu_benchmark.cu -lnvidia-ml -lpthread
 nvcc -O3 -std=c++14 -o power_trace power_trace.cu -lnvidia-ml -lpthread
-nvcc -O3 -std=c++14 -o carpet_benchmark carpet_benchmark.cu -lnvidia-ml
+nvcc -O3 -std=c++14 -o fractal_benchmark fractal_benchmark.cu -lnvidia-ml
 ./gpu_benchmark        # writes gpu_benchmark_results.txt
 ./power_trace          # writes power_trace.csv
 python3 plot_power_trace.py power_trace.csv
-./carpet_benchmark     # 2D Sierpinski carpet
+./fractal_benchmark    # gasket, carpet and Sierpinski pyramid
 ```
 
-`gpu_benchmark.cu` maps N = 5x10^8 points at block level (256 threads per
+`gpu_benchmark.cu` maps the two dense domains with N = 5x10^8 points at block level (256 threads per
 block, 1,953,125 blocks) and compares each map with the bounding box, which
 launches the full enclosing grid and discards the blocks outside the domain.
 The kernels of the model rows are hand translations to CUDA of the Python
@@ -201,10 +202,16 @@ and energy is the energy of one launch.
 domain 2,000 launches each, with idle intervals in between, sampling the
 power every 20 ms.
 
-`carpet_benchmark.cu` measures the 2D Sierpinski carpet with the same
-protocol, on 8^9 and 8^10 cells with blocks of 27 x 27 threads, since the
-carpet is a base-3 domain. It first checks that the map and the bounding box
-write exactly 8^L cells.
+`fractal_benchmark.cu` measures the three fractal domains with the same
+protocol, each on a complete level of the fractal: 3^17 elements for the 2D
+Sierpinski gasket, 8^10 for the 2D Sierpinski carpet and 4^11 for the 3D
+Sierpinski pyramid. These are the levels with the number of elements closest
+to 5x10^8 whose bounding box fits in 40 GB with one byte per element. The
+blocks are 16 x 16, 27 x 27 and 8 x 8 x 8 threads, so that the side of a
+block is a power of the base of the fractal. Before timing, every kernel is
+checked to write exactly the number of elements of the level. The row of
+`OSS:120b` in the gasket runs the function the model generated, which walks
+the rows of the domain.
 
 Timings and power depend on the GPU. The values of the manuscript were
 measured on an A100 40 GB SXM4.
