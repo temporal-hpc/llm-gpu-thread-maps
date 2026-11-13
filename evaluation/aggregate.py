@@ -36,9 +36,24 @@ def pass_at_k(c, n, k):
 
 
 rep, raw, cov = load("repaired"), load("raw"), load("coverage")
-if len(rep) != 1188 or len(raw) != 1188:
-    raise SystemExit("expected 1188 graded responses, found %d repaired / %d raw"
-                     % (len(rep), len(raw)))
+
+# A response whose grader was killed from outside (time limit reached inside a
+# call that cannot be interrupted, or out of memory) has no JSON. It is recorded
+# as a failure, with the same verdict as a response that reaches the time limit.
+names = sorted(os.path.basename(p)[:-4] for p in glob.glob(os.path.join(ROOT, "responses", "*.txt")))
+if len(names) != 1188:
+    raise SystemExit("expected 1188 responses, found %d" % len(names))
+for f in names:
+    dom, model, stage, r = f.split("__")
+    base = {"file": f, "domain": dom, "model": model.replace("_", ":", 1),
+            "stage": int(stage[2:]), "rep": r}
+    for table, name in ((raw, "raw"), (rep, "repaired")):
+        if f not in table:
+            print("no grade for %s (%s): recorded as a failure" % (f, name))
+            table[f] = dict(base, status="RUNTIME_ERROR", note="TO()", passed=False, first_fail=0)
+    if cov and f not in cov:
+        print("no coverage for %s: recorded as 0" % f)
+        cov[f] = dict(base, status="EVAL_TIMEOUT", any_order=0.0)
 os.makedirs(a.out, exist_ok=True)
 
 rows = []

@@ -14,6 +14,10 @@ import repair as R
 GT_DIR = os.environ["GT_DIR"]; OUT_DIR = os.environ["OUT_DIR"]
 MODE   = os.environ.get("MODE", "repaired")
 FN     = "map_to_coordinates"
+# seconds allowed to evaluate the 10^6 indices of one response; reaching the
+# limit inside the function is recorded as RUNTIME_ERROR with note TO().
+# TIME_LIMIT=0 disables it.
+TIME_LIMIT = int(os.environ.get("TIME_LIMIT", "1200"))
 
 path = sys.argv[1]
 base = os.path.basename(path)[:-4]
@@ -73,7 +77,7 @@ gt = array.array("i")
 with open(os.path.join(GT_DIR, dom + ".bin"), "rb") as f: gt.fromfile(f, N * D)
 
 first_fail = None; status = "OK"; note = ""; reached = 0
-signal.alarm(1200)
+signal.alarm(TIME_LIMIT)
 try:
     for n in range(N):
         try: r = fn(n)

@@ -13,8 +13,9 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 G = os.path.join(ROOT, "graded")
 rep = {json.load(open(p))['file']: json.load(open(p)) for p in glob.glob(G + '/repaired/*.json')}
 anyd = {json.load(open(p))['file']: json.load(open(p)) for p in glob.glob(G + '/coverage/*.json')}
-if len(rep) != 1188:
+if len(rep) < 1100:
     raise SystemExit("run evaluation/grade_all.sh first (found %d graded responses)" % len(rep))
+# a response whose grader was killed leaves no file and counts as a failure
 
 MODELS = [("deepseek-r1:70b","R1:70b"),("gemma3:12b","Gem3:12b"),("gemma3:27b","Gem3:27b"),
           ("gpt-oss:120b","OSS:120b"),("gpt-oss:20b","OSS:20b"),("llama3.3","Lla3.3:70b"),
@@ -29,8 +30,8 @@ DOMS = [("2D_Triangular","tab:2d_triangular","2D Triangular mapping","validation
 STAGES = (20, 50, 100)
 
 def key(d, m, s, r): return "%s__%s__st%d__%s" % (d, m.replace(':','_'), s, r)
-def cval(d, m, s): return sum(1 for r in "12345" if rep[key(d,m,s,r)]['passed'])
-def greedy(d, m, s): return rep[key(d,m,s,'greedy')]['passed']
+def cval(d, m, s): return sum(1 for r in "12345" if rep.get(key(d,m,s,r), {}).get('passed'))
+def greedy(d, m, s): return bool(rep.get(key(d,m,s,'greedy'), {}).get('passed'))
 def anyo(d, m, s):
     vs = [anyd[key(d,m,s,r)]['any_order'] for r in "12345" if key(d,m,s,r) in anyd]
     vs = [v for v in vs if v is not None]

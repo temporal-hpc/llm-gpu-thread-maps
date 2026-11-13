@@ -129,8 +129,24 @@ This grades every response three times and rewrites `data/passk_*.csv` and
   name and drops module-level test statements. It never alters an expression,
   a constant, an operator or the control flow.
 
-Generated code is executed with `exec`. Run the graders in a container or a
-disposable environment.
+The Ordered grader stops a response after 20 minutes and the Domain Coverage
+grader after 10 minutes, and a response that is stopped counts as a failure.
+Of the 1,188 responses, 13 reach the limit of the Ordered grader. Eleven of
+them never return from one of the first two indices. The other two, both of
+the 2D Sierpinski gasket with 50 samples (`gpt-oss:120b` and `gpt-oss:20b`,
+sample 1), are correct but slow: in the run reported in the manuscript they
+were stopped after more than 940,000 correct indices, and on a faster
+processor they finish and pass. A new run can therefore give 5/5 and 3/5 in
+those two cells, where the manuscript reports 4/5 and 2/5, and 160 exact
+responses instead of 158. Every other verdict is the same. The files
+`data/passk_*.csv` are the run reported in the manuscript; `TIME_LIMIT`
+(seconds, 0 for no limit) changes the limit of the Ordered grader. In the
+Domain Coverage grader 20 responses do not finish within the limit and are
+recorded as `EVAL_TIMEOUT` with coverage 0 in `data/coverage.csv`. None of
+them is the best sample of its cell, so the tables are not affected.
+
+Generated code is executed with `exec`, and a few responses allocate several
+GB of memory. Run the graders in a container or a disposable environment.
 
 ```bash
 python3 evaluation/repair_summary.py       # verdicts before and after the repair
